@@ -1,0 +1,111 @@
+gamingservice/
+├── app/
+│   ├── __init__.py                # Application factory
+│   ├── config/
+│   │   ├── __init__.py
+│   │   ├── development.py         # Config desenvolvimento
+│   │   ├── production.py          # Config produção
+│   │   └── testing.py             # Config testes
+│   ├── extensions/
+│   │   ├── __init__.py            # Inicializa extensões
+│   │   ├── mongo.py               # Configuração MongoDB
+│   │   ├── jwt.py                 # Configuração JWT
+│   │   └── cors.py                # Configuração CORS
+│   ├── api/
+│   │   ├── __init__.py            # Registra blueprints
+│   │   ├── auth/                  # Autenticação
+│   │   │   ├── __init__.py
+│   │   │   ├── routes.py          # Rotas de autenticação
+│   │   │   ├── login.py           # Handlers de login
+│   │   │   ├── register.py        # Handlers de registro
+│   │   │   └── password.py        # Recuperação de senha
+│   │   ├── games/                 # Jogos
+│   │   │   ├── __init__.py
+│   │   │   ├── routes.py
+│   │   │   └── handlers.py
+│   │   ├── ads/                   # Anúncios
+│   │   │   ├── __init__.py
+│   │   │   ├── routes.py
+│   │   │   ├── free_ads.py        # Anúncios gratuitos
+│   │   │   ├── paid_ads.py        # Anúncios pagos
+│   │   │   └── boosted_ads.py     # Anúncios destacados
+│   │   ├── orders/                # Pedidos
+│   │   │   ├── __init__.py
+│   │   │   ├── routes.py
+│   │   │   ├── cart.py            # Carrinho
+│   │   │   └── checkout.py        # Checkout
+│   │   ├── chat/                  # Chat
+│   │   │   ├── __init__.py
+│   │   │   ├── routes.py
+│   │   │   ├── messages.py        # Mensagens
+│   │   │   ├── rooms.py           # Salas de chat
+│   │   │   └── support.py         # Suporte
+│   │   ├── users/                 # Usuários
+│   │   │   ├── __init__.py
+│   │   │   ├── routes.py
+│   │   │   ├── profile.py         # Perfil
+│   │   │   └── ratings.py         # Avaliações
+│   │   ├── admin/                 # Admin
+│   │   │   ├── __init__.py
+│   │   │   ├── routes.py
+│   │   │   ├── tickets.py         # Chamados
+│   │   │   ├── users_admin.py     # Gerenciamento de usuários
+│   │   │   └── dashboard.py       # Dashboard
+│   │   └── search/                # Busca
+│   │       ├── __init__.py
+│   │       └── routes.py
+│   ├── models/                    # Modelos de dados
+│   │   ├── __init__.py
+│   │   ├── user/
+│   │   │   ├── __init__.py
+│   │   │   ├── schema.py          # Estrutura do documento
+│   │   │   ├── crud.py            # Operações básicas 
+│   │   │   └── queries.py         # Consultas específicas
+│   │   ├── game/
+│   │   │   ├── __init__.py
+│   │   │   ├── schema.py
+│   │   │   └── crud.py
+│   │   ├── ad/
+│   │   │   ├── __init__.py
+│   │   │   ├── schema.py
+│   │   │   └── crud.py
+│   │   ├── order/
+│   │   │   ├── __init__.py
+│   │   │   ├── schema.py
+│   │   │   └── crud.py
+│   │   └── chat/
+│   │       ├── __init__.py
+│   │       ├── schema.py
+│   │       └── crud.py
+│   ├── services/                  # Lógica de negócio
+│   │   ├── __init__.py
+│   │   ├── auth/                  # Serviços de autenticação
+│   │   │   ├── __init__.py
+│   │   │   ├── login_service.py
+│   │   │   ├── register_service.py
+│   │   │   └── password_service.py
+│   │   ├── ad/
+│   │   │   ├── __init__.py
+│   │   │   ├── free_service.py
+│   │   │   ├── paid_service.py
+│   │   │   └── boost_service.py
+│   │   ├── order/
+│   │   │   ├── __init__.py
+│   │   │   ├── cart_service.py
+│   │   │   └── checkout_service.py
+│   │   └── chat/
+│   │       ├── __init__.py
+│   │       └── message_service.py
+│   └── utils/                     # Utilitários
+│       ├── __init__.py
+│       ├── decorators/            # Decoradores
+│       │   ├── __init__.py
+│       │   ├── auth_decorators.py # Autenticação
+│       │   └── permissions.py     # Permissões
+│       └── helpers/
+│           ├── __init__.py
+│           ├── password_helpers.py # Hash/verificação
+│           └── response_helpers.py # Respostas HTTP
+├── tests/                         # Testes
+├── requirements.txt
+└── run.py                         # Ponto de entrada
