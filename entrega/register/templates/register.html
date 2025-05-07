@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário de Registro</title>
     <style>
+        /* Estilo para o modo escuro */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #121212; /* Cor de fundo escura */
+            color: #e0e0e0; /* Texto claro */
             margin: 0;
             padding: 20px;
         }
@@ -15,15 +17,15 @@
         .container_form {
             width: 400px;
             margin: 0 auto;
-            background: #ffffff;
+            background: #1e1e1e; /* Fundo mais escuro para o formulário */
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         h1 {
             text-align: center;
-            color: #333;
+            color: #9c27b0; /* Cor roxa para o título */
             margin-bottom: 20px;
         }
 
@@ -35,19 +37,26 @@
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
+            color: #9c27b0; /* Cor roxa para os rótulos */
         }
 
         .form_input {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
+            padding: 10px;
+            border: 1px solid #444;
             border-radius: 4px;
-            box-sizing: border-box;
+            background-color: #2c2c2c; /* Cor de fundo mais escura nos campos */
+            color: #e0e0e0;
             font-size: 16px;
         }
 
+        .form_input:focus {
+            border-color: #9c27b0; /* Cor roxa no foco */
+            outline: none;
+        }
+
         .submit_btn {
-            background-color: #4CAF50;
+            background-color: #9c27b0; /* Cor roxa no botão */
             color: white;
             padding: 10px 15px;
             border: none;
@@ -58,7 +67,7 @@
         }
 
         .submit_btn:hover {
-            background-color: #45a049;
+            background-color: #7b1fa2; /* Cor roxa mais escura ao passar o mouse */
         }
 
         /* Estilo para as mensagens de flash */
@@ -69,14 +78,15 @@
         }
 
         .message.success {
-            background-color: #d4edda;
-            color: #155724;
+            background-color: #4caf50; /* Verde para sucesso */
+            color: #ffffff;
         }
 
         .message.error {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: #f44336; /* Vermelho para erro */
+            color: #ffffff;
         }
+
     </style>
 </head>
 <body>
