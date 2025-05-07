@@ -61,20 +61,21 @@
             background-color: #45a049;
         }
 
+        /* Estilo para as mensagens de flash */
         .message {
-            background-color: #f9f9f9;
             padding: 10px;
             margin-bottom: 15px;
-            border: 1px solid #ddd;
             border-radius: 4px;
         }
+
         .message.success {
             background-color: #d4edda;
-            border-color: #c3e6cb;
+            color: #155724;
         }
+
         .message.error {
             background-color: #f8d7da;
-            border-color: #f5c6cb;
+            color: #721c24;
         }
     </style>
 </head>
@@ -82,7 +83,7 @@
     <div class="container_form">
         <h1>Formulário de Registro</h1>
 
-        <!-- Bloco de mensagens (exibe sucesso ou erro) -->
+        <!-- Bloco para mensagens flash de sucesso e erro -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
