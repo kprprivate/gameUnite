@@ -1,4 +1,3 @@
-// Função para fazer login
 async function handleLogin(event) {
     event.preventDefault();
 
@@ -17,9 +16,7 @@ async function handleLogin(event) {
         const data = await response.json();
 
         if (response.ok) {
-            // Armazena o token JWT
             localStorage.setItem('token', data.token);
-            // Redireciona para a página de perfil
             window.location.href = '/profile';
         } else {
             showAlert(data.message, 'error');
@@ -29,7 +26,6 @@ async function handleLogin(event) {
     }
 }
 
-// Função para fazer logout
 async function logout() {
     try {
         const token = localStorage.getItem('token');
@@ -41,9 +37,7 @@ async function logout() {
         });
 
         if (response.ok) {
-            // Remove o token do localStorage
             localStorage.removeItem('token');
-            // Redireciona para a página de login
             window.location.href = '/login';
         } else {
             showAlert('Erro ao fazer logout.', 'error');
@@ -53,14 +47,12 @@ async function logout() {
     }
 }
 
-// Função para confirmar e deletar conta
 function confirmDelete() {
     if (confirm('Tem certeza que deseja deletar sua conta? Esta ação não pode ser desfeita.')) {
         deleteAccount();
     }
 }
 
-// Função para deletar conta
 async function deleteAccount() {
     try {
         const token = localStorage.getItem('token');
@@ -86,7 +78,6 @@ async function deleteAccount() {
     }
 }
 
-// Função auxiliar para mostrar alertas
 function showAlert(message, type) {
     const alertDiv = document.createElement('div');
     alertDiv.className = `alert alert-${type}`;
@@ -95,13 +86,11 @@ function showAlert(message, type) {
     const container = document.querySelector('.container');
     container.insertBefore(alertDiv, container.firstChild);
 
-    // Remove o alerta após 3 segundos
     setTimeout(() => {
         alertDiv.remove();
     }, 3000);
 }
 
-// Função para extrair o ID do usuário do token JWT
 function getUserIdFromToken(token) {
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
@@ -112,12 +101,10 @@ function getUserIdFromToken(token) {
     }
 }
 
-// Verifica se o usuário está autenticado ao carregar a página
 document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('token');
     const currentPath = window.location.pathname;
 
-    // Se não houver token e a página atual não for login ou registro
     if (!token && !['/', '/login', '/register'].includes(currentPath)) {
         window.location.href = '/login';
     }
