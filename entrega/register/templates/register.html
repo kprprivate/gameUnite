@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário de Registro</title>
     <style>
-        /* Estilo para o modo escuro */
         body {
             font-family: Arial, sans-serif;
             background-color: #121212; /* Cor de fundo escura */
@@ -68,10 +67,10 @@
         }
 
         .submit_btn:hover {
-            background-color: #7b1fa2; /* Cor roxa mais escura ao passar o mouse */
+            background-color: #7b1fa2;
         }
 
-        /* Estilo para as mensagens de flash */
+
         .message {
             padding: 10px;
             margin-bottom: 15px;
@@ -79,12 +78,12 @@
         }
 
         .message.success {
-            background-color: #4caf50; /* Verde para sucesso */
+            background-color: #4caf50;
             color: #ffffff;
         }
 
         .message.error {
-            background-color: #f44336; /* Vermelho para erro */
+            background-color: #f44336;
             color: #ffffff;
         }
 
@@ -94,7 +93,7 @@
     <div class="container_form">
         <h1>Formulário de Registro</h1>
 
-        <!-- Bloco para mensagens flash de sucesso e erro -->
+
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}

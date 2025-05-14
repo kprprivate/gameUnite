@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/gamersDB"
 mongo = PyMongo(app)
 
-app.config["JWT_SECRET_KEY"] = "sua_chave_secreta"  # Troque por uma chave secreta real
+app.config["JWT_SECRET_KEY"] = "sua_chave_secreta"
 jwt = JWTManager(app)
 
 @app.route("/register", methods=["POST"])
@@ -36,7 +36,7 @@ def login():
 @app.route("/logout", methods=["POST"])
 @jwt_required()
 def logout():
-    jti = get_jwt_identity()  # Identificador único do token
+    jti = get_jwt_identity()  
     mongo.db.revoked_tokens.insert_one({"jti": jti})
     return jsonify({"message": "Logout realizado com sucesso!"}), 200
 
