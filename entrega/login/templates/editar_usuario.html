@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Usuário</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <div class="center">
+        <h1>Editar Usuário</h1>
+
+        <p>Nome atual: {{ usuario.nome }}</p>
+        <p>Descrição atual: {{ usuario.descricao }}</p>
+
+        <form method="POST" enctype="multipart/form-data">
+            <label for="nome">Nome:</label><br>
+            <input type="text" name="nome" value="{{ usuario.nome }}"><br><br>
+
+            <label for="descricao">Descrição:</label><br>
+            <input type="text" name="descricao" value="{{ usuario.descricao }}"><br><br>
+
+            <label for="imagem">Imagem de Perfil:</label><br>
+            <input type="file" name="imagem"><br><br>
+
+            <input type="submit" value="Salvar">
+        </form>
+    </div>
+</body>
+</html>
