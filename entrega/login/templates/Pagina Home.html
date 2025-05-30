@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Home</title>
+  <title>Layout Exemplo</title>
   <style>
+    /* Estilo do body */
     body {
-      background-color: #575656;
+      background-color: dimgray;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -14,298 +15,266 @@
       font-family: Arial, sans-serif;
     }
 
-    .pilar-esquerda {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 200px;
-      height: 200vh;
-      background-color: black;
-    }
-
-    .faixa-topo {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 70px; /* Altura suficiente */
-      background-color: black;
-      z-index: 10;
-
-      border-top-left-radius: 30px;
-      border-top-right-radius: 30px;
-    }
-
-    .conteudo {
-      position: fixed;
-      top: 55px;
-      left: 175px;
-      color: floralwhite;
-      text-align: center;
-      font-family: Arial, sans-serif;
-      font-style: italic;
-      width: calc(100% - 220px);
-      font-size: 15px;
-    }
-  .conteudo2 {
-      position: fixed;
-      top: 400px;
-      left: 400px;
-      max-width: 200px;
-      width: 80%;
-      height: auto;
-      z-index: 5;
-      font-size: 15px;
-    }
-
-    .conteudo3 {
-      position: fixed;
-      top: 350px;
-      left: 800px;
-      max-width: 200px;
-      width: 80%;
-      height: auto;
-      z-index: 5;
-      font-size: 15px;
-    }
-
-    .conteudo4 {
-      position: fixed;
-      top: 325px;
-      left: 1100px;
-      max-width: 200px;
-      width: 80%;
-      height: auto;
-      z-index: 5;
-      font-size: 15px;
-    }
-
-    .conteudo5 {
-      position: fixed;
-      top: 70px;
-      left: 45px;
-      max-width: 200px;
-      width: 80%;
-      height: auto;
-      z-index: 5;
-      font-size: 10px;
-      color: white;
-    }
-
-    .conteudo6 {
-      position: fixed;
-      top: 98px;
-      left: 45px;
-      max-width: 200px;
-      width: 80%;
-      height: auto;
-      z-index: 5;
-      font-size: 10px;
-      color: white;
-    }
-
-    .conteudo7 {
-      position: fixed;
-      top: 127.5px;  /* aumentei o valor para ficar abaixo da faixa */
-      left: 47.5px;
-      width: 40px;
-      height: auto;
-      z-index: 5; /* acima da faixa, se necessário */
-      font-size: 10px;
-      color: white;
-    }
-
-    .conteudo8 {
-      position: fixed;
-      top: 615px;  /* aumentei o valor para ficar abaixo da faixa */
-      left: 47.5px;
-      width: 150px;
-      height: auto;
-      z-index: 5; /* acima da faixa, se necessário */
-      font-size: 10px;
-      color: white;
-    }
-
-    .conteudo9 {
-      position: fixed;
-      top: 650px;  /* aumentei o valor para ficar abaixo da faixa */
-      left: 47.5px;
-      width: 150px;
-      height: auto;
-      z-index: 5; /* acima da faixa, se necessário */
-      font-size: 10px;
-      color: white;
-    }
-
-    .conteudo10 {
-      position: fixed;
-      top: 685px;  /* aumentei o valor para ficar abaixo da faixa */
-      left: 47.5px;
-      width: 150px;
-      height: auto;
-      z-index: 5; /* acima da faixa, se necessário */
-      font-size: 10px;
-      color: white;
-    }
-
-    .imagem-central {
+    /* Container principal */
+    .mainContent {
       display: flex;
-      justify-content: center;
-      top: 275px;
-      left: 1150px;
-      max-width: 50px;
-      width: 80%;
-      height: auto;
-      z-index: 5;
+      width: 100%;
+      height: 100%;
+      background-color: dimgray;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .header {
+      display: none; /* Por enquanto escondido */
+    }
+
+    /* Sidebar */
+    .sideBar {
+      width: 150px;
+      background-color: #2f2f2f;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+      color: white;
+    }
+
+    .top, .bottom {
+      height: 125px;
+      background-color: #444;
+      border-radius: 8px;
+    }
+
+    /* Conteúdo principal */
+    .content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .titleName {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: purple;
+    }
+
+    .blocos {
+      display: flex;
+      gap: 15px;
+    }
+
+    .b1, .b2, .b3 {
+      flex: 1;
+      height: 250px;
+      background-color: #ccc;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;     /* Centraliza horizontalmente */
+      justify-content: center; /* Centraliza verticalmente (pode ajustar depois) */
+      padding: 10px;
+      text-align: center;      /* Centraliza o texto */
     }
 
     .imagem-esquerda {
-      display: flex;
-      justify-content: center;
-      position: fixed;
-      top: 340px;
-      left: 460px;
-      max-width: 75px;
-      width: 80%;
+      width: 60px;         /* Define a largura */
+      height: auto;        /* Mantém a proporção */
+      margin-right: 10px;  /* Espaço à direita */
+      float: left;         /* Faz a imagem flutuar à esquerda do texto */
+      border-radius: 8px;  /* Borda arredondada opcional */
+    }
+
+    .imagem-central {
+      display: block;         /* Faz com que a imagem se comporte como bloco */
+      margin: 0 auto 10px;    /* Centraliza horizontalmente + espaçamento abaixo */
+      width: 50px;            /* Ajuste o tamanho conforme necessário */
       height: auto;
-      z-index: 5;
+      border-radius: 8px;
     }
 
     .imagem-direita {
-      display: flex;  /* Adicionado! */
-      justify-content: center;
-      top: 255px;
-      right: 625px;
-      max-width: 100px;
-      width: 80%;
+      display: block;         /* Faz com que a imagem se comporte como bloco */
+      margin: 0 auto 15px;    /* Centraliza horizontalmente + espaçamento abaixo */
+      width: 60px;            /* Ajuste o tamanho conforme necessário */
       height: auto;
-      z-index: 5;
+      border-radius: 8px;
     }
 
     .imagem-casa {
-      position: fixed;  /* Adicionado! */
-      top: 75px;
-      left: 15px;
-      max-width: 25px;
-      width: 80%;
+      display: block;         /* Faz com que a imagem se comporte como bloco */
+      margin-right: 17px;    /* Centraliza horizontalmente + espaçamento abaixo */
+      width: 30px;            /* Ajuste o tamanho conforme necessário */
       height: auto;
-      z-index: 5;
-      color: white;
-    }
-    .imagem-service {
-      position: fixed;  /* Adicionado! */
-      top: 110px;
-      left: 15px;
-      max-width: 25px;
-      width: 80%;
-      height: auto;
-      z-index: 5;
-      color: white;
-    }
-    .imagem-profile {
-      position: fixed;
-      top: 140px;  /* aumentei o valor para ficar abaixo da faixa */
-      left: 15px;
-      width: 25px;
-      height: auto;
-      z-index: 11; /* acima da faixa, se necessário */
-    }
-    .imagem-pergunta {
-      position: fixed;
-      top: 625px;  /* aumentei o valor para ficar abaixo da faixa */
-      left: 12.5px;
-      width: 25px;
-      height: auto;
-      z-index: 11; /* acima da faixa, se necessário */
+      border-radius: 8px;
     }
 
-    .imagem-entrada {
-      position: fixed;
-      top: 650px;  /* aumentei o valor para ficar abaixo da faixa */
-      left: 2.5px;
-      width: 40px;
+    .imagem-service {
+      display: block;         /* Faz com que a imagem se comporte como bloco */
+      margin-right: 15px;    /* Centraliza horizontalmente + espaçamento abaixo */
+      width: 30px;            /* Ajuste o tamanho conforme necessário */
       height: auto;
-      z-index: 11; /* acima da faixa, se necessário */
-      color: white;
+      border-radius: 8px;
+    }
+
+    .imagem-profile {
+      display: block;         /* Faz com que a imagem se comporte como bloco */
+      margin-right: 15px;    /* Centraliza horizontalmente + espaçamento abaixo */
+      width: 30px;            /* Ajuste o tamanho conforme necessário */
+      height: auto;
+      border-radius: 8px;
     }
 
     .imagem-cadastro {
-      position: fixed;
-      top: 695px;  /* aumentei o valor para ficar abaixo da faixa */
-      left: 15px;
-      width: 25px;
+      display: block;         /* Faz com que a imagem se comporte como bloco */
+      margin-right: 15px;    /* Centraliza horizontalmente + espaçamento abaixo */
+      width: 30px;            /* Ajuste o tamanho conforme necessário */
       height: auto;
-      z-index: 11; /* acima da faixa, se necessário */
-      color: white;
+      border-radius: 8px;
     }
 
+    .imagem-pergunta {
+      display: block;         /* Faz com que a imagem se comporte como bloco */
+      margin-right: 15px;    /* Centraliza horizontalmente + espaçamento abaixo */
+      width: 30px;            /* Ajuste o tamanho conforme necessário */
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .imagem-entrada {
+      display: block;         /* Faz com que a imagem se comporte como bloco */
+      margin-right: 15px;    /* Centraliza horizontalmente + espaçamento abaixo */
+      width: 30px;            /* Ajuste o tamanho conforme necessário */
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .menu-Casa {
+      display: flex;
+      align-items: center;
+      gap: 0px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 5px;
+    }
+
+    .menu-serviços {
+      display: flex;
+      align-items: center;
+      gap: 0px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 5px;
+    }
+
+    .menu-profile {
+      display: flex;
+      align-items: center;
+      gap: 0px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 5px;
+    }
+
+    .menu-cadastro {
+      display: flex;
+      align-items: center;
+      gap: 0px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 5px;
+    }
+
+    .menu-pergunta {
+      display: flex;
+      align-items: center;
+      gap: 0px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 5px;
+    }
+
+    .menu-entrada {
+      display: flex;
+      align-items: center;
+      gap: 0px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 5px;
+    }
 
   </style>
 </head>
 <body>
-  <div class="pilar-esquerda"></div>
-  <div class="faixa-topo"></div>
+  <div class="header"></div>
 
-  <div class="conteudo">
-    <h1>Pilares deste Site</h1>
-  </div>
-  <div class="conteudo2">
+  <div class="mainContent">
+    <div class="sideBar">
+      <div class="top">
+        <div class="menu-Casa">
+          <img src="../static/img2/home.png" class="imagem-casa">
+          <span>Início</span>
+        </div>
 
-    <img src="../static/img2/1068727.png" class="imagem-esquerda">
+        <div class="menu-serviços">
+          <img src="../static/img2/ferramenta.png" class="imagem-service">
+          <span>Serviços</span>
+        </div>
 
-    <h2>Busca por
-        melhor performace
-        em jogos
-    </h2>
-  </div>
-  <div class="conteudo3">
-    <img src="../static/img2/1321.png" class="imagem-central">
-    <h2>
+        <div class="menu-profile">
+          <img src="../static/img2/profile.png" class="imagem-profile">
+          <span>Perfil</span>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="menu-cadastro">
+          <img src="../static/img2/Cadastro.png" class="imagem-cadastro">
+          <span>Cadastro</span>
+        </div>
 
-      Ajuda para completar
-      determinados jogos
-    </h2>
-  </div>
-  <div class="conteudo4">
-    <img src="../static/img2/7249411.png" class="imagem-direita">
-    <h2>
+        <div class="menu-pergunta">
+          <img src="../static/img2/help.png" class="imagem-pergunta">
+          <span>Central de Suporte</span>
+        </div>
 
-      Serviços de freelancer pagos
-    </h2>
-  </div>
+        <div class="menu-entrada">
+          <img src="../static/img2/login.png" class="imagem-entrada">
+          <span>Entrada</span>
+        </div>
 
-  <div class="conteudo5">
-    <h2>Inicio
-    </h2>
-  </div>
-  <div class="conteudo6">
-    <h2>Serviços
-    </h2>
-  </div>
-  <div class="conteudo7">
-    <h2>Perfil
-    </h2>
-  </div>
-  <div class="conteudo8">
-    <h2>Central de Suporte
-    </h2>
-  </div>
-  <div class="conteudo9">
-    <h2>Entrar na Conta
-    </h2>
-  </div>
-  <div class="conteudo10">
-    <h2>Cadastro
-    </h2>
-  </div>
 
-  <!-- Caminho ajustado corretamente -->
+      </div>
+    </div>
+    <div class="content">
+      <div class="titleName">Welcome to GameUnite</div>
+      <div class="blocos">
+        <div class="b1">
+          <img src="../static/img2/1068727.png" class="imagem-esquerda">
 
-  <img src="../static/img2/home.png" class="imagem-casa">
-  <img src="../static/img2/ferramenta.png" class="imagem-service">
-  <img src="../static/img2/profile.png" class="imagem-profile">
-  <img src="../static/img2/help.png" class="imagem-pergunta">
-  <img src="../static/img2/login.png" class="imagem-entrada">
-  <img src="../static/img2/Cadastro.png" class="imagem-cadastro">
+          <h2>Busca por
+              melhor performace
+              em jogos
+          </h2>
+
+        </div>
+        <div class="b2">
+          <img src="../static/img2/1321.png" class="imagem-central">
+          <h2>Ajuda para completar<br>determinados jogos</h2>
+        </div>
+        <div class="b3">
+          <img src="../static/img2/7249411.png" class="imagem-direita">
+          <h2>
+          Serviços de freelancer pagos</h2>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
