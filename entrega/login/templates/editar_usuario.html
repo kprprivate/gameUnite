@@ -1,30 +1,254 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Editar Usuário</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Editar Usuário</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: dimgray;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 220px;
+      background-color: #343a40;
+      color: white;
+      padding: 1rem;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 0;
+      margin-bottom: 0.3rem;
+    }
+
+    .sidebar a:hover {
+      background-color: #495057;
+      border-radius: 0.3rem;
+    }
+
+    /* HEADER */
+    .header {
+      width: calc(100% - 220px);
+      background-color: dimgray;
+      color: purple;
+      padding: 1.5rem 2rem;
+      font-size: 1.2rem;
+      position: fixed;
+      top: 0;
+      left: 220px;
+      z-index: 999;
+      box-shadow: 0 4px 12px rgba(128, 0, 128, 0.4);
+    }
+
+    /* MAIN AREA */
+    .main {
+      margin-left: 220px;
+      padding-top: 6.5rem; /* espaço para o header */
+      padding-left: 1rem;
+      padding-right: 1rem;
+      width: calc(100% - 220px);
+    }
+
+    .content {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    #mainContent {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: darkgray;
+      padding: 2rem 3rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .image-profile {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .imagem-profile {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid purple;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: #222;
+    }
+
+    .form-control {
+      padding: 0.45rem 0.5rem;
+      font-size: 0.9rem;
+      border-radius: 0.3rem;
+      border: 2px solid #ccc;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: purple;
+      box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+    }
+
+    .btn-purple {
+        background-color: purple;
+        border-color: purple;
+        color: white;
+    }
+
+    .btn-purple:hover {
+        background-color: darkmagenta;
+        border-color: darkmagenta;
+}
+
+    button {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      padding: 0.5rem;
+      font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .header {
+        width: 100%;
+        left: 0;
+      }
+
+      .main {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="center">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>Menu</h2>
+    <a href="#">Inicio</a>
+    <a href="#">Perfil</a>
+    <a href="#">Serviços</a>
+    <a href="#">Sair</a>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    Sistema de Usuários
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="content">
+      <div id="mainContent">
         <h1>Editar Usuário</h1>
 
-        <p>Nome atual: {{ usuario.nome }}</p>
-        <p>Descrição atual: {{ usuario.descricao }}</p>
+        <div class="image-profile">
+          <img
+            id="previewImagem"
+            src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+            alt="Foto de Perfil"
+            class="imagem-profile"
+          />
+        </div>
 
         <form method="POST" enctype="multipart/form-data">
-            <label for="nome">Nome:</label><br>
-            <input type="text" name="nome" value="{{ usuario.nome }}"><br><br>
+          <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input type="text" name="nome" id="nome" class="form-control" required />
+          </div>
 
-            <label for="descricao">Descrição:</label><br>
-            <input type="text" name="descricao" value="{{ usuario.descricao }}"><br><br>
+          <div class="form-group">
+            <label for="descricao">Descrição:</label>
+            <textarea name="descricao" id="descricao" class="form-control" rows="3" required></textarea>
+          </div>
 
-            <label for="imagem">Imagem de Perfil:</label><br>
-            <input type="file" name="imagem"><br><br>
+          <div class="form-group">
+            <label for="foto">Foto de Perfil:</label>
+            <input type="file" name="foto" id="foto" class="form-control" accept="image/*" />
+          </div>
 
-            <input type="submit" value="Salvar">
+          <button type="submit" class="btn btn-purple">Salvar Alterações</button>
         </form>
+      </div>
     </div>
+  </div>
+
+  <!-- JS: Visualizar imagem antes de enviar -->
+  <script>
+    const inputFoto = document.getElementById('foto');
+    const previewImagem = document.getElementById('previewImagem');
+
+    inputFoto.addEventListener('change', function (event) {
+      const arquivo = event.target.files[0];
+      if (arquivo) {
+        const leitor = new FileReader();
+        leitor.onload = function (e) {
+          previewImagem.src = e.target.result;
+        };
+        leitor.readAsDataURL(arquivo);
+      } else {
+        previewImagem.src = 'https://cdn-icons-png.flaticon.com/512/847/847969.png';
+      }
+    });
+  </script>
+
 </body>
 </html>
