@@ -19,7 +19,9 @@ import Register from './pages/Auth/Register';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Profile/Profile';
 import CreateAd from './pages/Ads/CreateAd';
+import EditAd from './pages/Ads/EditAd';
 import AdDetails from './pages/Ads/AdDetails';
+import UserProfile from './pages/Users/UserProfile';
 
 // Components
 import ProtectedRoute from './components/Auth/ProtectedRoute';
@@ -38,6 +40,7 @@ function App() {
                 <Route path="/games" element={<Layout><Games /></Layout>} />
                 <Route path="/games/:gameId" element={<Layout><GameDetails /></Layout>} />
                 <Route path="/ads/:adId" element={<Layout><AdDetails /></Layout>} />
+                <Route path="/users/:userId" element={<Layout><UserProfile /></Layout>} />
 
                 {/* Auth Routes */}
                 <Route path="/login" element={<Login />} />
@@ -65,6 +68,14 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <Layout><CreateAd /></Layout>
+                      </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/ads/:adId/edit"
+                    element={
+                      <ProtectedRoute>
+                        <Layout><EditAd /></Layout>
                       </ProtectedRoute>
                     }
                 />

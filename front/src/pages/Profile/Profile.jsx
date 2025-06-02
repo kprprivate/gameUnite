@@ -1,54 +1,130 @@
-import React, { useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
-import { useForm } from 'react-hook-form';
+// front/src/pages/Profile/Profile.jsx
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { User, Mail, Phone, MapPin, Edit, Save, X } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import { userService } from '../../services';
+import { useForm } from 'react-hook-form';
+import { User, Mail, Phone, MapPin, Edit, Save, X, Lock } from 'lucide-react';
 import Button from '../../components/Common/Button';
+import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import Modal from '../../components/Common/Modal';
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user: authUser } = useAuth();
+  const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm({
-    defaultValues: {
-      first_name: 'João',
-      last_name: 'Silva',
-      email: 'joao@email.com',
-      phone: '(11) 99999-9999',
-      location: 'São Paulo, SP',
-      bio: 'Gamer apaixonado por RPGs e jogos de esporte. Sempre em busca de novas experiências.'
-    }
-  });
+  } = useForm();
+
+  const {
+    register: registerPassword,
+    handleSubmit: handlePasswordSubmit,
+    reset: resetPassword,
+    watch,
+    formState: { errors: passwordErrors }
+  } = useForm();
+
+  const newPassword = watch('new_password');
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      setLoading(true);
+
+      const result = await userService.getProfile();
+      if (result.success) {
+        setUserData(result.data.user);
+        reset({
+          first_name: result.data.user.first_name || '',
+          last_name: result.data.user.last_name || '',
+          email: result.data.user.email || '',
+          phone: result.data.user.phone || '',
+          location: result.data.user.location || '',
+          bio: result.data.user.bio || ''
+        });
+      } else {
+        toast.error(result.message);
+      }
+
+      setLoading(false);
+    };
+
+    fetchUserProfile();
+  }, [reset]);
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    
-    try {
-      // Implementar chamada para API de atualização de perfil
-      console.log('Updating profile:', data);
-      
-      // Simular delay da API
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast.success('Perfil atualizado com sucesso!');
+
+    const result = await userService.updateProfile(data);
+    if (result.success) {
+      setUserData(result.data.user);
+      toast.success(result.message);
       setIsEditing(false);
-    } catch (error) {
-      toast.error('Erro ao atualizar perfil');
+    } else {
+      toast.error(result.message);
     }
-    
+
+    setIsLoading(false);
+  };
+
+  const onPasswordSubmit = async (data) => {
+    setIsLoading(true);
+
+    const result = await userService.changePassword({
+      current_password: data.current_password,
+      new_password: data.new_password
+    });
+
+    if (result.success) {
+      toast.success(result.message);
+      setShowPasswordModal(false);
+      resetPassword();
+    } else {
+      toast.error(result.message);
+    }
+
     setIsLoading(false);
   };
 
   const handleCancel = () => {
-    reset();
+    if (userData) {
+      reset({
+        first_name: userData.first_name || '',
+        last_name: userData.last_name || '',
+        email: userData.email || '',
+        phone: userData.phone || '',
+        location: userData.location || '',
+        bio: userData.bio || ''
+      });
+    }
     setIsEditing(false);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
+
+  if (!userData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Erro ao carregar perfil</h2>
+          <p className="text-gray-600">Não foi possível carregar os dados do seu perfil.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -59,19 +135,35 @@ const Profile = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6">
-                  <User className="w-10 h-10 text-gray-600" />
+                  {userData.profile_pic ? (
+                    <img
+                      src={userData.profile_pic}
+                      alt="Profile"
+                      className="w-20 h-20 rounded-full object-cover"
+                    />
+                  ) : (
+                    <User className="w-10 h-10 text-gray-600" />
+                  )}
                 </div>
                 <div className="text-white">
-                  <h1 className="text-2xl font-bold">João Silva</h1>
-                  <p className="text-blue-100">@joaosilva</p>
-                  <p className="text-blue-100">Membro desde Janeiro 2024</p>
+                  <h1 className="text-2xl font-bold">
+                    {userData.first_name} {userData.last_name}
+                  </h1>
+                  <p className="text-blue-100">@{userData.username}</p>
+                  <p className="text-blue-100">
+                    Membro desde {new Date(userData.created_at).toLocaleDateString('pt-BR', {
+                      month: 'long',
+                      year: 'numeric'
+                    })}
+                  </p>
                 </div>
               </div>
               <div className="text-right text-white">
                 <div className="text-sm">
-                  <div>⭐ 4.8/5 - Avaliação</div>
-                  <div>15 anúncios publicados</div>
-                  <div>12 vendas concluídas</div>
+                  <div>⭐ {userData.seller_rating?.toFixed(1) || '0.0'}/5 - Vendedor</div>
+                  <div>⭐ {userData.buyer_rating?.toFixed(1) || '0.0'}/5 - Comprador</div>
+                  <div>{userData.total_ads || 0} anúncios publicados</div>
+                  <div>{userData.active_ads || 0} anúncios ativos</div>
                 </div>
               </div>
             </div>
@@ -171,17 +263,11 @@ const Profile = () => {
                       }
                     })}
                     type="email"
-                    disabled={!isEditing}
-                    className={`w-full pl-10 pr-3 py-2 border rounded-md ${
-                      isEditing 
-                        ? 'border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500' 
-                        : 'border-gray-200 bg-gray-50'
-                    }`}
+                    disabled={true} // Email não pode ser editado
+                    className="w-full pl-10 pr-3 py-2 border border-gray-200 bg-gray-50 rounded-md"
                   />
                 </div>
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-                )}
+                <p className="mt-1 text-sm text-gray-500">O email não pode ser alterado</p>
               </div>
 
               {/* Phone */}
@@ -200,6 +286,7 @@ const Profile = () => {
                         ? 'border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500' 
                         : 'border-gray-200 bg-gray-50'
                     }`}
+                    placeholder="(11) 99999-9999"
                   />
                 </div>
               </div>
@@ -220,6 +307,7 @@ const Profile = () => {
                         ? 'border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500' 
                         : 'border-gray-200 bg-gray-50'
                     }`}
+                    placeholder="Cidade, Estado"
                   />
                 </div>
               </div>
@@ -250,18 +338,23 @@ const Profile = () => {
           <h2 className="text-xl font-semibold text-gray-800 mb-6">
             Configurações da Conta
           </h2>
-          
+
           <div className="space-y-4">
             <div className="flex justify-between items-center py-3 border-b border-gray-200">
               <div>
                 <h3 className="font-medium text-gray-800">Alterar Senha</h3>
                 <p className="text-sm text-gray-600">Atualize sua senha para manter sua conta segura</p>
               </div>
-              <Button variant="outline" size="sm">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowPasswordModal(true)}
+              >
+                <Lock className="w-4 h-4 mr-2" />
                 Alterar
               </Button>
             </div>
-            
+
             <div className="flex justify-between items-center py-3 border-b border-gray-200">
               <div>
                 <h3 className="font-medium text-gray-800">Notificações por Email</h3>
@@ -272,19 +365,99 @@ const Profile = () => {
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
               </label>
             </div>
-            
+
             <div className="flex justify-between items-center py-3">
               <div>
                 <h3 className="font-medium text-red-600">Excluir Conta</h3>
                 <p className="text-sm text-gray-600">Remova permanentemente sua conta e todos os dados</p>
               </div>
-              <Button variant="danger" size="sm">
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => toast.info('Funcionalidade em desenvolvimento')}
+              >
                 Excluir
               </Button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Password Change Modal */}
+      <Modal
+        isOpen={showPasswordModal}
+        onClose={() => setShowPasswordModal(false)}
+        title="Alterar Senha"
+        footer={
+          <>
+            <Button
+              variant="outline"
+              onClick={() => setShowPasswordModal(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              onClick={handlePasswordSubmit(onPasswordSubmit)}
+              loading={isLoading}
+            >
+              Alterar Senha
+            </Button>
+          </>
+        }
+      >
+        <form onSubmit={handlePasswordSubmit(onPasswordSubmit)} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Senha Atual
+            </label>
+            <input
+              {...registerPassword('current_password', { required: 'Senha atual é obrigatória' })}
+              type="password"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {passwordErrors.current_password && (
+              <p className="mt-1 text-sm text-red-600">{passwordErrors.current_password.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Nova Senha
+            </label>
+            <input
+              {...registerPassword('new_password', {
+                required: 'Nova senha é obrigatória',
+                minLength: {
+                  value: 6,
+                  message: 'Nova senha deve ter pelo menos 6 caracteres'
+                }
+              })}
+              type="password"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {passwordErrors.new_password && (
+              <p className="mt-1 text-sm text-red-600">{passwordErrors.new_password.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Confirmar Nova Senha
+            </label>
+            <input
+              {...registerPassword('confirm_password', {
+                required: 'Confirmação é obrigatória',
+                validate: value => value === newPassword || 'Senhas não coincidem'
+              })}
+              type="password"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {passwordErrors.confirm_password && (
+              <p className="mt-1 text-sm text-red-600">{passwordErrors.confirm_password.message}</p>
+            )}
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };

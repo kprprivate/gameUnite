@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { gameService, adService } from '../../services';
 import { Gamepad, Star, Plus, Filter } from 'lucide-react';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
@@ -17,23 +18,27 @@ const GameDetails = () => {
   useEffect(() => {
     const fetchGameDetails = async () => {
       setLoading(true);
-      
+
       const gameResult = await gameService.getGame(gameId);
       if (gameResult.success) {
         setGame(gameResult.data.game);
+      } else {
+        toast.error(gameResult.message);
       }
-      
+
       setLoading(false);
     };
 
     const fetchGameAds = async () => {
       setAdsLoading(true);
-      
+
       const adsResult = await adService.getAds({ game_id: gameId });
       if (adsResult.success) {
         setAds(adsResult.data.ads);
+      } else {
+        toast.error(adsResult.message);
       }
-      
+
       setAdsLoading(false);
     };
 
@@ -103,7 +108,7 @@ const GameDetails = () => {
                   </span>
                 )}
               </div>
-              
+
               {game.description && (
                 <p className="text-gray-700 mb-6 leading-relaxed">
                   {game.description}
@@ -126,7 +131,7 @@ const GameDetails = () => {
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-gray-800">
-              Anúncios para {game.name}
+              Anúncios para {game.name} ({filteredAndSortedAds.length})
             </h2>
             <div className="flex space-x-4">
               <select
@@ -163,12 +168,15 @@ const GameDetails = () => {
                 Nenhum anúncio encontrado
               </h3>
               <p className="text-gray-600 mb-4">
-                Seja o primeiro a criar um anúncio para este jogo!
+                {ads.length === 0
+                  ? 'Seja o primeiro a criar um anúncio para este jogo!'
+                  : 'Nenhum anúncio corresponde aos filtros selecionados.'
+                }
               </p>
               <Link to={`/create-ad?game=${gameId}`}>
                 <Button>
                   <Plus className="w-4 h-4 mr-2" />
-                  Criar Primeiro Anúncio
+                  Criar Anúncio
                 </Button>
               </Link>
             </div>
@@ -180,34 +188,59 @@ const GameDetails = () => {
                   to={`/ads/${ad._id}`}
                   className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
                 >
+                  {ad.image_url && (
+                    <div className="mb-3">
+                      <img
+                        src={ad.image_url}
+                        alt={ad.title}
+                        className="w-full h-32 object-cover rounded"
+                      />
+                    </div>
+                  )}
+
                   <div className="flex justify-between items-start mb-3">
-                    <h3 className="font-semibold text-lg text-gray-800 line-clamp-2">
+                    <h3 className="font-semibold text-lg text-gray-800 line-clamp-2 flex-1 mr-2">
                       {ad.title}
                     </h3>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      ad.ad_type === 'venda' 
-                        ? 'bg-green-100 text-green-800'
-                        : ad.ad_type === 'troca'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-purple-100 text-purple-800'
-                    }`}>
-                      {ad.ad_type}
-                    </span>
+                    <div className="flex flex-col items-end space-y-1">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        ad.ad_type === 'venda' 
+                          ? 'bg-green-100 text-green-800'
+                          : ad.ad_type === 'troca'
+                          ? 'bg-blue-100 text-blue-800'
+                          : 'bg-purple-100 text-purple-800'
+                      }`}>
+                        {ad.ad_type}
+                      </span>
+                      {ad.is_boosted && (
+                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                          ⭐
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  
+
                   <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                     {ad.description}
                   </p>
-                  
-                  <div className="flex justify-between items-center">
-                    {ad.price && (
-                      <span className="text-xl font-bold text-green-600">
-                        R$ {ad.price}
+
+                  <div className="flex justify-between items-center text-sm">
+                    <div className="flex flex-col">
+                      {ad.price && (
+                        <span className="text-xl font-bold text-green-600">
+                          R$ {ad.price}
+                        </span>
+                      )}
+                      <span className="text-gray-500">{ad.platform}</span>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <span className="text-gray-500">
+                        {new Date(ad.created_at).toLocaleDateString('pt-BR')}
                       </span>
-                    )}
-                    <span className="text-sm text-gray-500">
-                      {new Date(ad.created_at).toLocaleDateString('pt-BR')}
-                    </span>
+                      <span className="text-gray-400 text-xs">
+                        {ad.view_count} views
+                      </span>
+                    </div>
                   </div>
                 </Link>
               ))}

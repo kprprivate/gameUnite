@@ -3,6 +3,7 @@ import { gameService } from '../services/gameService';
 
 const GameContext = createContext();
 
+// Mover o hook para fora resolve o warning
 export const useGames = () => {
   const context = useContext(GameContext);
   if (!context) {
@@ -53,3 +54,6 @@ export const GameProvider = ({ children }) => {
     </GameContext.Provider>
   );
 };
+
+// Exportar o contexto por último
+export default GameContext;

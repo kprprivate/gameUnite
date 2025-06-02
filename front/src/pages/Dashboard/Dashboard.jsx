@@ -1,66 +1,72 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
-import { adService } from '../../services/adService';
+import { userService, adService } from '../../services';
 import { Plus, Eye, Edit, Trash2, TrendingUp, DollarSign } from 'lucide-react';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Button from '../../components/Common/Button';
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [dashboardData, setDashboardData] = useState(null);
   const [userAds, setUserAds] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({
-    totalAds: 0,
-    activeAds: 0,
-    totalViews: 0,
-    totalRevenue: 0
-  });
+  const [adsLoading, setAdsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchDashboardData = async () => {
       setLoading(true);
-      
-      // Buscar anúncios do usuário
-      // const adsResult = await adService.getUserAds(); // Implementar esta função no service
-      
-      // Por enquanto, dados mockados
-      const mockAds = [
-        {
-          _id: '1',
-          title: 'FIFA 24 - PlayStation 5',
-          description: 'Jogo em perfeito estado, pouco usado',
-          price: 200,
-          ad_type: 'venda',
-          status: 'active',
-          views: 45,
-          created_at: '2025-01-15T10:00:00Z'
-        },
-        {
-          _id: '2',
-          title: 'God of War Ragnarök',
-          description: 'Jogo zerado, todos os troféus desbloqueados',
-          price: 150,
-          ad_type: 'venda',
-          status: 'active',
-          views: 32,
-          created_at: '2025-01-10T14:30:00Z'
-        }
-      ];
 
-      setUserAds(mockAds);
-      setStats({
-        totalAds: mockAds.length,
-        activeAds: mockAds.filter(ad => ad.status === 'active').length,
-        totalViews: mockAds.reduce((total, ad) => total + ad.views, 0),
-        totalRevenue: mockAds.reduce((total, ad) => total + ad.price, 0)
-      });
-      
+      try {
+        // Buscar dados do dashboard
+        const dashboardResult = await userService.getDashboardData();
+        if (dashboardResult.success) {
+          setDashboardData(dashboardResult.data);
+        }
+
+        // Buscar anúncios do usuário
+        const adsResult = await adService.getMyAds();
+        if (adsResult.success) {
+          setUserAds(adsResult.data.ads);
+        }
+      } catch (error) {
+        toast.error('Erro ao carregar dados do dashboard');
+      }
+
       setLoading(false);
     };
 
-    fetchUserData();
+    fetchDashboardData();
   }, []);
+
+  const handleEditAd = (adId) => {
+    navigate(`/ads/${adId}/edit`);
+  };
+
+  const handleDeleteAd = async (adId) => {
+    if (window.confirm('Tem certeza que deseja excluir este anúncio?')) {
+      setAdsLoading(true);
+
+      const result = await adService.deleteAd(adId);
+      if (result.success) {
+        toast.success('Anúncio excluído com sucesso!');
+        // Remover o anúncio da lista
+        setUserAds(userAds.filter(ad => ad._id !== adId));
+
+        // Atualizar dados do dashboard
+        const dashboardResult = await userService.getDashboardData();
+        if (dashboardResult.success) {
+          setDashboardData(dashboardResult.data);
+        }
+      } else {
+        toast.error(result.message);
+      }
+
+      setAdsLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -69,6 +75,8 @@ const Dashboard = () => {
       </div>
     );
   }
+
+  const stats = dashboardData?.stats || {};
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -79,7 +87,7 @@ const Dashboard = () => {
             Dashboard
           </h1>
           <p className="text-gray-600">
-            Gerencie seus anúncios e acompanhe suas vendas
+            Olá, {dashboardData?.user?.first_name || user?.username}! Gerencie seus anúncios e acompanhe suas vendas
           </p>
         </div>
 
@@ -92,7 +100,7 @@ const Dashboard = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total de Anúncios</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalAds}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.total_ads || 0}</p>
               </div>
             </div>
           </div>
@@ -104,7 +112,7 @@ const Dashboard = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Anúncios Ativos</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.activeAds}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.active_ads || 0}</p>
               </div>
             </div>
           </div>
@@ -116,7 +124,7 @@ const Dashboard = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total de Views</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalViews}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.total_views || 0}</p>
               </div>
             </div>
           </div>
@@ -128,7 +136,7 @@ const Dashboard = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Valor Total</p>
-                <p className="text-2xl font-bold text-gray-900">R$ {stats.totalRevenue}</p>
+                <p className="text-2xl font-bold text-gray-900">R$ {stats.total_value || 0}</p>
               </div>
             </div>
           </div>
@@ -164,6 +172,12 @@ const Dashboard = () => {
             </Link>
           </div>
 
+          {adsLoading && (
+            <div className="flex justify-center py-4">
+              <LoadingSpinner />
+            </div>
+          )}
+
           {userAds.length === 0 ? (
             <div className="text-center py-12">
               <div className="mb-4">
@@ -191,6 +205,9 @@ const Dashboard = () => {
                       Anúncio
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Jogo
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Tipo
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -209,7 +226,7 @@ const Dashboard = () => {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {userAds.map((ad) => (
-                    <tr key={ad._id}>
+                    <tr key={ad._id} className={adsLoading ? 'opacity-50' : ''}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
                           <div className="text-sm font-medium text-gray-900">
@@ -221,16 +238,26 @@ const Dashboard = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {ad.game?.name || 'Jogo não encontrado'}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {ad.platform}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           ad.ad_type === 'venda' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-blue-100 text-blue-800'
+                            ? 'bg-green-100 text-green-800'
+                            : ad.ad_type === 'troca'
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-purple-100 text-purple-800'
                         }`}>
-                          {ad.ad_type}
+                          {ad.ad_type.charAt(0).toUpperCase() + ad.ad_type.slice(1)}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        R$ {ad.price}
+                        {ad.price ? `R$ ${ad.price}` : '-'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
@@ -242,20 +269,31 @@ const Dashboard = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {ad.views}
+                        {ad.view_count || 0}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
                           <Link
                             to={`/ads/${ad._id}`}
                             className="text-blue-600 hover:text-blue-900"
+                            title="Ver anúncio"
                           >
                             <Eye className="w-4 h-4" />
                           </Link>
-                          <button className="text-yellow-600 hover:text-yellow-900">
+                          <button
+                            className="text-yellow-600 hover:text-yellow-900"
+                            title="Editar anúncio"
+                            onClick={() => handleEditAd(ad._id)}
+                            disabled={adsLoading}
+                          >
                             <Edit className="w-4 h-4" />
                           </button>
-                          <button className="text-red-600 hover:text-red-900">
+                          <button 
+                            className="text-red-600 hover:text-red-900"
+                            title="Excluir anúncio"
+                            onClick={() => handleDeleteAd(ad._id)}
+                            disabled={adsLoading}
+                          >
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>

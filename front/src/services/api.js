@@ -13,6 +13,21 @@ const api = axios.create({
   },
 });
 
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  failedQueue.forEach(prom => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+
+  failedQueue = [];
+};
+
 // Interceptor para adicionar token
 api.interceptors.request.use(
   (config) => {
@@ -36,7 +51,19 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        }).then(token => {
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          return api(originalRequest);
+        }).catch(err => {
+          return Promise.reject(err);
+        });
+      }
+
       originalRequest._retry = true;
+      isRefreshing = true;
 
       try {
         const refreshToken = Cookies.get('refresh_token');
@@ -50,19 +77,25 @@ api.interceptors.response.use(
           const { access_token } = response.data.data;
           Cookies.set('access_token', access_token);
 
+          processQueue(null, access_token);
+
+          originalRequest.headers.Authorization = `Bearer ${access_token}`;
           return api(originalRequest);
         }
       } catch (refreshError) {
-        // Refresh falhou, redirecionar para login
+        processQueue(refreshError, null);
         Cookies.remove('access_token');
         Cookies.remove('refresh_token');
         window.location.href = '/login';
+      } finally {
+        isRefreshing = false;
       }
     }
 
-    // Mostrar toast de erro se não for erro de autenticação
-    if (error.response?.status !== 401) {
-      toast.error(error.response?.data?.message || 'Erro interno do servidor');
+    // Mostrar toast de erro apenas uma vez
+    if (error.response?.status !== 401 && !originalRequest._retry) {
+      const message = error.response?.data?.message || 'Erro interno do servidor';
+      toast.error(message);
     }
 
     return Promise.reject(error);
