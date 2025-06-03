@@ -22,7 +22,7 @@ def register_blueprints(app):
     from app.api.ads.routes import ads_bp
     app.register_blueprint(ads_bp, url_prefix='/api/ads')
 
-    # Order routes
+    # Order routes - NOVO
     from app.api.orders.routes import orders_bp
     app.register_blueprint(orders_bp, url_prefix='/api/orders')
 

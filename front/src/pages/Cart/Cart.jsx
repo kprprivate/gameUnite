@@ -1,3 +1,4 @@
+// front/src/pages/Ads/AdDetails.jsx - VERSÃO COM FAVORITOS CORRIGIDOS
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -8,7 +9,6 @@ import { cartUtils } from '../../utils/cartUtils';
 import { Calendar, MapPin, User, MessageCircle, Heart, Share2, Eye, ShoppingCart, Check } from 'lucide-react';
 import Button from '../../components/Common/Button';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
-import AddToCartButton from '../../components/Common/AddToCartButton';
 
 const AdDetails = () => {
   const { adId } = useParams();
@@ -25,13 +25,7 @@ const AdDetails = () => {
   const [isInCart, setIsInCart] = useState(false);
   const [cartLoading, setCartLoading] = useState(false);
 
-  // UseRef para controlar carregamento
-  const hasLoaded = useRef(false);
-
   useEffect(() => {
-    if (hasLoaded.current) return;
-    hasLoaded.current = true;
-
     const fetchAdDetails = async () => {
       setLoading(true);
 
@@ -39,26 +33,43 @@ const AdDetails = () => {
         const result = await adService.getAd(adId);
         if (result.success) {
           setAd(result.data.ad);
+
+          // Definir contagem de favoritos (do backend ou da resposta)
           setFavoritesCount(result.data.ad.favorites_count || 0);
-          setIsFavorited(result.data.ad.user_favorited || false);
 
           // Verificar se está no carrinho
           setIsInCart(cartUtils.isInCart(adId));
+
+          // Se o usuário está logado, verificar se favoritou este anúncio
+          if (isAuthenticated) {
+            await checkIfFavorited();
+          } else {
+            setIsFavorited(false);
+          }
         } else {
           toast.error(result.message);
         }
       } catch (error) {
+        console.error('Erro ao carregar anúncio:', error);
         toast.error('Erro ao carregar anúncio');
       }
 
       setLoading(false);
     };
 
-    fetchAdDetails();
-
-    return () => {
-      hasLoaded.current = false;
+    const checkIfFavorited = async () => {
+      try {
+        const favoriteResult = await favoritesService.checkIsFavorite(adId);
+        if (favoriteResult.success) {
+          setIsFavorited(favoriteResult.data.is_favorited);
+        }
+      } catch (error) {
+        console.error('Erro ao verificar favorito:', error);
+        // Não mostrar erro para o usuário, apenas logar
+      }
     };
+
+    fetchAdDetails();
   }, [adId, isAuthenticated]);
 
   // Listener para mudanças no carrinho
@@ -84,13 +95,22 @@ const AdDetails = () => {
     try {
       const result = await favoritesService.toggleFavorite(adId);
       if (result.success) {
-        setIsFavorited(result.data.is_favorited);
-        setFavoritesCount(prev => result.data.is_favorited ? prev + 1 : prev - 1);
+        const newIsFavorited = result.data.is_favorited;
+        setIsFavorited(newIsFavorited);
+
+        // Atualizar contador baseado na ação
+        if (result.data.action === 'added') {
+          setFavoritesCount(prev => prev + 1);
+        } else if (result.data.action === 'removed') {
+          setFavoritesCount(prev => Math.max(0, prev - 1));
+        }
+
         toast.success(result.message);
       } else {
         toast.error(result.message);
       }
     } catch (error) {
+      console.error('Erro ao favoritar:', error);
       toast.error('Erro ao favoritar anúncio');
     } finally {
       setFavoriteLoading(false);
@@ -227,27 +247,29 @@ const AdDetails = () => {
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  {/* Botão de Favoritar */}
+                  {/* Botão de Favoritar - CORRIGIDO */}
                   <div className="flex items-center space-x-1">
                     <button
                       onClick={handleFavorite}
                       disabled={favoriteLoading}
-                      className={`p-2 rounded-full transition-colors ${
+                      className={`p-2 rounded-full transition-colors duration-200 ${
                         isFavorited 
-                          ? 'bg-red-100 text-red-600' 
+                          ? 'bg-red-100 text-red-600 hover:bg-red-200' 
                           : 'bg-gray-100 text-gray-600 hover:bg-red-100 hover:text-red-600'
-                      } ${favoriteLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      } ${favoriteLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                       title={isFavorited ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
                     >
-                      <Heart className={`w-5 h-5 ${isFavorited ? 'fill-current' : ''}`} />
+                      <Heart className={`w-5 h-5 transition-all duration-200 ${
+                        isFavorited ? 'fill-current text-red-600' : 'text-gray-600'
+                      }`} />
                     </button>
-                    <span className="text-sm text-gray-600">{favoritesCount}</span>
+                    <span className="text-sm text-gray-600 font-medium">{favoritesCount}</span>
                   </div>
 
                   {/* Botão de Compartilhar */}
                   <button
                     onClick={handleShare}
-                    className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600"
+                    className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600 transition-colors duration-200"
                     title="Compartilhar anúncio"
                   >
                     <Share2 className="w-5 h-5" />
@@ -279,7 +301,7 @@ const AdDetails = () => {
                   )}
                 </div>
 
-                {/* Botões de Ação - ÍCONES CORRIGIDOS */}
+                {/* Botões de Ação */}
                 {canAddToCart && (
                   <div className="flex space-x-3">
                     {isInCart ? (
@@ -457,7 +479,7 @@ const AdDetails = () => {
             {ad.game && (
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Sobre o Jogo</h3>
-                
+
                 <div className="flex items-center mb-4">
                   <img
                     src={ad.game.image_url || 'https://via.placeholder.com/64x64/9CA3AF/FFFFFF?text=Game'}

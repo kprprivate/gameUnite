@@ -1,4 +1,3 @@
- 
 import React from 'react';
 import clsx from 'clsx';
 
@@ -11,8 +10,8 @@ const Button = ({
   className = '',
   ...props
 }) => {
-  const baseClasses = 'font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
-  
+  const baseClasses = 'font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 inline-flex items-center justify-center';
+
   const variants = {
     primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
     secondary: 'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500',
@@ -41,7 +40,7 @@ const Button = ({
       {...props}
     >
       {loading ? (
-        <div className="flex items-center">
+        <div className="inline-flex items-center">
           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
           Carregando...
         </div>

@@ -3,4 +3,5 @@ export { gameService } from './gameService';
 export { adService } from './adService';
 export { userService } from './userService';
 export { favoritesService } from './favoritesService';
+export { orderService } from './orderService';
 export { default as api } from './api';

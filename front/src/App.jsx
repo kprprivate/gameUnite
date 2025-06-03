@@ -22,7 +22,11 @@ import CreateAd from './pages/Ads/CreateAd';
 import EditAd from './pages/Ads/EditAd';
 import AdDetails from './pages/Ads/AdDetails';
 import UserProfile from './pages/Users/UserProfile';
-import Favorites from './pages/Favorites/Favorites'; // NOVA IMPORTAÇÃO
+import Favorites from './pages/Favorites/Favorites';
+import Cart from './pages/Cart/Cart';
+import Checkout from './pages/Cart/Checkout';
+import Orders from './pages/Orders/Orders';
+import OrderDetails from './pages/Orders/OrderDetails';
 
 // Components
 import ProtectedRoute from './components/Auth/ProtectedRoute';
@@ -69,6 +73,38 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <Layout><Favorites /></Layout>
+                      </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/cart"
+                    element={
+                      <ProtectedRoute>
+                        <Layout><Cart /></Layout>
+                      </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/checkout"
+                    element={
+                      <ProtectedRoute>
+                        <Layout><Checkout /></Layout>
+                      </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/orders"
+                    element={
+                      <ProtectedRoute>
+                        <Layout><Orders /></Layout>
+                      </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/orders/:orderId"
+                    element={
+                      <ProtectedRoute>
+                        <Layout><OrderDetails /></Layout>
                       </ProtectedRoute>
                     }
                 />
