@@ -1,6 +1,5 @@
-# app/__init__.py
 from flask import Flask
-
+import os
 
 def create_app(config_name="development"):
     app = Flask(__name__)
@@ -11,6 +10,10 @@ def create_app(config_name="development"):
     # Carregar configuração
     from app.config import get_config
     app.config.from_object(get_config(config_name))
+
+    # Configurar pasta de uploads
+    app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
     # Inicializar extensões ANTES dos blueprints
     from app.extensions import init_extensions

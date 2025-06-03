@@ -36,7 +36,7 @@ def get_user_profile(user_id):
 def update_user_profile(user_id, update_data):
     """Atualiza o perfil do usuário."""
     try:
-        # Campos permitidos para atualização
+        # Campos permitidos para atualização (INCLUINDO profile_pic)
         allowed_fields = [
             "first_name", "last_name", "bio", "profile_pic",
             "phone", "location"

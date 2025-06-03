@@ -1,13 +1,13 @@
-// front/src/pages/Profile/Profile.jsx
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
 import { userService } from '../../services';
 import { useForm } from 'react-hook-form';
-import { User, Mail, Phone, MapPin, Edit, Save, X, Lock } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Edit, Save, X, Lock, Camera } from 'lucide-react';
 import Button from '../../components/Common/Button';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Modal from '../../components/Common/Modal';
+import ProfileImageUpload from '../../components/Common/ProfileImageUpload';
 
 const Profile = () => {
   const { user: authUser } = useAuth();
@@ -16,6 +16,7 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [profileImageUrl, setProfileImageUrl] = useState(null);
 
   const {
     register,
@@ -41,6 +42,7 @@ const Profile = () => {
       const result = await userService.getProfile();
       if (result.success) {
         setUserData(result.data.user);
+        setProfileImageUrl(result.data.user.profile_pic);
         reset({
           first_name: result.data.user.first_name || '',
           last_name: result.data.user.last_name || '',
@@ -58,6 +60,17 @@ const Profile = () => {
 
     fetchUserProfile();
   }, [reset]);
+
+  const handleProfileImageUpdate = (newImageUrl) => {
+    setProfileImageUrl(newImageUrl);
+    // Atualizar userData também para refletir a mudança imediatamente
+    if (userData) {
+      setUserData({
+        ...userData,
+        profile_pic: newImageUrl
+      });
+    }
+  };
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -134,16 +147,13 @@ const Profile = () => {
           <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mr-6">
-                  {userData.profile_pic ? (
-                    <img
-                      src={userData.profile_pic}
-                      alt="Profile"
-                      className="w-20 h-20 rounded-full object-cover"
-                    />
-                  ) : (
-                    <User className="w-10 h-10 text-gray-600" />
-                  )}
+                {/* COMPONENTE DE UPLOAD DE FOTO DE PERFIL */}
+                <div className="mr-6">
+                  <ProfileImageUpload
+                    currentImage={profileImageUrl}
+                    onImageUpdated={handleProfileImageUpdate}
+                    size="xl"
+                  />
                 </div>
                 <div className="text-white">
                   <h1 className="text-2xl font-bold">
@@ -353,6 +363,16 @@ const Profile = () => {
                 <Lock className="w-4 h-4 mr-2" />
                 Alterar
               </Button>
+            </div>
+
+            <div className="flex justify-between items-center py-3 border-b border-gray-200">
+              <div>
+                <h3 className="font-medium text-gray-800">Foto de Perfil</h3>
+                <p className="text-sm text-gray-600">Clique na sua foto acima para alterá-la</p>
+              </div>
+              <div className="text-sm text-blue-600">
+                {profileImageUrl ? 'Foto definida' : 'Sem foto'}
+              </div>
             </div>
 
             <div className="flex justify-between items-center py-3 border-b border-gray-200">

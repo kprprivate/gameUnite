@@ -3,10 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useGames } from '../../contexts/GameContext';
-import { adService } from '../../services/adService';
-import { Upload, DollarSign, Gamepad } from 'lucide-react';
+import { adService } from '../../services';
+import { DollarSign, Gamepad } from 'lucide-react';
 import Button from '../../components/Common/Button';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import ImageUpload from '../../components/Common/ImageUpload';
 
 const EditAd = () => {
   const { adId } = useParams();
@@ -14,7 +15,8 @@ const EditAd = () => {
   const { games, fetchGames } = useGames();
   const [isLoading, setIsLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [currentImageUrl, setCurrentImageUrl] = useState(null);
 
   const {
     register,
@@ -48,8 +50,9 @@ const EditAd = () => {
             desired_games: ad.desired_games || ''
           });
 
+          // Definir imagem atual
           if (ad.image_url) {
-            setImagePreview(ad.image_url);
+            setCurrentImageUrl(ad.image_url);
           }
         } else {
           toast.error(result.message);
@@ -70,11 +73,26 @@ const EditAd = () => {
     loadAdData();
   }, [adId, games, fetchGames, reset, navigate]);
 
+  const handleImageUploaded = (imageData) => {
+    setUploadedImage(imageData);
+    if (imageData) {
+      setCurrentImageUrl(imageData.main_url);
+    } else {
+      setCurrentImageUrl(null);
+    }
+  };
+
   const onSubmit = async (data) => {
     setIsLoading(true);
 
     try {
-      const result = await adService.updateAd(adId, data);
+      // Incluir URL da imagem no envio
+      const updateData = {
+        ...data,
+        image_url: uploadedImage?.main_url || currentImageUrl || null
+      };
+
+      const result = await adService.updateAd(adId, updateData);
 
       if (result.success) {
         toast.success('Anúncio atualizado com sucesso!');
@@ -87,17 +105,6 @@ const EditAd = () => {
     }
 
     setIsLoading(false);
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   if (pageLoading) {
@@ -246,6 +253,24 @@ const EditAd = () => {
               )}
             </div>
 
+            {/* Upload de Imagem MELHORADO */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Imagens do Anúncio
+              </label>
+              <ImageUpload
+                onImageUploaded={handleImageUploaded}
+                currentImage={currentImageUrl}
+                category="ads"
+                placeholder="Adicione ou altere a foto do seu anúncio"
+                className="w-full"
+                allowRemove={true}
+              />
+              <p className="mt-2 text-sm text-gray-500">
+                💡 Você pode arrastar uma nova imagem ou clicar para trocar a atual
+              </p>
+            </div>
+
             {/* Preço (apenas para venda) */}
             {adType === 'venda' && (
               <div>
@@ -297,47 +322,6 @@ const EditAd = () => {
                 )}
               </div>
             )}
-
-            {/* Upload de Imagem */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Imagens do Jogo
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                  id="image-upload"
-                />
-                <label htmlFor="image-upload" className="cursor-pointer">
-                  {imagePreview ? (
-                    <div>
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
-                        className="mx-auto h-32 w-32 object-cover rounded-lg mb-4"
-                      />
-                      <p className="text-sm text-blue-600 hover:text-blue-500">
-                        Clique para alterar a imagem
-                      </p>
-                    </div>
-                  ) : (
-                    <div>
-                      <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                      <p className="text-sm text-gray-600">
-                        <span className="text-blue-600 hover:text-blue-500">Clique para fazer upload</span>
-                        {' '}ou arraste e solte
-                      </p>
-                      <p className="text-xs text-gray-500 mt-2">
-                        PNG, JPG, GIF até 10MB
-                      </p>
-                    </div>
-                  )}
-                </label>
-              </div>
-            </div>
 
             {/* Plataforma */}
             <div>

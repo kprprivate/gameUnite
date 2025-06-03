@@ -4,15 +4,16 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useGames } from '../../contexts/GameContext';
 import { adService } from '../../services/adService';
-import { Upload, DollarSign, Gamepad } from 'lucide-react';
+import { DollarSign, Gamepad } from 'lucide-react';
 import Button from '../../components/Common/Button';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import ImageUpload from '../../components/Common/ImageUpload';
 
 const CreateAd = () => {
   const navigate = useNavigate();
   const { games, fetchGames } = useGames();
   const [isLoading, setIsLoading] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(null);
 
   const {
     register,
@@ -31,10 +32,16 @@ const CreateAd = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    
+
     try {
-      const result = await adService.createAd(data);
-      
+      // Incluir URL da imagem se foi feito upload
+      const adData = {
+        ...data,
+        image_url: uploadedImage?.main_url || null
+      };
+
+      const result = await adService.createAd(adData);
+
       if (result.success) {
         toast.success('Anúncio criado com sucesso!');
         navigate('/dashboard');
@@ -44,19 +51,12 @@ const CreateAd = () => {
     } catch (error) {
       toast.error('Erro ao criar anúncio');
     }
-    
+
     setIsLoading(false);
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleImageUploaded = (imageData) => {
+    setUploadedImage(imageData);
   };
 
   return (
@@ -91,7 +91,7 @@ const CreateAd = () => {
                     <div className="text-sm text-gray-500">Vender o jogo</div>
                   </div>
                 </label>
-                
+
                 <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
                   <input
                     {...register('ad_type', { required: 'Selecione o tipo de anúncio' })}
@@ -104,7 +104,7 @@ const CreateAd = () => {
                     <div className="text-sm text-gray-500">Trocar por outro</div>
                   </div>
                 </label>
-                
+
                 <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
                   <input
                     {...register('ad_type', { required: 'Selecione o tipo de anúncio' })}
@@ -155,7 +155,7 @@ const CreateAd = () => {
                 Título do Anúncio
               </label>
               <input
-                {...register('title', { 
+                {...register('title', {
                   required: 'Título é obrigatório',
                   minLength: {
                     value: 10,
@@ -179,7 +179,7 @@ const CreateAd = () => {
                 Descrição
               </label>
               <textarea
-                {...register('description', { 
+                {...register('description', {
                   required: 'Descrição é obrigatória',
                   minLength: {
                     value: 20,
@@ -197,6 +197,22 @@ const CreateAd = () => {
               )}
             </div>
 
+            {/* Upload de Imagem */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Imagens do Jogo
+              </label>
+              <ImageUpload
+                onImageUploaded={handleImageUploaded}
+                category="ads"
+                placeholder="Adicione fotos do seu jogo para atrair mais compradores"
+                className="w-full"
+              />
+              <p className="mt-2 text-sm text-gray-500">
+                💡 Anúncios com fotos recebem até 5x mais visualizações!
+              </p>
+            </div>
+
             {/* Preço (apenas para venda) */}
             {adType === 'venda' && (
               <div>
@@ -206,7 +222,7 @@ const CreateAd = () => {
                 <div className="relative">
                   <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
-                    {...register('price', { 
+                    {...register('price', {
                       required: adType === 'venda' ? 'Preço é obrigatório para vendas' : false,
                       min: {
                         value: 1,
@@ -234,7 +250,7 @@ const CreateAd = () => {
                   Jogos Desejados para Troca
                 </label>
                 <textarea
-                  {...register('desired_games', { 
+                  {...register('desired_games', {
                     required: adType === 'troca' ? 'Informe os jogos desejados para troca' : false
                   })}
                   rows={3}
@@ -248,47 +264,6 @@ const CreateAd = () => {
                 )}
               </div>
             )}
-
-            {/* Upload de Imagem */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Imagens do Jogo
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                  id="image-upload"
-                />
-                <label htmlFor="image-upload" className="cursor-pointer">
-                  {imagePreview ? (
-                    <div>
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
-                        className="mx-auto h-32 w-32 object-cover rounded-lg mb-4"
-                      />
-                      <p className="text-sm text-blue-600 hover:text-blue-500">
-                        Clique para alterar a imagem
-                      </p>
-                    </div>
-                  ) : (
-                    <div>
-                      <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                      <p className="text-sm text-gray-600">
-                        <span className="text-blue-600 hover:text-blue-500">Clique para fazer upload</span>
-                        {' '}ou arraste e solte
-                      </p>
-                      <p className="text-xs text-gray-500 mt-2">
-                        PNG, JPG, GIF até 10MB
-                      </p>
-                    </div>
-                  )}
-                </label>
-              </div>
-            </div>
 
             {/* Plataforma */}
             <div>

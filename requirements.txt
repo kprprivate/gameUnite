@@ -6,3 +6,5 @@ pymongo
 bcrypt
 python-slugify
 certifi
+Pillow
+boto3
