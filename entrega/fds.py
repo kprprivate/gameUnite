@@ -1,10 +1,10 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return 'Web App with Python Flask!'
+@app.route('/forgot_password')
+def esqueciMinhaSenha():
+    return render_template("esqueciSenha.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
