@@ -6,7 +6,6 @@ cors = CORS(
     origins=[
         'http://localhost:3000', 
         'http://127.0.0.1:3000',
-        'http://localhost:5173',  # Vite dev server alternativo
     ],
     allow_headers=[
         'Content-Type',

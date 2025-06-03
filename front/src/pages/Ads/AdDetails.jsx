@@ -1,9 +1,9 @@
-// front/src/pages/Ads/AdDetails.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
 import { adService } from '../../services';
+import { favoritesService } from '../../services/favoritesService';
 import { Calendar, MapPin, User, MessageCircle, Heart, Share2, Eye } from 'lucide-react';
 import Button from '../../components/Common/Button';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
@@ -13,9 +13,11 @@ const AdDetails = () => {
   const { isAuthenticated } = useAuth();
   const [ad, setAd] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isLiked, setIsLiked] = useState(false);
-  const [totalLikes, setTotalLikes] = useState(0);
-  const [likeLoading, setLikeLoading] = useState(false);
+
+  // Estados para favoritos
+  const [isFavorited, setIsFavorited] = useState(false);
+  const [favoritesCount, setFavoritesCount] = useState(0);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
 
   // UseRef para controlar se já carregou os dados (evita duplicação)
   const hasLoaded = useRef(false);
@@ -32,6 +34,9 @@ const AdDetails = () => {
         const result = await adService.getAd(adId);
         if (result.success) {
           setAd(result.data.ad);
+          // Definir contadores do backend
+          setFavoritesCount(result.data.ad.favorites_count || 0);
+          setIsFavorited(result.data.ad.user_favorited || false);
         } else {
           toast.error(result.message);
         }
@@ -42,22 +47,7 @@ const AdDetails = () => {
       setLoading(false);
     };
 
-    const fetchLikes = async () => {
-      if (isAuthenticated) {
-        try {
-          const result = await adService.getAdLikes(adId);
-          if (result.success) {
-            setIsLiked(result.data.user_liked);
-            setTotalLikes(result.data.total_likes);
-          }
-        } catch (error) {
-          console.error('Erro ao buscar curtidas:', error);
-        }
-      }
-    };
-
     fetchAdDetails();
-    fetchLikes();
 
     // Cleanup function para resetar o flag quando o componente for desmontado
     return () => {
@@ -65,29 +55,30 @@ const AdDetails = () => {
     };
   }, [adId, isAuthenticated]);
 
-  const handleLike = async () => {
+  const handleFavorite = async () => {
     if (!isAuthenticated) {
-      toast.info('Faça login para curtir anúncios');
+      toast.info('Faça login para favoritar anúncios');
       return;
     }
 
-    if (likeLoading) return;
+    if (favoriteLoading) return;
 
-    setLikeLoading(true);
+    setFavoriteLoading(true);
 
     try {
-      const result = await adService.likeAd(adId);
+      const result = await favoritesService.toggleFavorite(adId);
       if (result.success) {
-        setIsLiked(result.data.liked);
-        setTotalLikes(result.data.total_likes);
+        setIsFavorited(result.data.is_favorited);
+        // Atualizar contador localmente
+        setFavoritesCount(prev => result.data.is_favorited ? prev + 1 : prev - 1);
         toast.success(result.message);
       } else {
         toast.error(result.message);
       }
     } catch (error) {
-      toast.error('Erro ao curtir anúncio');
+      toast.error('Erro ao favoritar anúncio');
     } finally {
-      setLikeLoading(false);
+      setFavoriteLoading(false);
     }
   };
 
@@ -170,23 +161,28 @@ const AdDetails = () => {
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
+                  {/* Botão de Favoritar */}
                   <div className="flex items-center space-x-1">
                     <button
-                      onClick={handleLike}
-                      disabled={likeLoading}
+                      onClick={handleFavorite}
+                      disabled={favoriteLoading}
                       className={`p-2 rounded-full transition-colors ${
-                        isLiked 
+                        isFavorited 
                           ? 'bg-red-100 text-red-600' 
                           : 'bg-gray-100 text-gray-600 hover:bg-red-100 hover:text-red-600'
-                      } ${likeLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      } ${favoriteLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      title={isFavorited ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
                     >
-                      <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
+                      <Heart className={`w-5 h-5 ${isFavorited ? 'fill-current' : ''}`} />
                     </button>
-                    <span className="text-sm text-gray-600">{totalLikes}</span>
+                    <span className="text-sm text-gray-600">{favoritesCount}</span>
                   </div>
+
+                  {/* Botão de Compartilhar */}
                   <button
                     onClick={handleShare}
                     className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600"
+                    title="Compartilhar anúncio"
                   >
                     <Share2 className="w-5 h-5" />
                   </button>
@@ -257,7 +253,7 @@ const AdDetails = () => {
               <h3 className="text-lg font-semibold text-gray-800 mb-4">
                 {ad.ad_type === 'venda' ? 'Vendedor' : ad.ad_type === 'troca' ? 'Anunciante' : 'Comprador'}
               </h3>
-              
+
               <div className="flex items-center mb-4">
                 <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center mr-3">
                   {ad.user?.profile_pic ? (
@@ -272,7 +268,7 @@ const AdDetails = () => {
                 </div>
                 <div>
                   <p className="font-medium text-gray-800">
-                    {ad.user?.first_name && ad.user?.last_name 
+                    {ad.user?.first_name && ad.user?.last_name
                       ? `${ad.user.first_name} ${ad.user.last_name}`
                       : ad.user?.username || 'Usuário'}
                   </p>
@@ -297,7 +293,7 @@ const AdDetails = () => {
                 <div className="space-y-3">
                   <Button
                     onClick={handleContact}
-                    className="w-full"
+                    className="w-full flex items-center justify-center"
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />
                     Entrar em Contato

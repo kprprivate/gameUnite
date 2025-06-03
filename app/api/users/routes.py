@@ -136,3 +136,106 @@ def get_user_public_ads(user_id):
 
     except Exception as e:
         return error_response(f"Erro ao buscar anúncios do usuário: {str(e)}")
+
+
+@users_bp.route("/favorites", methods=["GET"])
+@jwt_required
+def get_user_favorites_route():
+    """Retorna os favoritos do usuário logado."""
+    try:
+        from app.services.favorites.favorites_service import get_user_favorites
+
+        limit = int(request.args.get("limit", 20))
+        skip = int(request.args.get("skip", 0))
+
+        result = get_user_favorites(g.user["_id"], limit, skip)
+
+        if result["success"]:
+            return success_response(
+                data=result["data"],
+                message="Favoritos encontrados com sucesso"
+            )
+        else:
+            return error_response(result["message"])
+
+    except Exception as e:
+        return error_response(f"Erro ao buscar favoritos: {str(e)}")
+
+
+@users_bp.route("/favorites/<ad_id>", methods=["POST"])
+@jwt_required
+def add_to_favorites_route(ad_id):
+    """Adiciona um anúncio aos favoritos."""
+    try:
+        from app.services.favorites.favorites_service import add_to_favorites
+
+        result = add_to_favorites(g.user["_id"], ad_id)
+
+        if result["success"]:
+            return success_response(
+                data=result["data"],
+                message=result["message"],
+                status_code=201
+            )
+        else:
+            return error_response(result["message"], status_code=400)
+
+    except Exception as e:
+        return error_response(f"Erro ao adicionar favorito: {str(e)}")
+
+
+@users_bp.route("/favorites/<ad_id>", methods=["DELETE"])
+@jwt_required
+def remove_from_favorites_route(ad_id):
+    """Remove um anúncio dos favoritos."""
+    try:
+        from app.services.favorites.favorites_service import remove_from_favorites
+
+        result = remove_from_favorites(g.user["_id"], ad_id)
+
+        if result["success"]:
+            return success_response(message=result["message"])
+        else:
+            return error_response(result["message"], status_code=400)
+
+    except Exception as e:
+        return error_response(f"Erro ao remover favorito: {str(e)}")
+
+
+@users_bp.route("/favorites/<ad_id>/toggle", methods=["POST"])
+@jwt_required
+def toggle_favorite_route(ad_id):
+    """Alterna favorito (adiciona se não existe, remove se existe)."""
+    try:
+        from app.services.favorites.favorites_service import toggle_favorite
+
+        result = toggle_favorite(g.user["_id"], ad_id)
+
+        if result["success"]:
+            return success_response(
+                data=result["data"],
+                message=result["message"]
+            )
+        else:
+            return error_response(result["message"], status_code=400)
+
+    except Exception as e:
+        return error_response(f"Erro ao alternar favorito: {str(e)}")
+
+
+@users_bp.route("/favorites/<ad_id>/check", methods=["GET"])
+@jwt_required
+def check_favorite_route(ad_id):
+    """Verifica se um anúncio está nos favoritos do usuário."""
+    try:
+        from app.services.favorites.favorites_service import is_ad_favorited
+
+        result = is_ad_favorited(g.user["_id"], ad_id)
+
+        if result["success"]:
+            return success_response(data=result["data"])
+        else:
+            return error_response(result["message"])
+
+    except Exception as e:
+        return error_response(f"Erro ao verificar favorito: {str(e)}")

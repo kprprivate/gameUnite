@@ -52,3 +52,12 @@ def setup_indexes():
             unique=index_config.get("unique", False),
             background=True
         )
+
+    # Favoritos
+    from app.models.favorites.schema import favorites_indexes
+    for index_config in favorites_indexes:
+        db.favorites.create_index(
+            index_config["key"],
+            unique=index_config.get("unique", False),
+            background=True
+        )

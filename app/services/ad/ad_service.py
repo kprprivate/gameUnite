@@ -135,7 +135,7 @@ def get_ad_by_id(ad_id, increment_view=True, user_id=None):
         # Buscar dados do jogo
         game = db.games.find_one({"_id": ad["game_id"]})
 
-        # CORREÇÃO: Incrementar contador de visualizações com proteção contra duplicação
+        # Incrementar contador de visualizações com proteção contra duplicação
         current_view_count = ad.get("view_count", 0)
 
         # Apenas incrementar se:
@@ -150,6 +150,18 @@ def get_ad_by_id(ad_id, increment_view=True, user_id=None):
             )
             current_view_count = updated_ad.get("view_count", current_view_count + 1)
 
+        # Contar favoritos
+        favorites_count = db.favorites.count_documents({"ad_id": ObjectId(ad_id)})
+
+        # Verificar se o usuário atual favoritou (se logado)
+        user_favorited = False
+        if user_id:
+            user_favorite = db.favorites.find_one({
+                "user_id": ObjectId(user_id),
+                "ad_id": ObjectId(ad_id)
+            })
+            user_favorited = user_favorite is not None
+
         ad_data = {
             "_id": str(ad["_id"]),
             "user_id": str(ad["user_id"]),
@@ -163,6 +175,8 @@ def get_ad_by_id(ad_id, increment_view=True, user_id=None):
             "is_boosted": ad.get("is_boosted", False),
             "view_count": current_view_count,
             "total_likes": len(ad.get("likes", [])),
+            "favorites_count": favorites_count,  # NOVO
+            "user_favorited": user_favorited,    # NOVO
             "created_at": ad["created_at"].isoformat(),
             "updated_at": ad["updated_at"].isoformat(),
             "user": {

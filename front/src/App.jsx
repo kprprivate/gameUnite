@@ -22,6 +22,7 @@ import CreateAd from './pages/Ads/CreateAd';
 import EditAd from './pages/Ads/EditAd';
 import AdDetails from './pages/Ads/AdDetails';
 import UserProfile from './pages/Users/UserProfile';
+import Favorites from './pages/Favorites/Favorites'; // NOVA IMPORTAÇÃO
 
 // Components
 import ProtectedRoute from './components/Auth/ProtectedRoute';
@@ -60,6 +61,14 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <Layout><Profile /></Layout>
+                      </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/favorites"
+                    element={
+                      <ProtectedRoute>
+                        <Layout><Favorites /></Layout>
                       </ProtectedRoute>
                     }
                 />

@@ -1,6 +1,5 @@
 # app/api/__init__.py
 def register_blueprints(app):
-    # Options handler blueprint - DEVE ser registrado primeiro
     from app.api.cors.options_handler import options_bp
     app.register_blueprint(options_bp)
 
@@ -39,3 +38,7 @@ def register_blueprints(app):
     # Search routes 
     from app.api.search.routes import search_bp
     app.register_blueprint(search_bp, url_prefix='/api/search')
+
+    # Favorites routes - NOVO
+    from app.api.favorites.routes import favorites_bp
+    app.register_blueprint(favorites_bp, url_prefix='/api/favorites')
