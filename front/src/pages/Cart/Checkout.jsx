@@ -1,9 +1,11 @@
+// front/src/pages/Cart/Checkout.jsx - VERSÃO CORRIGIDA
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
 import { orderService } from '../../services/orderService';
+import { cartUtils } from '../../utils/cartUtils';
 import {
   CreditCard,
   MapPin,
@@ -12,7 +14,10 @@ import {
   Mail,
   Lock,
   CheckCircle,
-  ArrowLeft
+  ArrowLeft,
+  Package,
+  AlertTriangle,
+  ShoppingCart
 } from 'lucide-react';
 import Button from '../../components/Common/Button';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
@@ -20,14 +25,15 @@ import LoadingSpinner from '../../components/Common/LoadingSpinner';
 const Checkout = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState(1); // 1: Endereço, 2: Pagamento, 3: Revisão
+  const [pageLoading, setPageLoading] = useState(true);
+  const [cartValidation, setCartValidation] = useState(null);
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors }
   } = useForm({
     defaultValues: {
@@ -39,21 +45,44 @@ const Checkout = () => {
   });
 
   useEffect(() => {
-    loadCartItems();
+    loadAndValidateCart();
   }, []);
 
-  const loadCartItems = () => {
+  const loadAndValidateCart = () => {
+    setPageLoading(true);
+
     try {
-      const savedCart = localStorage.getItem('cart');
-      const items = savedCart ? JSON.parse(savedCart) : [];
+      // Limpar itens inválidos primeiro
+      cartUtils.cleanInvalidItems();
+
+      // Carregar itens do carrinho
+      const items = cartUtils.getCartItems();
+
       if (items.length === 0) {
         toast.error('Carrinho vazio');
         navigate('/cart');
+        return;
       }
+
+      // Validar carrinho
+      const validation = cartUtils.validateCart();
+      setCartValidation(validation);
+
+      if (!validation.valid) {
+        toast.error(validation.message);
+        navigate('/cart');
+        return;
+      }
+
       setCartItems(items);
+
+      console.log('Checkout carregado:', { items, validation });
     } catch (error) {
-      console.error('Erro ao carregar carrinho:', error);
+      console.error('Erro ao carregar checkout:', error);
+      toast.error('Erro ao carregar dados do checkout');
       navigate('/cart');
+    } finally {
+      setPageLoading(false);
     }
   };
 
@@ -65,10 +94,23 @@ const Checkout = () => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
+  const getUniqueSellerCount = () => {
+    const sellers = new Set(cartItems.map(item => item.seller_id));
+    return sellers.size;
+  };
+
   const onSubmit = async (data) => {
     setLoading(true);
 
     try {
+      // Validar carrinho novamente antes do envio
+      const validation = cartUtils.validateCart();
+      if (!validation.valid) {
+        toast.error(validation.message);
+        navigate('/cart');
+        return;
+      }
+
       // Preparar dados do checkout
       const checkoutData = {
         cart_items: cartItems.map(item => ({
@@ -79,7 +121,7 @@ const Checkout = () => {
         shipping_address: {
           street: data.street,
           number: data.number,
-          complement: data.complement,
+          complement: data.complement || '',
           neighborhood: data.neighborhood,
           city: data.city,
           state: data.state,
@@ -95,35 +137,47 @@ const Checkout = () => {
         payment_method: data.payment_method || 'pending'
       };
 
+      console.log('Enviando checkout:', checkoutData);
+
       const result = await orderService.checkout(checkoutData);
 
       if (result.success) {
         // Limpar carrinho
-        localStorage.removeItem('cart');
-        window.dispatchEvent(new Event('cart-updated'));
+        cartUtils.clearCart();
 
         toast.success('Pedidos criados com sucesso!');
         navigate('/orders', {
           state: {
             message: 'Seus pedidos foram criados com sucesso!',
-            orders: result.orders
+            orders: result.data.orders || result.orders
           }
         });
       } else {
         toast.error(result.message);
       }
     } catch (error) {
+      console.error('Erro no checkout:', error);
       toast.error('Erro ao processar pedidos');
     } finally {
       setLoading(false);
     }
   };
 
-  if (cartItems.length === 0 && !loading) {
+  if (pageLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
+
+  if (cartItems.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
+          <ShoppingCart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Carrinho vazio</h2>
+          <p className="text-gray-600 mb-6">Adicione alguns jogos ao seu carrinho para continuar.</p>
           <Button onClick={() => navigate('/games')}>
             Explorar Jogos
           </Button>
@@ -152,6 +206,34 @@ const Checkout = () => {
           </p>
         </div>
 
+        {/* Avisos importantes */}
+        {cartValidation && !cartValidation.valid && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center">
+              <AlertTriangle className="w-5 h-5 text-red-600 mr-2" />
+              <span className="text-red-800 font-medium">
+                Problema no carrinho: {cartValidation.message}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {getUniqueSellerCount() > 1 && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center">
+              <AlertTriangle className="w-5 h-5 text-blue-600 mr-2" />
+              <div className="text-blue-800">
+                <span className="font-medium">
+                  Múltiplos vendedores detectados!
+                </span>
+                <p className="text-sm mt-1">
+                  Seus itens serão divididos em {getUniqueSellerCount()} pedidos separados, um para cada vendedor.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Formulário */}
           <div className="lg:col-span-2">
@@ -166,7 +248,7 @@ const Checkout = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nome
+                      Nome *
                     </label>
                     <input
                       {...register('first_name', { required: 'Nome é obrigatório' })}
@@ -180,7 +262,7 @@ const Checkout = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Sobrenome
+                      Sobrenome *
                     </label>
                     <input
                       {...register('last_name', { required: 'Sobrenome é obrigatório' })}
@@ -194,7 +276,7 @@ const Checkout = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email
+                      Email *
                     </label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -217,7 +299,7 @@ const Checkout = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Telefone
+                      Telefone *
                     </label>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -245,7 +327,7 @@ const Checkout = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      CEP
+                      CEP *
                     </label>
                     <input
                       {...register('zipcode', { required: 'CEP é obrigatório' })}
@@ -260,7 +342,7 @@ const Checkout = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Rua
+                      Rua *
                     </label>
                     <input
                       {...register('street', { required: 'Rua é obrigatória' })}
@@ -274,7 +356,7 @@ const Checkout = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Número
+                      Número *
                     </label>
                     <input
                       {...register('number', { required: 'Número é obrigatório' })}
@@ -300,7 +382,7 @@ const Checkout = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Bairro
+                      Bairro *
                     </label>
                     <input
                       {...register('neighborhood', { required: 'Bairro é obrigatório' })}
@@ -314,7 +396,7 @@ const Checkout = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Cidade
+                      Cidade *
                     </label>
                     <input
                       {...register('city', { required: 'Cidade é obrigatória' })}
@@ -328,12 +410,13 @@ const Checkout = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Estado
+                      Estado *
                     </label>
                     <input
                       {...register('state', { required: 'Estado é obrigatório' })}
                       type="text"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="SP"
                     />
                     {errors.state && (
                       <p className="mt-1 text-sm text-red-600">{errors.state.message}</p>
@@ -364,7 +447,7 @@ const Checkout = () => {
                           💰 Pagamento Pendente
                         </div>
                         <div className="text-sm text-yellow-700">
-                          O pagamento será combinado diretamente com o vendedor após a confirmação do pedido
+                          O pagamento será combinado diretamente com cada vendedor após a confirmação do pedido
                         </div>
                       </div>
                     </div>
@@ -408,7 +491,7 @@ const Checkout = () => {
                 </div>
               </div>
 
-                            {/* Botão de finalizar - ÍCONE CORRIGIDO */}
+              {/* Botão de finalizar */}
               <div className="bg-white rounded-lg shadow-md p-6">
                 <Button
                   type="submit"
@@ -417,7 +500,7 @@ const Checkout = () => {
                   size="lg"
                 >
                   <Lock className="w-4 h-4 mr-2" />
-                  Finalizar Pedido
+                  Finalizar Pedido{getUniqueSellerCount() > 1 ? 's' : ''}
                 </Button>
                 <p className="text-xs text-gray-500 text-center mt-2">
                   Ao finalizar, você concorda com nossos termos de uso e política de privacidade
@@ -434,7 +517,7 @@ const Checkout = () => {
               </h2>
 
               {/* Lista de itens */}
-              <div className="space-y-4 mb-6">
+              <div className="space-y-4 mb-6 max-h-96 overflow-y-auto">
                 {cartItems.map((item) => (
                   <div key={item.ad_id} className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
@@ -446,7 +529,7 @@ const Checkout = () => {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <CheckCircle className="w-6 h-6 text-gray-400" />
+                          <Package className="w-6 h-6 text-gray-400" />
                         </div>
                       )}
                     </div>
@@ -455,7 +538,10 @@ const Checkout = () => {
                         {item.title}
                       </p>
                       <p className="text-xs text-gray-600">
-                        Qtd: {item.quantity}
+                        {item.game_name} • Qtd: {item.quantity}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Por: {item.seller_name}
                       </p>
                     </div>
                     <span className="text-sm font-medium text-gray-900">
@@ -468,15 +554,15 @@ const Checkout = () => {
               {/* Totais */}
               <div className="space-y-3 border-t border-gray-200 pt-4">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Subtotal</span>
+                  <span className="text-gray-600">Subtotal ({getTotalItems()} itens):</span>
                   <span className="font-medium">R$ {getTotalPrice().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Frete</span>
+                  <span className="text-gray-600">Frete:</span>
                   <span className="font-medium">A combinar</span>
                 </div>
                 <div className="flex justify-between items-center pt-3 border-t border-gray-200">
-                  <span className="text-lg font-semibold text-gray-900">Total</span>
+                  <span className="text-lg font-semibold text-gray-900">Total:</span>
                   <span className="text-2xl font-bold text-green-600">
                     R$ {getTotalPrice().toFixed(2)}
                   </span>
@@ -493,6 +579,21 @@ const Checkout = () => {
                   Seus dados estão seguros e você pode cancelar o pedido antes do pagamento.
                 </p>
               </div>
+
+              {/* Resumo dos vendedores */}
+              {getUniqueSellerCount() > 1 && (
+                <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                  <div className="flex items-center mb-2">
+                    <User className="w-4 h-4 text-blue-600 mr-2" />
+                    <span className="font-medium text-blue-900">
+                      {getUniqueSellerCount()} Vendedores
+                    </span>
+                  </div>
+                  <p className="text-sm text-blue-700">
+                    Serão criados {getUniqueSellerCount()} pedidos separados, um para cada vendedor.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

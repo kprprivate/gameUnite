@@ -1,180 +1,278 @@
-// front/src/pages/Ads/AdDetails.jsx - VERSÃO COM FAVORITOS CORRIGIDOS
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+// Cart.jsx - VERSÃO OTIMIZADA
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
-import { adService } from '../../services';
-import { favoritesService } from '../../services/favoritesService';
 import { cartUtils } from '../../utils/cartUtils';
-import { Calendar, MapPin, User, MessageCircle, Heart, Share2, Eye, ShoppingCart, Check } from 'lucide-react';
+import {
+  ShoppingCart,
+  Trash2,
+  Plus,
+  Minus,
+  ArrowRight,
+  Package,
+  RefreshCw,
+  CreditCard,
+  Shield
+} from 'lucide-react';
 import Button from '../../components/Common/Button';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
+import EmptyState from '../../components/Common/EmptyState';
 
-const AdDetails = () => {
-  const { adId } = useParams();
-  const { isAuthenticated, user } = useAuth();
-  const [ad, setAd] = useState(null);
+// Componentes essenciais mantidos
+const CartItemImage = ({ imageUrl, title }) => (
+  <div className="w-20 h-20 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+    {imageUrl ? (
+      <img
+        src={imageUrl}
+        alt={title}
+        className="w-full h-full object-cover"
+      />
+    ) : (
+      <div className="w-full h-full flex items-center justify-center">
+        <Package className="w-8 h-8 text-gray-400" />
+      </div>
+    )}
+  </div>
+);
+
+const QuantityControls = ({ item, onUpdateQuantity, updating }) => (
+  <div className="flex items-center space-x-2">
+    <button
+      onClick={() => onUpdateQuantity(item.ad_id, item.quantity - 1)}
+      disabled={item.quantity <= 1 || updating[item.ad_id]}
+      className="p-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
+    >
+      <Minus className="w-4 h-4" />
+    </button>
+
+    <span className="px-3 py-1 border rounded bg-gray-50 min-w-[3rem] text-center">
+      {updating[item.ad_id] ? (
+        <RefreshCw className="w-4 h-4 animate-spin mx-auto" />
+      ) : (
+        item.quantity
+      )}
+    </span>
+
+    <button
+      onClick={() => onUpdateQuantity(item.ad_id, item.quantity + 1)}
+      disabled={updating[item.ad_id]}
+      className="p-1 border border-gray-300 rounded hover:bg-gray-50"
+    >
+      <Plus className="w-4 h-4" />
+    </button>
+  </div>
+);
+
+const CartItem = ({ item, onUpdateQuantity, onRemoveItem, updating }) => (
+  <div className="p-6">
+    <div className="flex items-start space-x-4">
+      <CartItemImage imageUrl={item.image_url} title={item.title} />
+
+      <div className="flex-1">
+        <div className="flex justify-between items-start mb-3">
+          <div className="flex-1 min-w-0 pr-4">
+            <h3 className="text-lg font-medium text-gray-900 mb-1">
+              {item.title}
+            </h3>
+            <p className="text-sm text-gray-600">
+              {item.game_name} • {item.platform}
+            </p>
+            <p className="text-sm text-gray-500">
+              Por: {item.seller_name}
+            </p>
+          </div>
+
+          <button
+            onClick={() => onRemoveItem(item.ad_id, item.title)}
+            disabled={updating[item.ad_id]}
+            className="text-red-600 hover:text-red-800 p-1"
+            title="Remover"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="flex justify-between items-center">
+          <QuantityControls
+            item={item}
+            onUpdateQuantity={onUpdateQuantity}
+            updating={updating}
+          />
+
+          <div className="text-right">
+            <div className="text-xl font-bold text-gray-900">
+              R$ {(item.price * item.quantity).toFixed(2)}
+            </div>
+            {item.quantity > 1 && (
+              <div className="text-sm text-gray-500">
+                R$ {item.price.toFixed(2)} cada
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const CartSummary = ({ cartItems, onProceedToCheckout, isAuthenticated }) => {
+  const getSubtotal = () => {
+    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  };
+
+  const getTotalItems = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  const uniqueSellers = [...new Set(cartItems.map(item => item.seller_id))].length;
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm border p-6 sticky top-8">
+      <h2 className="text-xl font-semibold mb-6">Resumo</h2>
+
+      <div className="space-y-3 mb-6">
+        <div className="flex justify-between text-gray-600">
+          <span>Subtotal ({getTotalItems()} itens)</span>
+          <span>R$ {getSubtotal().toFixed(2)}</span>
+        </div>
+
+        <div className="border-t pt-3">
+          <div className="flex justify-between items-center">
+            <span className="text-xl font-semibold">Total</span>
+            <span className="text-2xl font-bold text-green-600">
+              R$ {getSubtotal().toFixed(2)}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {uniqueSellers > 1 && (
+        <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+          <p className="text-sm text-amber-800">
+            ⚠️ Você tem itens de {uniqueSellers} vendedores - serão pedidos separados
+          </p>
+        </div>
+      )}
+
+      <Button
+        onClick={onProceedToCheckout}
+        className="w-full mb-4"
+        size="lg"
+      >
+        <CreditCard className="w-5 h-5 mr-2" />
+        Finalizar Compra
+        <ArrowRight className="w-5 h-5 ml-2" />
+      </Button>
+
+      {!isAuthenticated && (
+        <p className="text-sm text-center text-gray-500 mb-4">
+          É necessário fazer login para continuar
+        </p>
+      )}
+
+      {/* Informação de segurança simplificada */}
+      <div className="flex items-center justify-center text-sm text-gray-500 pt-4 border-t">
+        <Shield className="w-4 h-4 mr-2" />
+        Compra 100% segura
+      </div>
+    </div>
+  );
+};
+
+// Componente principal simplificado
+const Cart = () => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Estados para favoritos
-  const [isFavorited, setIsFavorited] = useState(false);
-  const [favoritesCount, setFavoritesCount] = useState(0);
-  const [favoriteLoading, setFavoriteLoading] = useState(false);
-
-  // Estados para carrinho
-  const [isInCart, setIsInCart] = useState(false);
-  const [cartLoading, setCartLoading] = useState(false);
+  const [updating, setUpdating] = useState({});
 
   useEffect(() => {
-    const fetchAdDetails = async () => {
-      setLoading(true);
+    loadCartItems();
+  }, []);
 
-      try {
-        const result = await adService.getAd(adId);
-        if (result.success) {
-          setAd(result.data.ad);
-
-          // Definir contagem de favoritos (do backend ou da resposta)
-          setFavoritesCount(result.data.ad.favorites_count || 0);
-
-          // Verificar se está no carrinho
-          setIsInCart(cartUtils.isInCart(adId));
-
-          // Se o usuário está logado, verificar se favoritou este anúncio
-          if (isAuthenticated) {
-            await checkIfFavorited();
-          } else {
-            setIsFavorited(false);
-          }
-        } else {
-          toast.error(result.message);
-        }
-      } catch (error) {
-        console.error('Erro ao carregar anúncio:', error);
-        toast.error('Erro ao carregar anúncio');
-      }
-
-      setLoading(false);
-    };
-
-    const checkIfFavorited = async () => {
-      try {
-        const favoriteResult = await favoritesService.checkIsFavorite(adId);
-        if (favoriteResult.success) {
-          setIsFavorited(favoriteResult.data.is_favorited);
-        }
-      } catch (error) {
-        console.error('Erro ao verificar favorito:', error);
-        // Não mostrar erro para o usuário, apenas logar
-      }
-    };
-
-    fetchAdDetails();
-  }, [adId, isAuthenticated]);
-
-  // Listener para mudanças no carrinho
   useEffect(() => {
-    const handleCartUpdate = () => {
-      setIsInCart(cartUtils.isInCart(adId));
-    };
-
+    const handleCartUpdate = () => loadCartItems();
     window.addEventListener('cart-updated', handleCartUpdate);
     return () => window.removeEventListener('cart-updated', handleCartUpdate);
-  }, [adId]);
+  }, []);
 
-  const handleFavorite = async () => {
-    if (!isAuthenticated) {
-      toast.info('Faça login para favoritar anúncios');
-      return;
+  const getTotalItems = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  const loadCartItems = () => {
+    try {
+      setLoading(true);
+      cartUtils.cleanInvalidItems();
+      const items = cartUtils.getCartItems();
+      setCartItems(items);
+    } catch (error) {
+      console.error('Erro ao carregar carrinho:', error);
+      toast.error('Erro ao carregar carrinho');
+      setCartItems([]);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    if (favoriteLoading) return;
-
-    setFavoriteLoading(true);
+  const handleUpdateQuantity = async (adId, newQuantity) => {
+    if (updating[adId]) return;
 
     try {
-      const result = await favoritesService.toggleFavorite(adId);
+      setUpdating(prev => ({ ...prev, [adId]: true }));
+      const result = cartUtils.updateQuantity(adId, newQuantity);
+
       if (result.success) {
-        const newIsFavorited = result.data.is_favorited;
-        setIsFavorited(newIsFavorited);
-
-        // Atualizar contador baseado na ação
-        if (result.data.action === 'added') {
-          setFavoritesCount(prev => prev + 1);
-        } else if (result.data.action === 'removed') {
-          setFavoritesCount(prev => Math.max(0, prev - 1));
-        }
-
-        toast.success(result.message);
+        loadCartItems();
       } else {
         toast.error(result.message);
       }
     } catch (error) {
-      console.error('Erro ao favoritar:', error);
-      toast.error('Erro ao favoritar anúncio');
+      console.error('Erro ao atualizar quantidade:', error);
+      toast.error('Erro ao atualizar quantidade');
     } finally {
-      setFavoriteLoading(false);
+      setUpdating(prev => ({ ...prev, [adId]: false }));
     }
   };
 
-  const handleAddToCart = async () => {
-    if (!isAuthenticated) {
-      toast.info('Faça login para adicionar ao carrinho');
-      return;
-    }
-
-    if (cartLoading) return;
-
-    // Verificar se é anúncio de venda
-    if (ad.ad_type !== 'venda') {
-      toast.error('Apenas anúncios de venda podem ser adicionados ao carrinho');
-      return;
-    }
-
-    // Verificar se não é o próprio anúncio
-    if (ad.user_id === user?._id) {
-      toast.error('Você não pode adicionar seu próprio anúncio ao carrinho');
-      return;
-    }
-
-    // Verificar se tem preço
-    if (!ad.price || ad.price <= 0) {
-      toast.error('Este anúncio não possui preço válido');
-      return;
-    }
-
-    setCartLoading(true);
+  const handleRemoveItem = async (adId, title) => {
+    if (updating[adId] || !window.confirm(`Remover "${title}" do carrinho?`)) return;
 
     try {
-      const result = cartUtils.addToCart(ad, 1);
+      setUpdating(prev => ({ ...prev, [adId]: true }));
+      const result = cartUtils.removeFromCart(adId);
+
       if (result.success) {
-        setIsInCart(true);
-        toast.success(result.message);
+        toast.success('Item removido');
+        loadCartItems();
       } else {
         toast.error(result.message);
       }
     } catch (error) {
-      toast.error('Erro ao adicionar ao carrinho');
+      console.error('Erro ao remover item:', error);
+      toast.error('Erro ao remover item');
     } finally {
-      setCartLoading(false);
+      setUpdating(prev => ({ ...prev, [adId]: false }));
     }
   };
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: ad.title,
-        text: ad.description,
-        url: window.location.href,
-      });
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success('Link copiado para a área de transferência!');
+  const handleProceedToCheckout = () => {
+    if (!isAuthenticated) {
+      toast.info('Faça login para finalizar a compra');
+      navigate('/login', { state: { from: { pathname: '/cart' } } });
+      return;
     }
-  };
 
-  const handleContact = () => {
-    toast.info('Funcionalidade de contato em desenvolvimento');
+    const validation = cartUtils.validateCart();
+    if (!validation.valid) {
+      toast.error(validation.message);
+      return;
+    }
+
+    navigate('/checkout');
   };
 
   if (loading) {
@@ -185,319 +283,70 @@ const AdDetails = () => {
     );
   }
 
-  if (!ad) {
+  if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Anúncio não encontrado</h2>
-          <Link to="/" className="text-blue-600 hover:text-blue-800">
-            Voltar para a página inicial
-          </Link>
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="container mx-auto px-4">
+          <EmptyState
+            icon={ShoppingCart}
+            title="Seu carrinho está vazio"
+            description="Explore nossos jogos e adicione ao carrinho."
+            actionText="Ver Jogos"
+            onAction={() => navigate('/games')}
+          />
         </div>
       </div>
     );
   }
 
-  // Verificar se pode mostrar o botão de carrinho
-  const canAddToCart = (
-    ad.ad_type === 'venda' &&
-    ad.price &&
-    ad.price > 0 &&
-    isAuthenticated &&
-    ad.user_id !== user?._id
-  );
-
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 max-w-6xl">
+        {/* Header simplificado */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Carrinho
+          </h1>
+          <p className="text-gray-600">
+            {getTotalItems()} {getTotalItems() === 1 ? 'item' : 'itens'}
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Conteúdo Principal */}
+          {/* Lista de Itens */}
           <div className="lg:col-span-2">
-            {/* Imagens */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-              <div className="aspect-w-16 aspect-h-9">
-                <img
-                  src={ad.image_url || ad.game?.image_url || 'https://via.placeholder.com/600x400/9CA3AF/FFFFFF?text=Sem+Imagem'}
-                  alt={ad.title}
-                  className="w-full h-96 object-cover"
-                />
-              </div>
-            </div>
-
-            {/* Detalhes do Anúncio */}
-            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-800 mb-2">{ad.title}</h1>
-                  <div className="flex items-center space-x-4 text-sm text-gray-600">
-                    <div className="flex items-center">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {new Date(ad.created_at).toLocaleDateString('pt-BR')}
-                    </div>
-                    <div className="flex items-center">
-                      <Eye className="w-4 h-4 mr-1" />
-                      {ad.view_count} visualizações
-                    </div>
-                    {ad.user?.location && (
-                      <div className="flex items-center">
-                        <MapPin className="w-4 h-4 mr-1" />
-                        {ad.user.location}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  {/* Botão de Favoritar - CORRIGIDO */}
-                  <div className="flex items-center space-x-1">
-                    <button
-                      onClick={handleFavorite}
-                      disabled={favoriteLoading}
-                      className={`p-2 rounded-full transition-colors duration-200 ${
-                        isFavorited 
-                          ? 'bg-red-100 text-red-600 hover:bg-red-200' 
-                          : 'bg-gray-100 text-gray-600 hover:bg-red-100 hover:text-red-600'
-                      } ${favoriteLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                      title={isFavorited ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
-                    >
-                      <Heart className={`w-5 h-5 transition-all duration-200 ${
-                        isFavorited ? 'fill-current text-red-600' : 'text-gray-600'
-                      }`} />
-                    </button>
-                    <span className="text-sm text-gray-600 font-medium">{favoritesCount}</span>
-                  </div>
-
-                  {/* Botão de Compartilhar */}
-                  <button
-                    onClick={handleShare}
-                    className="p-2 rounded-full bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600 transition-colors duration-200"
-                    title="Compartilhar anúncio"
-                  >
-                    <Share2 className="w-5 h-5" />
-                  </button>
-                </div>
+            <div className="bg-white rounded-lg shadow-sm border">
+              <div className="divide-y">
+                {cartItems.map((item) => (
+                  <CartItem
+                    key={item.ad_id}
+                    item={item}
+                    onUpdateQuantity={handleUpdateQuantity}
+                    onRemoveItem={handleRemoveItem}
+                    updating={updating}
+                  />
+                ))}
               </div>
 
-              {/* Preço e Tipo */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-4">
-                  {ad.ad_type === 'venda' && ad.price && (
-                    <div className="text-3xl font-bold text-green-600">
-                      R$ {ad.price.toFixed(2)}
-                    </div>
-                  )}
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    ad.ad_type === 'venda' 
-                      ? 'bg-green-100 text-green-800'
-                      : ad.ad_type === 'troca'
-                      ? 'bg-blue-100 text-blue-800'
-                      : 'bg-purple-100 text-purple-800'
-                  }`}>
-                    {ad.ad_type.charAt(0).toUpperCase() + ad.ad_type.slice(1)}
-                  </span>
-                  {ad.is_boosted && (
-                    <span className="px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-                      ⭐ Destaque
-                    </span>
-                  )}
-                </div>
-
-                {/* Botões de Ação */}
-                {canAddToCart && (
-                  <div className="flex space-x-3">
-                    {isInCart ? (
-                      <Link to="/cart">
-                        <Button variant="outline" className="inline-flex items-center">
-                          <Check className="w-4 h-4 mr-2" />
-                          Ver no Carrinho
-                        </Button>
-                      </Link>
-                    ) : (
-                      <Button
-                        onClick={handleAddToCart}
-                        loading={cartLoading}
-                        className="inline-flex items-center"
-                      >
-                        <ShoppingCart className="w-4 h-4 mr-2" />
-                        Adicionar ao Carrinho
-                      </Button>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Especificações */}
-              <div className="grid grid-cols-2 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
-                <div>
-                  <span className="text-sm font-medium text-gray-600">Plataforma:</span>
-                  <p className="text-gray-800">{ad.platform}</p>
-                </div>
-                <div>
-                  <span className="text-sm font-medium text-gray-600">Estado:</span>
-                  <p className="text-gray-800 capitalize">{ad.condition}</p>
-                </div>
-                {ad.game && (
-                  <div className="col-span-2">
-                    <span className="text-sm font-medium text-gray-600">Jogo:</span>
-                    <p className="text-gray-800">{ad.game.name}</p>
-                  </div>
-                )}
-              </div>
-
-              {/* Jogos Desejados (para trocas) */}
-              {ad.ad_type === 'troca' && ad.desired_games && (
-                <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-                  <h3 className="text-lg font-semibold text-blue-800 mb-2">Jogos Desejados para Troca</h3>
-                  <p className="text-blue-700">{ad.desired_games}</p>
-                </div>
-              )}
-
-              {/* Descrição */}
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Descrição</h3>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">{ad.description}</p>
+              {/* Footer simples */}
+              <div className="p-4 bg-gray-50 border-t">
+                <Link
+                  to="/games"
+                  className="text-blue-600 hover:text-blue-800 text-sm"
+                >
+                  ← Continuar comprando
+                </Link>
               </div>
             </div>
           </div>
 
-          {/* Sidebar */}
+          {/* Resumo */}
           <div className="lg:col-span-1">
-            {/* Call to Action Principal */}
-            {canAddToCart && (
-              <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">
-                    R$ {ad.price.toFixed(2)}
-                  </div>
-                  <p className="text-gray-600 mb-4">Preço do jogo</p>
-
-                  {isInCart ? (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-center text-green-600 mb-2">
-                        <Check className="w-5 h-5 mr-2" />
-                        <span className="font-medium">No seu carrinho</span>
-                      </div>
-                      <Link to="/cart" className="block">
-                        <Button className="w-full" size="lg">
-                          Finalizar Compra
-                        </Button>
-                      </Link>
-                      <Link to="/cart" className="block">
-                        <Button variant="outline" className="w-full">
-                          Ver Carrinho
-                        </Button>
-                      </Link>
-                    </div>
-                  ) : (
-                    <Button
-                      onClick={handleAddToCart}
-                      loading={cartLoading}
-                      className="w-full inline-flex items-center justify-center"
-                      size="lg"
-                    >
-                      <ShoppingCart className="w-5 h-5 mr-2" />
-                      Adicionar ao Carrinho
-                    </Button>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Informações do Vendedor */}
-            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                {ad.ad_type === 'venda' ? 'Vendedor' : ad.ad_type === 'troca' ? 'Anunciante' : 'Comprador'}
-              </h3>
-
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center mr-3">
-                  {ad.user?.profile_pic ? (
-                    <img
-                      src={ad.user.profile_pic}
-                      alt={ad.user.username}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                  ) : (
-                    <User className="w-6 h-6 text-gray-600" />
-                  )}
-                </div>
-                <div>
-                  <p className="font-medium text-gray-800">
-                    {ad.user?.first_name && ad.user?.last_name
-                      ? `${ad.user.first_name} ${ad.user.last_name}`
-                      : ad.user?.username || 'Usuário'}
-                  </p>
-                  <p className="text-sm text-gray-600">@{ad.user?.username || 'usuario'}</p>
-                </div>
-              </div>
-
-              <div className="space-y-2 mb-4">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Avaliação como vendedor:</span>
-                  <span className="font-medium">
-                    ⭐ {ad.user?.seller_rating?.toFixed(1) || '0.0'}/5
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Avaliações:</span>
-                  <span className="font-medium">{ad.user?.seller_ratings_count || 0}</span>
-                </div>
-              </div>
-
-              {isAuthenticated ? (
-                <div className="space-y-3">
-                  <Button
-                    onClick={handleContact}
-                    className="w-full inline-flex items-center justify-center"
-                  >
-                    <MessageCircle className="w-4 h-4 mr-2" />
-                    Entrar em Contato
-                  </Button>
-                  <Link to={`/users/${ad.user?._id}`}>
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                    >
-                      Ver Perfil do {ad.ad_type === 'venda' ? 'Vendedor' : 'Anunciante'}
-                    </Button>
-                  </Link>
-                </div>
-              ) : (
-                <div className="text-center">
-                  <p className="text-sm text-gray-600 mb-3">
-                    Faça login para entrar em contato
-                  </p>
-                  <Link to="/login">
-                    <Button className="w-full">
-                      Fazer Login
-                    </Button>
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            {/* Informações do Jogo */}
-            {ad.game && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Sobre o Jogo</h3>
-
-                <div className="flex items-center mb-4">
-                  <img
-                    src={ad.game.image_url || 'https://via.placeholder.com/64x64/9CA3AF/FFFFFF?text=Game'}
-                    alt={ad.game.name}
-                    className="w-16 h-16 object-cover rounded-lg mr-4"
-                  />
-                  <div>
-                    <h4 className="font-medium text-gray-800">{ad.game.name}</h4>
-                    <Link
-                      to={`/games/${ad.game._id}`}
-                      className="text-sm text-blue-600 hover:text-blue-800"
-                    >
-                      Ver mais sobre este jogo
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            )}
+            <CartSummary
+              cartItems={cartItems}
+              onProceedToCheckout={handleProceedToCheckout}
+              isAuthenticated={isAuthenticated}
+            />
           </div>
         </div>
       </div>
@@ -505,4 +354,4 @@ const AdDetails = () => {
   );
 };
 
-export default AdDetails;
+export default Cart;
