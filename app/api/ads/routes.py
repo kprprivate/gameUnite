@@ -1,14 +1,14 @@
 # app/api/ads/routes.py - VERSÃO CORRIGIDA COM VALIDAÇÕES
 from flask import Blueprint, request, g, jsonify
+
+from app.services.ad.ad_service import format_ad_response, create_ad, get_ad_by_id, update_ad, like_ad, delete_ad, \
+    get_ad_likes, get_user_ads
+from app.services.ad_questions.questions_service import validate_object_id
 from app.utils.helpers.response_helpers import success_response, error_response
 from app.utils.decorators.auth_decorators import jwt_required
 from bson import ObjectId, errors as bson_errors
 from app.db.mongo_client import db
 from datetime import datetime
-from app.services.ad.ad_service import (
-    create_ad, get_user_ads, get_ad_by_id, update_ad, delete_ad, like_ad, get_ad_likes,
-    validate_object_id, format_ad_response
-)
 
 # Criar blueprint
 ads_bp = Blueprint("ads", __name__)

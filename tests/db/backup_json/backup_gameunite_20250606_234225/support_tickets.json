@@ -1,0 +1,15 @@
+[
+  {
+    "_id": "6818f05768b2d5a57b3ecd31",
+    "order_id": "6818f05568b2d5a57b3ecd1e",
+    "chat_room_id": "6818f05668b2d5a57b3ecd21",
+    "user_id": "6818f05468b2d5a57b3ecd12",
+    "subject": "Vendedor não respondeu",
+    "description": "O vendedor não respondeu às minhas últimas mensagens.",
+    "status": "open",
+    "assigned_admin_id": "6818f05468b2d5a57b3ecd0e",
+    "created_at": "2025-05-05 16:37:35.423000",
+    "updated_at": "2025-05-05 16:37:35.423000",
+    "resolved_at": null
+  }
+]

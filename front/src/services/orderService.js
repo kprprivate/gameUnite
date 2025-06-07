@@ -13,7 +13,8 @@ export const orderService = {
     }
   },
 
-  async checkout(checkoutData) {
+  // CORRIGIDO: Função renomeada para processCheckout
+  async processCheckout(checkoutData) {
     try {
       const response = await api.post('/orders/checkout', checkoutData);
       return { success: true, data: response.data.data, message: response.data.message };
@@ -23,6 +24,11 @@ export const orderService = {
         message: error.response?.data?.message || 'Erro no checkout'
       };
     }
+  },
+
+  // Mantendo a função original também para compatibilidade
+  async checkout(checkoutData) {
+    return this.processCheckout(checkoutData);
   },
 
   async getOrders(params = {}) {

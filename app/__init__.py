@@ -15,13 +15,16 @@ def create_app(config_name="development"):
     app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
-    # Inicializar extensões ANTES dos blueprints
+    # Inicializar extensões ANTES dos blueprints (incluindo SocketIO)
     from app.extensions import init_extensions
     init_extensions(app)
 
     # Registrar blueprints DEPOIS das extensões
     from app.api import register_blueprints
     register_blueprints(app)
+
+    # Registrar eventos do WebSocket
+    from app.websockets import chat_events
 
     # Configurar índices do MongoDB - com tratamento de erro
     if config_name != "testing":  # Skip index setup in test mode

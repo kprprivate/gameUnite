@@ -22,13 +22,21 @@ def register_blueprints(app):
     from app.api.ads.routes import ads_bp
     app.register_blueprint(ads_bp, url_prefix='/api/ads')
 
-    # Order routes - NOVO
+    # Order routes
     from app.api.orders.routes import orders_bp
     app.register_blueprint(orders_bp, url_prefix='/api/orders')
+
+    # Cart routes
+    from app.api.cart.routes import cart_bp
+    app.register_blueprint(cart_bp, url_prefix='/api/cart')
 
     # Chat routes
     from app.api.chat.routes import chat_bp
     app.register_blueprint(chat_bp, url_prefix='/api/chat')
+
+    # Ad Questions routes
+    from app.api.ad_questions.routes import ad_questions_bp
+    app.register_blueprint(ad_questions_bp, url_prefix='/api/ad-questions')
 
     # User routes
     from app.api.users.routes import users_bp

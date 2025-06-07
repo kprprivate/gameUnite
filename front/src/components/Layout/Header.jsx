@@ -1,7 +1,7 @@
-// front/src/components/Layout/Header.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useCart } from '../../contexts/CartContext'; // ADICIONAR IMPORT
 import { useGames } from '../../contexts/GameContext';
 import { useDebounce } from '../../hooks';
 import {
@@ -22,6 +22,7 @@ import {
 
 const Header = () => {
   const { user, logout, isAuthenticated } = useAuth();
+  const { cart } = useCart(); // USAR CONTEXTO DO CARRINHO
   const { fetchGames } = useGames();
   const navigate = useNavigate();
 
@@ -32,7 +33,6 @@ const Header = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
-  const [cartItemCount, setCartItemCount] = useState(0);
 
   // Refs
   const searchRef = useRef(null);
@@ -48,25 +48,6 @@ const Header = () => {
       setShowSearchResults(false);
     }
   }, [debouncedSearch]);
-
-  // Atualizar contador do carrinho
-  useEffect(() => {
-    const updateCartCount = () => {
-      const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
-      setCartItemCount(cartItems.length);
-    };
-
-    updateCartCount();
-
-    // Listeners para mudanças no carrinho
-    window.addEventListener('storage', updateCartCount);
-    window.addEventListener('cart-updated', updateCartCount);
-
-    return () => {
-      window.removeEventListener('storage', updateCartCount);
-      window.removeEventListener('cart-updated', updateCartCount);
-    };
-  }, []);
 
   // Fechar dropdowns quando clicar fora
   useEffect(() => {
@@ -117,6 +98,9 @@ const Header = () => {
     setIsMenuOpen(false);
     setIsUserMenuOpen(false);
   };
+
+  // CORRIGIDO: Usar dados do contexto do carrinho
+  const cartItemCount = cart?.total_items || 0;
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
@@ -210,7 +194,7 @@ const Header = () => {
                   Anunciar
                 </Link>
 
-                {/* Cart */}
+                {/* Cart - CORRIGIDO */}
                 <Link
                   to="/cart"
                   className="relative p-2 text-gray-700 hover:text-blue-600 transition-colors"
@@ -391,6 +375,7 @@ const Header = () => {
                     Criar Anúncio
                   </Link>
 
+                  {/* Cart Mobile - CORRIGIDO */}
                   <Link
                     to="/cart"
                     className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"

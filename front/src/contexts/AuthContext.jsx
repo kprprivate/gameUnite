@@ -1,4 +1,3 @@
-// front/src/contexts/AuthContext.jsx - VERSÃO CORRIGIDA
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authService } from '../services/authService';
 import { userService } from '../services/userService';
@@ -18,15 +17,27 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [lastAuthCheck, setLastAuthCheck] = useState(0);
+
+  // Cache da verificação de autenticação (5 minutos)
+  const AUTH_CACHE_DURATION = 5 * 60 * 1000;
 
   // Função para verificar se o usuário está autenticado
-  const checkAuth = async () => {
+  const checkAuth = async (force = false) => {
+    const now = Date.now();
+
+    // OTIMIZAÇÃO: Usar cache se não for forçado e estiver dentro do tempo
+    if (!force && (now - lastAuthCheck) < AUTH_CACHE_DURATION && user) {
+      return;
+    }
+
     const token = Cookies.get('access_token');
 
     if (!token) {
       setUser(null);
       setIsAuthenticated(false);
       setLoading(false);
+      setLastAuthCheck(now);
       return;
     }
 
@@ -37,12 +48,14 @@ export const AuthProvider = ({ children }) => {
       if (result.success) {
         setUser(result.data.user);
         setIsAuthenticated(true);
+        setLastAuthCheck(now);
       } else {
         // Token inválido, remover cookies
         Cookies.remove('access_token');
         Cookies.remove('refresh_token');
         setUser(null);
         setIsAuthenticated(false);
+        setLastAuthCheck(now);
       }
     } catch (error) {
       console.error('Erro ao verificar autenticação:', error);
@@ -51,6 +64,7 @@ export const AuthProvider = ({ children }) => {
       Cookies.remove('refresh_token');
       setUser(null);
       setIsAuthenticated(false);
+      setLastAuthCheck(now);
     }
 
     setLoading(false);
@@ -59,17 +73,20 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     checkAuth();
 
-    // Listener para mudanças nos cookies (importante para detectar login/logout em outras abas)
+    // OTIMIZAÇÃO: Reduzir listeners desnecessários
     const handleStorageChange = (e) => {
       if (e.key === 'access_token' || e.key === 'refresh_token') {
-        checkAuth();
+        checkAuth(true); // Forçar verificação apenas se tokens mudaram
       }
     };
 
-    // Listener para mudanças de foco na janela (detecta mudanças em outras abas)
+    // OTIMIZAÇÃO: Verificar apenas quando a janela ganha foco E passou tempo suficiente
     const handleVisibilityChange = () => {
       if (!document.hidden) {
-        checkAuth();
+        const now = Date.now();
+        if ((now - lastAuthCheck) > AUTH_CACHE_DURATION) {
+          checkAuth();
+        }
       }
     };
 
@@ -77,15 +94,19 @@ export const AuthProvider = ({ children }) => {
     window.addEventListener('storage', handleStorageChange);
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // Verificar autenticação a cada 5 minutos
-    const authCheckInterval = setInterval(checkAuth, 5 * 60 * 1000);
+    // OTIMIZAÇÃO: Verificar autenticação apenas a cada 10 minutos (não 5)
+    const authCheckInterval = setInterval(() => {
+      if (isAuthenticated) {
+        checkAuth();
+      }
+    }, 10 * 60 * 1000);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       clearInterval(authCheckInterval);
     };
-  }, []);
+  }, [lastAuthCheck, isAuthenticated]);
 
   const login = async (email, password) => {
     try {
@@ -94,6 +115,7 @@ export const AuthProvider = ({ children }) => {
       if (result.success) {
         setUser(result.user);
         setIsAuthenticated(true);
+        setLastAuthCheck(Date.now());
 
         // Disparar evento personalizado para notificar outras abas
         window.dispatchEvent(new StorageEvent('storage', {
@@ -124,6 +146,7 @@ export const AuthProvider = ({ children }) => {
     // Limpar estado local
     setUser(null);
     setIsAuthenticated(false);
+    setLastAuthCheck(0);
 
     // Remover cookies
     Cookies.remove('access_token');
@@ -146,6 +169,8 @@ export const AuthProvider = ({ children }) => {
       ...prevUser,
       ...updatedUserData
     }));
+    // Atualizar timestamp do cache
+    setLastAuthCheck(Date.now());
   };
 
   const value = {
@@ -156,7 +181,7 @@ export const AuthProvider = ({ children }) => {
     updateUser,
     loading,
     isAuthenticated,
-    checkAuth // Expor função para revalidação manual se necessário
+    checkAuth: () => checkAuth(true) // Expor função para revalidação manual forçada
   };
 
   return (

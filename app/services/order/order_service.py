@@ -370,8 +370,8 @@ def update_order_status(order_id, user_id, new_status, role=None):
             return {"success": False, "message": f"Transição de status inválida: {current_status} -> {new_status}"}
 
         # Verificar quem pode fazer cada transição
-        if new_status == "paid" and not is_buyer:
-            return {"success": False, "message": "Apenas o comprador pode marcar como pago"}
+        if new_status == "paid" and not is_seller:
+            return {"success": False, "message": "Apenas o vendedor pode marcar como pago"}
 
         if new_status == "shipped" and not is_seller:
             return {"success": False, "message": "Apenas o vendedor pode marcar como enviado"}
@@ -401,3 +401,58 @@ def update_order_status(order_id, user_id, new_status, role=None):
     except Exception as e:
         print(f"Erro ao atualizar status: {str(e)}")
         return {"success": False, "message": f"Erro interno ao atualizar status: {str(e)}"}
+
+
+def update_order_status_with_chat_notification(order_id, user_id, new_status, role=None):
+    """Atualiza status do pedido e envia notificação via chat."""
+    from app.services.chat.chat_service import get_chat_room
+    from app.websockets.chat_events import send_order_status_update
+
+    # Usar função existente de atualização
+    result = update_order_status(order_id, user_id, new_status, role)
+
+    if result["success"]:
+        try:
+            # Buscar sala de chat do pedido
+            chat_result = get_chat_room(order_id, user_id)
+            if chat_result["success"]:
+                room_id = chat_result["data"]["room"]["_id"]
+
+                # Buscar dados do usuário que fez a atualização
+                from app.models.user.crud import get_user_by_id
+                user = get_user_by_id(user_id)
+                username = user.get('username', 'Usuário') if user else 'Usuário'
+
+                # Enviar notificação via WebSocket
+                send_order_status_update(room_id, order_id, new_status, username)
+
+        except Exception as e:
+            # Log error but don't fail the status update
+            print(f"Erro ao enviar notificação de chat: {e}")
+
+    return result
+
+def process_checkout_with_chat(user_id, cart_items, shipping_address, payment_method="pending"):
+    """Processa checkout e cria chats automaticamente."""
+    from app.services.chat.chat_service import create_chat_room
+    from app.websockets.chat_events import send_system_notification
+
+    # Usar função existente de checkout
+    result = process_checkout(user_id, cart_items, shipping_address, payment_method)
+
+    if result["success"]:
+        # Criar salas de chat para cada pedido
+        for order in result["orders"]:
+            try:
+                chat_result = create_chat_room(order["_id"])
+                if chat_result["success"]:
+                    room_id = chat_result["data"]["room"]["_id"]
+
+                    # Enviar mensagem de boas-vindas
+                    welcome_msg = f"🎮 Pedido criado! Conversem sobre detalhes da entrega e pagamento."
+                    send_system_notification(room_id, welcome_msg)
+
+            except Exception as e:
+                print(f"Erro ao criar chat para pedido {order['_id']}: {e}")
+
+    return result

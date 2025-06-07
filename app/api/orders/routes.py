@@ -4,7 +4,7 @@ from app.utils.helpers.response_helpers import success_response, error_response
 from app.utils.decorators.auth_decorators import jwt_required
 from app.services.order.order_service import (
     create_order, get_order_by_id, get_user_orders,
-    update_order_status, process_checkout
+    update_order_status_with_chat_notification, process_checkout
 )
 
 # Criar blueprint
@@ -184,7 +184,7 @@ def update_order_status_route(order_id):
         if new_status not in valid_statuses:
             return error_response(f"Status inválido. Deve ser um dos: {', '.join(valid_statuses)}", status_code=400)
 
-        result = update_order_status(order_id, g.user["_id"], new_status, role)
+        result = update_order_status_with_chat_notification(order_id, g.user["_id"], new_status, role)
 
         if result["success"]:
             return success_response(message=result["message"])
@@ -388,7 +388,7 @@ def cancel_order(order_id):
         data = request.json or {}
         reason = data.get("reason", "Cancelado pelo usuário")
 
-        result = update_order_status(order_id, g.user["_id"], "cancelled")
+        result = update_order_status_with_chat_notification(order_id, g.user["_id"], "cancelled")
 
         if result["success"]:
             # Aqui você poderia adicionar lógica adicional como:

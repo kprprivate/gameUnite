@@ -61,3 +61,21 @@ def setup_indexes():
             unique=index_config.get("unique", False),
             background=True
         )
+
+    # Carrinho
+    from app.models.cart.schema import cart_indexes
+    for index_config in cart_indexes:
+        db.cart.create_index(
+            index_config["key"],
+            unique=index_config.get("unique", False),
+            background=True
+        )
+
+    # Perguntas dos Anúncios
+    from app.models.ad_questions.schema import ad_questions_indexes
+    for index_config in ad_questions_indexes:
+        db.ad_questions.create_index(
+            index_config["key"],
+            unique=index_config.get("unique", False),
+            background=True
+        )

@@ -1,0 +1,104 @@
+[
+  {
+    "_id": "68405dd4c746255aee475917",
+    "buyer_id": "683683bfadee286e2d71272f",
+    "seller_id": "683f070c7d624369c4c241d3",
+    "ad_id": "683f854862ea757871328f21",
+    "game_id": "6818f05268b2d5a57b3ecd08",
+    "quantity": 1,
+    "unit_price": 171.0,
+    "total_price": 171.0,
+    "status": "cancelled",
+    "payment_status": "cancelled",
+    "shipping_address": {
+      "street": "1111",
+      "number": "111",
+      "complement": "11",
+      "neighborhood": "11",
+      "city": "11",
+      "state": "11",
+      "zipcode": "222",
+      "country": "Brasil"
+    },
+    "notes": "Pedido via carrinho - PAULO PLINIO",
+    "created_at": "2025-06-04 14:53:08.254000",
+    "updated_at": "2025-06-04 14:54:19.392000",
+    "expires_at": "2025-06-05 14:53:08.254000",
+    "ad_snapshot": {
+      "title": "PAULO PLINIO",
+      "description": "EU SOU LOUCO\nEU SOU LOUCO\nEU SOU LOUCO\nEU SOU LOUCO\nEU SOU LOUCO\nEU SOU LOUCO\nEU SOU LOUCO",
+      "platform": "PC",
+      "condition": "novo",
+      "image_url": "http://127.0.0.1:5000/api/upload/ads/medium/ads_85fc2e118aa6451ebc6bdc206fc7771f_1748993350.png",
+      "game_name": "Valorant"
+    }
+  },
+  {
+    "_id": "68407c092f84c6e97296ffd1",
+    "buyer_id": "683683bfadee286e2d71272f",
+    "seller_id": "683f070c7d624369c4c241d3",
+    "ad_id": "683f854862ea757871328f21",
+    "game_id": "6818f05268b2d5a57b3ecd08",
+    "quantity": 1,
+    "unit_price": 171.0,
+    "total_price": 171.0,
+    "status": "cancelled",
+    "payment_status": "cancelled",
+    "shipping_address": {
+      "street": "alsdjflk",
+      "number": "laksdjf",
+      "complement": "lksajdflk",
+      "neighborhood": "lkasjdlkf",
+      "city": "alsdkjf",
+      "state": "sadf",
+      "zipcode": "ljlasdjfl",
+      "country": "Brasil"
+    },
+    "notes": "Pedido via carrinho - PAULO PLINIO",
+    "created_at": "2025-06-04 17:02:01.740000",
+    "updated_at": "2025-06-04 17:03:30.344000",
+    "expires_at": "2025-06-05 17:02:01.740000",
+    "ad_snapshot": {
+      "title": "PAULO PLINIO",
+      "description": "EU SOU LOUCO\nEU SOU LOUCO\nEU SOU LOUCO\nEU SOU LOUCO\nEU SOU LOUCO\nEU SOU LOUCO\nEU SOU LOUCO",
+      "platform": "PC",
+      "condition": "novo",
+      "image_url": "http://127.0.0.1:5000/api/upload/ads/medium/ads_85fc2e118aa6451ebc6bdc206fc7771f_1748993350.png",
+      "game_name": "Valorant"
+    }
+  },
+  {
+    "_id": "684089c0a9f15f6292854622",
+    "buyer_id": "683f070c7d624369c4c241d3",
+    "seller_id": "683683bfadee286e2d71272f",
+    "ad_id": "683dc0a0833448e6c54e2f69",
+    "game_id": "6818f05268b2d5a57b3ecd08",
+    "quantity": 1,
+    "unit_price": 2.0,
+    "total_price": 2.0,
+    "status": "cancelled",
+    "payment_status": "cancelled",
+    "shipping_address": {
+      "street": "salkdjf",
+      "number": "lsadjkf",
+      "complement": "lasdkjf",
+      "neighborhood": "sadfsadf",
+      "city": "sadf",
+      "state": "asdf",
+      "zipcode": "alsdkjfl",
+      "country": "Brasil"
+    },
+    "notes": "Pedido via carrinho - TESTANDO ALGUMA COISA",
+    "created_at": "2025-06-04 18:00:32.797000",
+    "updated_at": "2025-06-04 18:03:28.372000",
+    "expires_at": "2025-06-05 18:00:32.797000",
+    "ad_snapshot": {
+      "title": "TESTANDO ALGUMA COISA",
+      "description": "TESTANDO ALGUMA COISA\nTESTANDO ALGUMA COISA\nTESTANDO ALGUMA COISA\nTESTANDO ALGUMA COISA\nTESTANDO ALGUMA COISA",
+      "platform": "PC",
+      "condition": "novo",
+      "image_url": "http://127.0.0.1:5000/api/upload/ads/medium/no-ads-image.jpg",
+      "game_name": "Valorant"
+    }
+  }
+]

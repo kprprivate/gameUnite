@@ -28,3 +28,7 @@ def init_extensions(app):
     # JWT
     from app.extensions.jwt import jwt
     jwt.init_app(app)
+
+    # SocketIO
+    from app.extensions.socketio import socketio
+    socketio.init_app(app)
