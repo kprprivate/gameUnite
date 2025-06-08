@@ -22,6 +22,10 @@ def create_app(config_name="development"):
     # Registrar blueprints DEPOIS das extensões
     from app.api import register_blueprints
     register_blueprints(app)
+    
+    # Registrar middleware de segurança
+    from app.utils.security.security_middleware import register_security_middleware
+    register_security_middleware(app)
 
     # Registrar eventos do WebSocket
     from app.websockets import chat_events

@@ -43,6 +43,12 @@ const AdDetails = () => {
   const [imageLoading, setImageLoading] = useState(true);
   const [error, setError] = useState(null);
   const [deleting, setDeleting] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+  const [reportDetails, setReportDetails] = useState('');
+  const [submittingReport, setSubmittingReport] = useState(false);
+  const [similarAds, setSimilarAds] = useState([]);
+  const [loadingSimilar, setLoadingSimilar] = useState(false);
 
   // Estados para interações - CORRIGIDOS
   const [viewCount, setViewCount] = useState(0);
@@ -54,6 +60,12 @@ const AdDetails = () => {
       loadAdDetails();
     }
   }, [adId]);
+
+  useEffect(() => {
+    if (ad && ad.game_id) {
+      loadSimilarAds();
+    }
+  }, [ad]);
 
   const loadAdDetails = async () => {
     setLoading(true);
@@ -93,6 +105,32 @@ const AdDetails = () => {
     }
 
     setLoading(false);
+  };
+
+  const loadSimilarAds = async () => {
+    if (!ad || !ad.game_id) return;
+    
+    setLoadingSimilar(true);
+    
+    try {
+      const result = await adService.getAds({ 
+        game_id: ad.game_id, 
+        limit: 4,
+        skip: 0 
+      });
+      
+      if (result.success) {
+        // Filtrar o anúncio atual e pegar apenas 3 similares
+        const filtered = result.data.ads
+          .filter(similarAd => similarAd._id !== ad._id)
+          .slice(0, 3);
+        setSimilarAds(filtered);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar anúncios similares:', error);
+    }
+    
+    setLoadingSimilar(false);
   };
 
   const handleDeleteAd = async () => {
@@ -166,6 +204,54 @@ const AdDetails = () => {
       toast.success('Link copiado para a área de transferência!');
     }
   };
+
+  const handleReport = async () => {
+    if (!isAuthenticated) {
+      toast.info('Faça login para reportar anúncios');
+      return;
+    }
+
+    if (!reportReason.trim()) {
+      toast.error('Selecione um motivo para o report');
+      return;
+    }
+
+    setSubmittingReport(true);
+
+    try {
+      // Simular envio do report - você pode implementar a API depois
+      const reportData = {
+        ad_id: adId,
+        reason: reportReason,
+        details: reportDetails,
+        reporter_id: user._id
+      };
+
+      console.log('Report enviado:', reportData);
+      
+      // Simular delay de request
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      toast.success('Report enviado com sucesso! Nossa equipe irá analisar.');
+      setShowReportModal(false);
+      setReportReason('');
+      setReportDetails('');
+    } catch (error) {
+      console.error('Erro ao enviar report:', error);
+      toast.error('Erro ao enviar report. Tente novamente.');
+    }
+
+    setSubmittingReport(false);
+  };
+
+  const reportReasons = [
+    { value: 'spam', label: 'Spam ou conteúdo repetitivo' },
+    { value: 'fake', label: 'Anúncio falso ou enganoso' },
+    { value: 'inappropriate', label: 'Conteúdo inapropriado' },
+    { value: 'scam', label: 'Tentativa de golpe' },
+    { value: 'wrong_category', label: 'Categoria incorreta' },
+    { value: 'other', label: 'Outro motivo' }
+  ];
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('pt-BR', {
@@ -339,10 +425,10 @@ const AdDetails = () => {
                                 ? 'bg-red-50 border-red-200 text-red-600 hover:bg-red-100'
                                 : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
                         } ${!isAuthenticated ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-                        title={isAuthenticated ? 'Favoritar' : 'Faça login para favoritar'}
+                        title={isAuthenticated ? (isFavorited ? 'Remover dos favoritos' : 'Adicionar aos favoritos') : 'Faça login para favoritar'}
                     >
                       <Heart
-                          className={`w-5 h-5 ${isFavorited ? 'fill-current' : ''}`}
+                          className={`w-5 h-5 ${isFavorited ? 'fill-current text-red-600' : 'text-gray-600'}`}
                       />
                       <span className="text-sm font-medium">{favoritesCount}</span>
                     </button>
@@ -361,8 +447,7 @@ const AdDetails = () => {
                 {/* Preço */}
                 {ad.price && ad.ad_type === 'venda' && (
                     <div className="mb-6">
-                      <div className="text-3xl font-bold text-green-600 flex items-center">
-                        <DollarSign className="w-8 h-8 mr-2" />
+                      <div className="text-3xl font-bold text-green-600">
                         R$ {parseFloat(ad.price).toFixed(2)}
                       </div>
                     </div>
@@ -418,6 +503,84 @@ const AdDetails = () => {
 
               {/* Seção de Perguntas */}
               <AdQuestions ad={ad} isOwner={isOwner} />
+
+              {/* Anúncios Similares */}
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                  Anúncios Similares
+                </h3>
+                
+                {loadingSimilar ? (
+                  <div className="flex justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  </div>
+                ) : similarAds.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {similarAds.map((similarAd) => (
+                      <div 
+                        key={similarAd._id}
+                        className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-all cursor-pointer group"
+                        onClick={() => navigate(`/ads/${similarAd._id}`)}
+                      >
+                        <div className="aspect-video bg-gray-200 overflow-hidden">
+                          {similarAd.image_url ? (
+                            <img
+                              src={similarAd.image_url}
+                              alt={similarAd.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <Package className="w-8 h-8 text-gray-400" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="p-4">
+                          <h4 className="font-medium text-gray-800 truncate mb-1">
+                            {similarAd.title}
+                          </h4>
+                          
+                          <div className="flex items-center justify-between mb-2">
+                            <span className={`text-xs px-2 py-1 rounded-full ${
+                              similarAd.ad_type === 'venda' ? 'bg-green-100 text-green-700' :
+                              similarAd.ad_type === 'troca' ? 'bg-blue-100 text-blue-700' :
+                              'bg-orange-100 text-orange-700'
+                            }`}>
+                              {similarAd.ad_type === 'venda' ? 'Venda' : 
+                               similarAd.ad_type === 'troca' ? 'Troca' : 'Procura'}
+                            </span>
+                          </div>
+                          
+                          {similarAd.price && similarAd.ad_type === 'venda' && (
+                            <p className="text-lg font-bold text-green-600 mb-2">
+                              R$ {parseFloat(similarAd.price).toFixed(2)}
+                            </p>
+                          )}
+                          
+                          <div className="flex items-center justify-between text-xs text-gray-500">
+                            <div className="flex items-center">
+                              <Eye className="w-3 h-3 mr-1" />
+                              {similarAd.view_count || 0}
+                            </div>
+                            <div className="flex items-center">
+                              <Heart className="w-3 h-3 mr-1" />
+                              {similarAd.favorites_count || 0}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <Package className="w-12 h-12 mx-auto text-gray-300 mb-3" />
+                    <p className="text-gray-600">
+                      Nenhum anúncio similar encontrado
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Sidebar */}
@@ -455,8 +618,8 @@ const AdDetails = () => {
                 <div className="space-y-2 text-sm text-gray-600 mb-4">
                   <div className="flex items-center">
                     <Star className="w-4 h-4 mr-2 text-yellow-500" />
-                    Avaliação: {ad.user?.seller_rating || 0}
-                    ({ad.user?.seller_ratings_count || 0} {(ad.user?.seller_ratings_count || 0) === 1 ? 'venda' : 'vendas'})
+                    Avaliação: {(ad.user?.seller_rating || 0).toFixed(1)}
+                    ({ad.user?.sales_count || 0} {(ad.user?.sales_count || 0) === 1 ? 'venda' : 'vendas'})
                   </div>
                   <div className="flex items-center">
                     <MapPin className="w-4 h-4 mr-2" />
@@ -532,25 +695,95 @@ const AdDetails = () => {
                     <p className="text-sm text-gray-600 mb-3">
                       Encontrou algo suspeito neste anúncio?
                     </p>
-                    <Button variant="outline" size="sm" className="w-full">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full"
+                      onClick={() => setShowReportModal(true)}
+                      disabled={!isAuthenticated}
+                    >
                       <Flag className="w-4 h-4 mr-2" />
                       Reportar
                     </Button>
                   </div>
               )}
 
-              {/* Anúncios Relacionados */}
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">
-                  Anúncios Similares
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Em breve: sugestões de anúncios similares
-                </p>
-              </div>
             </div>
           </div>
         </div>
+
+        {/* Modal de Report */}
+        {showReportModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-md w-full max-h-screen overflow-y-auto">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    Reportar Anúncio
+                  </h3>
+                  <button 
+                    onClick={() => setShowReportModal(false)}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Motivo do report *
+                    </label>
+                    <select
+                      value={reportReason}
+                      onChange={(e) => setReportReason(e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    >
+                      <option value="">Selecione um motivo</option>
+                      {reportReasons.map((reason) => (
+                        <option key={reason.value} value={reason.value}>
+                          {reason.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Detalhes (opcional)
+                    </label>
+                    <textarea
+                      value={reportDetails}
+                      onChange={(e) => setReportDetails(e.target.value)}
+                      placeholder="Descreva o problema com mais detalhes..."
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      rows="4"
+                    />
+                  </div>
+
+                  <div className="flex space-x-3 pt-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowReportModal(false)}
+                      className="flex-1"
+                      disabled={submittingReport}
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      onClick={handleReport}
+                      className="flex-1"
+                      disabled={submittingReport || !reportReason.trim()}
+                    >
+                      {submittingReport ? 'Enviando...' : 'Enviar Report'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
   );
 };

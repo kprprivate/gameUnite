@@ -3,7 +3,8 @@ from app.utils.helpers.response_helpers import success_response, error_response
 from app.utils.decorators.auth_decorators import jwt_required
 from app.services.ad_questions.questions_service import (
     ask_question, answer_question, get_ad_questions,
-    get_user_questions, delete_question, toggle_question_visibility
+    get_user_questions, delete_question, toggle_question_visibility,
+    get_user_ad_questions
 )
 
 # Criar blueprint
@@ -284,3 +285,32 @@ def questions_health_check():
     except Exception as e:
         print(f"❌ Health check falhou: {str(e)}")
         return error_response(f"Health check falhou: {str(e)}", status_code=503)
+
+
+@ad_questions_bp.route("/my-questions", methods=["GET"])
+@jwt_required
+def get_my_ad_questions():
+    """Busca todas as perguntas dos anúncios do usuário logado."""
+    try:
+        limit = min(int(request.args.get("limit", 20)), 100)
+        skip = max(int(request.args.get("skip", 0)), 0)
+        status_filter = request.args.get("status")  # pending, answered
+
+        result = get_user_ad_questions(
+            user_id=str(g.user["_id"]),
+            limit=limit,
+            skip=skip,
+            status_filter=status_filter
+        )
+
+        if result["success"]:
+            return success_response(
+                data=result["data"],
+                message=result["message"]
+            )
+        else:
+            return error_response(result["message"])
+
+    except Exception as e:
+        print(f"❌ Erro ao buscar perguntas do usuário: {str(e)}")
+        return error_response(f"Erro ao buscar perguntas: {str(e)}")

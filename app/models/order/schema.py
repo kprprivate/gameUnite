@@ -15,11 +15,14 @@ order_schema_example = {
     "hours": 2,                              # Quantidade de horas
     "price_per_hour": 50.00,                 # Preço por hora
     "total_price": 100.00,                   # Preço total
-    "status": "pending",    # "pending", "paid", "in_progress", "completed", "cancelled", "refunded"
+    "status": "pending",    # "pending", "paid", "in_progress", "completed", "delivered", "cancelled", "refunded"
     "buyer_confirmed": False,                # Comprador confirmou entrega
     "seller_confirmed": False,               # Vendedor confirmou entrega
     "buyer_rating": None,                    # Avaliação do comprador (0-5)
     "seller_rating": None,                   # Avaliação do vendedor (0-5)
+    "buyer_review": None,                    # Comentário do comprador
+    "seller_review": None,                   # Comentário do vendedor
+    "rating_submitted": False,               # Se as avaliações foram enviadas
     "payment_id": "payment123",              # ID do pagamento (gateway)
     "chat_room_id": "60d5ec9af682fbd12a0b6666", # ID da sala de chat
     "created_at": "2023-05-01T12:00:00Z",

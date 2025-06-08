@@ -17,10 +17,12 @@ import {
   Package,
   Clock,
   CheckCircle,
-  XCircle
+  XCircle,
+  MessageCircle
 } from 'lucide-react';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Button from '../../components/Common/Button';
+import MyQuestions from '../../components/Dashboard/MyQuestions';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -39,6 +41,7 @@ const Dashboard = () => {
   const tabs = [
     { id: 'overview', label: 'Visão Geral', icon: TrendingUp },
     { id: 'ads', label: 'Meus Anúncios', icon: Package },
+    { id: 'questions', label: 'Perguntas', icon: MessageCircle },
     { id: 'sales', label: 'Vendas', icon: DollarSign },
     { id: 'purchases', label: 'Compras', icon: ShoppingBag },
     { id: 'profile', label: 'Perfil', icon: Users }
@@ -549,6 +552,9 @@ const Dashboard = () => {
             )}
           </div>
         );
+
+      case 'questions':
+        return <MyQuestions />;
 
       case 'profile':
         return (

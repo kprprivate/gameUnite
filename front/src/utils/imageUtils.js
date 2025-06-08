@@ -1,4 +1,30 @@
-const BASE_URL = 'http://127.0.0.1:5000/api/upload';
+// Dynamic base URL based on environment
+const getBaseUrl = () => {
+  // Check for environment variable first
+  if (import.meta.env.VITE_API_UPLOAD_URL) {
+    return import.meta.env.VITE_API_UPLOAD_URL;
+  }
+  
+  // In development, use localhost
+  if (import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://127.0.0.1:5000/api/upload';
+  }
+  
+  // In production, try using the Vite proxy first
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    // In development with Vite proxy
+    return '/api/upload';
+  }
+  
+  // In production, construct URL from current location
+  const protocol = window.location.protocol;
+  const hostname = window.location.hostname;
+  
+  // For production, assume API is on port 5000 or same domain with /api path
+  return `${protocol}//${hostname}:5000/api/upload`;
+};
+
+const BASE_URL = getBaseUrl();
 
 export const imageUtils = {
   // URLs padrão para fallback

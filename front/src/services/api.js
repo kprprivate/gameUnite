@@ -2,12 +2,39 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 
-const API_BASE_URL = 'http://127.0.0.1:5000/api';
+// Dynamic base URL based on environment
+const getApiBaseUrl = () => {
+  // Check for environment variable first
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  
+  // In development, use localhost
+  if (import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://127.0.0.1:5000/api';
+  }
+  
+  // In production, try using relative URL with Vite proxy first
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    // In development with Vite proxy
+    return '/api';
+  }
+  
+  // In production, construct URL from current location
+  const protocol = window.location.protocol;
+  const hostname = window.location.hostname;
+  
+  // For production, assume API is on port 5000 or same domain with /api path
+  return `${protocol}//${hostname}:5000/api`;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Criar instância do axios
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
+  withCredentials: false, // Importante para CORS
   headers: {
     'Content-Type': 'application/json',
   },
@@ -71,14 +98,11 @@ api.interceptors.request.use(
   (config) => {
     const token = Cookies.get('access_token');
 
-    // Só adicionar o token se ele for válido
-    if (token && isTokenValid()) {
+    // Adicionar token se existir
+    if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-    } else if (token) {
-      // Token inválido, remover
-      console.warn('Token inválido detectado, removendo...');
-      clearSession();
     }
+
 
     return config;
   },

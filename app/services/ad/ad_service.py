@@ -56,7 +56,7 @@ def get_user_stats(user_id):
         member_since = user.get("created_at", datetime.utcnow()).year
 
         # Por enquanto, usar valores baseados em vendas (depois implementar sistema de avaliações)
-        avg_rating = min(5.0, 3.5 + (sales_count * 0.1))  # Rating baseado em vendas
+        avg_rating = min(5.0, sales_count * 0.2) if sales_count > 0 else 0  # Rating baseado em vendas
         rating_count = sales_count
 
         return {
@@ -618,7 +618,7 @@ def get_user_stats(user_id):
         member_since = user.get("created_at", datetime.utcnow()).year
 
         # Por enquanto, usar valores baseados em vendas (depois implementar sistema de avaliações)
-        avg_rating = min(5.0, 3.5 + (sales_count * 0.1))  # Rating baseado em vendas
+        avg_rating = min(5.0, sales_count * 0.2) if sales_count > 0 else 0  # Rating baseado em vendas
         rating_count = sales_count
 
         return {

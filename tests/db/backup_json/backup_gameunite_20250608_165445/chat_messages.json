@@ -1,0 +1,413 @@
+[
+  {
+    "_id": "6818f05668b2d5a57b3ecd23",
+    "room_id": "6818f05668b2d5a57b3ecd20",
+    "user_id": "6818f05468b2d5a57b3ecd12",
+    "user_role": "buyer",
+    "content": "Olá! Estou interessado em melhorar minhas habilidades no Valorant. Podemos começar hoje?",
+    "is_system": false,
+    "created_at": "2025-05-02 17:17:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd12",
+      "6818f05468b2d5a57b3ecd0f"
+    ]
+  },
+  {
+    "_id": "6818f05668b2d5a57b3ecd24",
+    "room_id": "6818f05668b2d5a57b3ecd20",
+    "user_id": "6818f05468b2d5a57b3ecd0f",
+    "user_role": "seller",
+    "content": "Oi! Claro, podemos começar hoje. Qual seu rank atual e quais agentes você costuma jogar?",
+    "is_system": false,
+    "created_at": "2025-05-02 17:22:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd12",
+      "6818f05468b2d5a57b3ecd0f"
+    ]
+  },
+  {
+    "_id": "6818f05668b2d5a57b3ecd25",
+    "room_id": "6818f05668b2d5a57b3ecd20",
+    "user_id": "6818f05468b2d5a57b3ecd12",
+    "user_role": "buyer",
+    "content": "Sou Bronze 3 e geralmente jogo com Reyna e Phoenix, mas quero aprender Jett.",
+    "is_system": false,
+    "created_at": "2025-05-02 17:24:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd12",
+      "6818f05468b2d5a57b3ecd0f"
+    ]
+  },
+  {
+    "_id": "6818f05668b2d5a57b3ecd26",
+    "room_id": "6818f05668b2d5a57b3ecd20",
+    "user_id": "6818f05468b2d5a57b3ecd0f",
+    "user_role": "seller",
+    "content": "Ótimo! Vamos focar em posicionamento e mecânica básica primeiro. Me adicione no jogo: RadiantCoach#1234",
+    "is_system": false,
+    "created_at": "2025-05-02 17:27:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd12",
+      "6818f05468b2d5a57b3ecd0f"
+    ]
+  },
+  {
+    "_id": "6818f05668b2d5a57b3ecd27",
+    "room_id": "6818f05668b2d5a57b3ecd20",
+    "user_id": null,
+    "user_role": null,
+    "content": "O serviço foi marcado como concluído pelo vendedor.",
+    "is_system": true,
+    "created_at": "2025-05-03 16:57:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd12",
+      "6818f05468b2d5a57b3ecd0f"
+    ]
+  },
+  {
+    "_id": "6818f05668b2d5a57b3ecd28",
+    "room_id": "6818f05668b2d5a57b3ecd20",
+    "user_id": null,
+    "user_role": null,
+    "content": "O serviço foi marcado como concluído pelo comprador.",
+    "is_system": true,
+    "created_at": "2025-05-03 17:07:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd12",
+      "6818f05468b2d5a57b3ecd0f"
+    ]
+  },
+  {
+    "_id": "6818f05668b2d5a57b3ecd29",
+    "room_id": "6818f05668b2d5a57b3ecd20",
+    "user_id": "6818f05468b2d5a57b3ecd12",
+    "user_role": "buyer",
+    "content": "Muito obrigado pela aula! Aprendi bastante e já estou aplicando o que você me ensinou.",
+    "is_system": false,
+    "created_at": "2025-05-03 17:12:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd12",
+      "6818f05468b2d5a57b3ecd0f"
+    ]
+  },
+  {
+    "_id": "6818f05668b2d5a57b3ecd2a",
+    "room_id": "6818f05668b2d5a57b3ecd21",
+    "user_id": "6818f05468b2d5a57b3ecd12",
+    "user_role": "buyer",
+    "content": "Oi! Comprei sua aula de CS2. Quando podemos começar?",
+    "is_system": false,
+    "created_at": "2025-05-05 12:12:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd12",
+      "6818f05468b2d5a57b3ecd10"
+    ]
+  },
+  {
+    "_id": "6818f05668b2d5a57b3ecd2b",
+    "room_id": "6818f05668b2d5a57b3ecd21",
+    "user_id": "6818f05468b2d5a57b3ecd10",
+    "user_role": "seller",
+    "content": "Olá! Podemos começar hoje às 20h. Você tem Discord?",
+    "is_system": false,
+    "created_at": "2025-05-05 12:37:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd12",
+      "6818f05468b2d5a57b3ecd10"
+    ]
+  },
+  {
+    "_id": "6818f05668b2d5a57b3ecd2c",
+    "room_id": "6818f05668b2d5a57b3ecd21",
+    "user_id": "6818f05468b2d5a57b3ecd12",
+    "user_role": "buyer",
+    "content": "Sim, meu Discord é NoobPlayer#5678.",
+    "is_system": false,
+    "created_at": "2025-05-05 12:42:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd12",
+      "6818f05468b2d5a57b3ecd10"
+    ]
+  },
+  {
+    "_id": "6818f05768b2d5a57b3ecd2d",
+    "room_id": "6818f05668b2d5a57b3ecd21",
+    "user_id": "6818f05468b2d5a57b3ecd12",
+    "user_role": "buyer",
+    "content": "Aliás, já posso te adiantar que tenho dificuldade principalmente com spray control.",
+    "is_system": false,
+    "created_at": "2025-05-05 16:22:34.535000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd12"
+    ]
+  },
+  {
+    "_id": "6818f05768b2d5a57b3ecd2e",
+    "room_id": "6818f05668b2d5a57b3ecd22",
+    "user_id": "6818f05468b2d5a57b3ecd13",
+    "user_role": "buyer",
+    "content": "Oi! Comprei suas aulas de LoL. Podemos combinar os horários?",
+    "is_system": false,
+    "created_at": "2025-04-28 17:17:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd13",
+      "6818f05468b2d5a57b3ecd11"
+    ]
+  },
+  {
+    "_id": "6818f05768b2d5a57b3ecd2f",
+    "room_id": "6818f05668b2d5a57b3ecd22",
+    "user_id": "6818f05468b2d5a57b3ecd11",
+    "user_role": "seller",
+    "content": "Claro! Tenho disponibilidade nas terças e quintas, das 19h às 22h.",
+    "is_system": false,
+    "created_at": "2025-04-28 17:27:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd13",
+      "6818f05468b2d5a57b3ecd11"
+    ]
+  },
+  {
+    "_id": "6818f05768b2d5a57b3ecd30",
+    "room_id": "6818f05668b2d5a57b3ecd22",
+    "user_id": null,
+    "user_role": null,
+    "content": "O serviço foi marcado como concluído pelo vendedor e pelo comprador.",
+    "is_system": true,
+    "created_at": "2025-04-29 17:07:33.433000",
+    "read_by": [
+      "6818f05468b2d5a57b3ecd13",
+      "6818f05468b2d5a57b3ecd11"
+    ]
+  },
+  {
+    "_id": "6843c1fd57cddbc2d1ebe7fa",
+    "room_id": "6843c1fd57cddbc2d1ebe7f9",
+    "user_id": null,
+    "user_role": null,
+    "content": "💬 Chat criado para o pedido. Conversem sobre detalhes da transação.",
+    "is_system": true,
+    "created_at": "2025-06-07 04:37:17.770000",
+    "read_by": [
+      "683683bfadee286e2d71272f",
+      "683f070c7d624369c4c241d3"
+    ]
+  },
+  {
+    "_id": "68445c81e70db308e4d573fc",
+    "room_id": "6843c1fd57cddbc2d1ebe7f9",
+    "user_id": "683683bfadee286e2d71272f",
+    "user_role": "buyer",
+    "content": "oi",
+    "is_system": false,
+    "created_at": "2025-06-07 15:36:33.580000",
+    "read_by": [
+      "683683bfadee286e2d71272f",
+      "683f070c7d624369c4c241d3"
+    ]
+  },
+  {
+    "_id": "68445cb8e70db308e4d573fd",
+    "room_id": "6843c1fd57cddbc2d1ebe7f9",
+    "user_id": "683f070c7d624369c4c241d3",
+    "user_role": "seller",
+    "content": "oi",
+    "is_system": false,
+    "created_at": "2025-06-07 15:37:28.091000",
+    "read_by": [
+      "683f070c7d624369c4c241d3",
+      "683683bfadee286e2d71272f"
+    ]
+  },
+  {
+    "_id": "68445cc6e70db308e4d573fe",
+    "room_id": "6843c1fd57cddbc2d1ebe7f9",
+    "user_id": "683f070c7d624369c4c241d3",
+    "user_role": "seller",
+    "content": "ta bom",
+    "is_system": false,
+    "created_at": "2025-06-07 15:37:42.122000",
+    "read_by": [
+      "683f070c7d624369c4c241d3",
+      "683683bfadee286e2d71272f"
+    ]
+  },
+  {
+    "_id": "68445ccbe70db308e4d573ff",
+    "room_id": "6843c1fd57cddbc2d1ebe7f9",
+    "user_id": "683683bfadee286e2d71272f",
+    "user_role": "buyer",
+    "content": "cala a boca",
+    "is_system": false,
+    "created_at": "2025-06-07 15:37:47.098000",
+    "read_by": [
+      "683683bfadee286e2d71272f"
+    ]
+  },
+  {
+    "_id": "684465fff510347e55a6eea4",
+    "room_id": "684465fff510347e55a6eea3",
+    "user_id": null,
+    "user_role": null,
+    "content": "💬 Chat criado para o pedido. Conversem sobre detalhes da transação.",
+    "is_system": true,
+    "created_at": "2025-06-07 16:17:03.120000",
+    "read_by": [
+      "683683bfadee286e2d71272f",
+      "683f070c7d624369c4c241d3"
+    ]
+  },
+  {
+    "_id": "68446625f510347e55a6eea5",
+    "room_id": "684465fff510347e55a6eea3",
+    "user_id": "683f070c7d624369c4c241d3",
+    "user_role": "seller",
+    "content": "qual foi truta?",
+    "is_system": false,
+    "created_at": "2025-06-07 16:17:41.512000",
+    "read_by": [
+      "683f070c7d624369c4c241d3",
+      "683683bfadee286e2d71272f"
+    ]
+  },
+  {
+    "_id": "6844662ff510347e55a6eea6",
+    "room_id": "684465fff510347e55a6eea3",
+    "user_id": "683683bfadee286e2d71272f",
+    "user_role": "buyer",
+    "content": "oi",
+    "is_system": false,
+    "created_at": "2025-06-07 16:17:51.818000",
+    "read_by": [
+      "683683bfadee286e2d71272f",
+      "683f070c7d624369c4c241d3"
+    ]
+  },
+  {
+    "_id": "68446637f510347e55a6eea7",
+    "room_id": "684465fff510347e55a6eea3",
+    "user_id": "683683bfadee286e2d71272f",
+    "user_role": "buyer",
+    "content": "cala sua boca",
+    "is_system": false,
+    "created_at": "2025-06-07 16:17:59.856000",
+    "read_by": [
+      "683683bfadee286e2d71272f",
+      "683f070c7d624369c4c241d3"
+    ]
+  },
+  {
+    "_id": "6844663bf510347e55a6eea8",
+    "room_id": "684465fff510347e55a6eea3",
+    "user_id": "683f070c7d624369c4c241d3",
+    "user_role": "seller",
+    "content": "nao quero",
+    "is_system": false,
+    "created_at": "2025-06-07 16:18:03.725000",
+    "read_by": [
+      "683f070c7d624369c4c241d3",
+      "683683bfadee286e2d71272f"
+    ]
+  },
+  {
+    "_id": "68446640f510347e55a6eea9",
+    "room_id": "684465fff510347e55a6eea3",
+    "user_id": "683f070c7d624369c4c241d3",
+    "user_role": "seller",
+    "content": "vem calar",
+    "is_system": false,
+    "created_at": "2025-06-07 16:18:08.486000",
+    "read_by": [
+      "683f070c7d624369c4c241d3",
+      "683683bfadee286e2d71272f"
+    ]
+  },
+  {
+    "_id": "68446697ca6c10ae80bfc037",
+    "room_id": "684465fff510347e55a6eea3",
+    "user_id": "683f070c7d624369c4c241d3",
+    "user_role": "seller",
+    "content": "ta pago ai truta",
+    "is_system": false,
+    "created_at": "2025-06-07 16:19:35.958000",
+    "read_by": [
+      "683f070c7d624369c4c241d3",
+      "683683bfadee286e2d71272f"
+    ]
+  },
+  {
+    "_id": "684466a7ca6c10ae80bfc038",
+    "room_id": "684465fff510347e55a6eea3",
+    "user_id": "683683bfadee286e2d71272f",
+    "user_role": "buyer",
+    "content": "certeza?",
+    "is_system": false,
+    "created_at": "2025-06-07 16:19:51.335000",
+    "read_by": [
+      "683683bfadee286e2d71272f"
+    ]
+  },
+  {
+    "_id": "68446718ca6c10ae80bfc03b",
+    "room_id": "684465fff510347e55a6eea3",
+    "user_id": "683683bfadee286e2d71272f",
+    "user_role": "buyer",
+    "content": "atualizacao?",
+    "is_system": false,
+    "created_at": "2025-06-07 16:21:44.210000",
+    "read_by": [
+      "683683bfadee286e2d71272f"
+    ]
+  },
+  {
+    "_id": "68446c8a1a2ea2bad936c491",
+    "room_id": "68446c8a1a2ea2bad936c490",
+    "user_id": null,
+    "user_role": null,
+    "content": "💬 Chat criado para o pedido. Conversem sobre detalhes da transação.",
+    "is_system": true,
+    "created_at": "2025-06-07 16:44:58.039000",
+    "read_by": [
+      "683683bfadee286e2d71272f",
+      "683f070c7d624369c4c241d3"
+    ]
+  },
+  {
+    "_id": "68446c8d1a2ea2bad936c492",
+    "room_id": "68446c8a1a2ea2bad936c490",
+    "user_id": "683683bfadee286e2d71272f",
+    "user_role": "buyer",
+    "content": "SEU ESCURO",
+    "is_system": false,
+    "created_at": "2025-06-07 16:45:01.299000",
+    "read_by": [
+      "683683bfadee286e2d71272f",
+      "683f070c7d624369c4c241d3"
+    ]
+  },
+  {
+    "_id": "68446ca71a2ea2bad936c493",
+    "room_id": "68446c8a1a2ea2bad936c490",
+    "user_id": "683f070c7d624369c4c241d3",
+    "user_role": "seller",
+    "content": "BOA BOA",
+    "is_system": false,
+    "created_at": "2025-06-07 16:45:27.183000",
+    "read_by": [
+      "683f070c7d624369c4c241d3"
+    ]
+  },
+  {
+    "_id": "68446cac1a2ea2bad936c494",
+    "room_id": "68446c8a1a2ea2bad936c490",
+    "user_id": "683683bfadee286e2d71272f",
+    "user_role": "buyer",
+    "content": "AAAA",
+    "is_system": false,
+    "created_at": "2025-06-07 16:45:32.480000",
+    "read_by": [
+      "683683bfadee286e2d71272f",
+      "683f070c7d624369c4c241d3"
+    ]
+  }
+]

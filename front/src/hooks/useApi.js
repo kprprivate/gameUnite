@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import api from '../services/api';
 
-export const useApi = (apiFunction, dependencies = []) => {
+// Hook for data fetching with API function
+export const useApiData = (apiFunction, dependencies = []) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -46,4 +48,46 @@ export const useApi = (apiFunction, dependencies = []) => {
   };
 
   return { data, loading, error, refetch };
+};
+
+// Hook that returns API client for making requests
+export const useApi = () => {
+  return {
+    get: async (url, config = {}) => {
+      try {
+        const response = await api.get(url, config);
+        return response.data;
+      } catch (error) {
+        console.error('API GET Error:', error.response?.data || error.message);
+        throw error;
+      }
+    },
+    post: async (url, data = {}, config = {}) => {
+      try {
+        const response = await api.post(url, data, config);
+        return response.data;
+      } catch (error) {
+        console.error('API POST Error:', error.response?.data || error.message);
+        throw error;
+      }
+    },
+    put: async (url, data = {}, config = {}) => {
+      try {
+        const response = await api.put(url, data, config);
+        return response.data;
+      } catch (error) {
+        console.error('API PUT Error:', error.response?.data || error.message);
+        throw error;
+      }
+    },
+    delete: async (url, config = {}) => {
+      try {
+        const response = await api.delete(url, config);
+        return response.data;
+      } catch (error) {
+        console.error('API DELETE Error:', error.response?.data || error.message);
+        throw error;
+      }
+    }
+  };
 };

@@ -3,6 +3,7 @@ from datetime import datetime
 from bson import ObjectId
 from app.db.mongo_client import db
 from app.models.user.crud import get_user_by_id
+from app.services.notification.notification_service import notify_new_question
 
 
 def ask_question(ad_id, user_id, question, is_public=True):
@@ -51,6 +52,21 @@ def ask_question(ad_id, user_id, question, is_public=True):
         }
 
         print(f"✅ Pergunta criada com sucesso: {result.inserted_id}")
+
+        # Criar notificação para o dono do anúncio
+        try:
+            questioner_name = f"{user.get('first_name', '')} {user.get('last_name', '')}".strip() if user else "Usuário"
+            if not questioner_name:
+                questioner_name = user.get('username', 'Usuário') if user else "Usuário"
+            
+            notify_new_question(
+                ad_owner_id=str(ad["user_id"]),
+                questioner_name=questioner_name,
+                ad_title=ad.get("title", "Anúncio"),
+                question_text=question.strip()
+            )
+        except Exception as notif_error:
+            print(f"⚠️ Erro ao criar notificação: {notif_error}")
 
         return {
             "success": True,
@@ -136,6 +152,71 @@ def answer_question(question_id, user_id, answer):
     except Exception as e:
         print(f"❌ Erro ao responder pergunta: {str(e)}")
         return {"success": False, "message": f"Erro ao responder pergunta: {str(e)}"}
+
+
+def get_user_ad_questions(user_id, limit=20, skip=0, status_filter=None):
+    """Busca todas as perguntas dos anúncios de um usuário."""
+    try:
+        # Buscar anúncios do usuário
+        user_ads = list(db.ads.find({"user_id": ObjectId(user_id)}, {"_id": 1, "title": 1}))
+        if not user_ads:
+            return {
+                "success": True,
+                "data": {"questions": []},
+                "message": "Nenhum anúncio encontrado para este usuário"
+            }
+
+        ad_ids = [ad["_id"] for ad in user_ads]
+        ad_titles = {str(ad["_id"]): ad["title"] for ad in user_ads}
+
+        # Construir query para buscar perguntas
+        query = {"ad_id": {"$in": ad_ids}}
+        
+        if status_filter:
+            query["status"] = status_filter
+
+        # Buscar perguntas com paginação
+        questions_cursor = db.ad_questions.find(query).sort("created_at", -1).skip(skip).limit(limit)
+        
+        questions = []
+        for question in questions_cursor:
+            # Buscar dados do usuário que fez a pergunta
+            user = get_user_by_id(str(question["user_id"]))
+            
+            question_data = {
+                "_id": str(question["_id"]),
+                "ad_id": str(question["ad_id"]),
+                "ad_title": ad_titles.get(str(question["ad_id"]), "Anúncio removido"),
+                "question": question["question"],
+                "answer": question.get("answer"),
+                "status": question["status"],
+                "is_public": question.get("is_public", True),
+                "created_at": question["created_at"].isoformat(),
+                "updated_at": question["updated_at"].isoformat(),
+                "answered_at": question["answered_at"].isoformat() if question.get("answered_at") else None,
+                "user": {
+                    "username": user.get("username", "Usuário") if user else "Usuário",
+                    "first_name": user.get("first_name", "") if user else "",
+                    "last_name": user.get("last_name", "") if user else "",
+                    "profile_pic": user.get("profile_pic", "") if user else ""
+                }
+            }
+            questions.append(question_data)
+
+        total_count = db.ad_questions.count_documents(query)
+
+        return {
+            "success": True,
+            "data": {
+                "questions": questions,
+                "total": total_count
+            },
+            "message": "Perguntas encontradas com sucesso"
+        }
+
+    except Exception as e:
+        print(f"❌ Erro ao buscar perguntas do usuário: {str(e)}")
+        return {"success": False, "message": f"Erro ao buscar perguntas: {str(e)}"}
 
 
 def get_ad_questions(ad_id, user_id=None):

@@ -1,0 +1,63 @@
+[
+  {
+    "_id": "6818f05768b2d5a57b3ecd31",
+    "order_id": "6818f05568b2d5a57b3ecd1e",
+    "chat_room_id": "6818f05668b2d5a57b3ecd21",
+    "user_id": "6818f05468b2d5a57b3ecd12",
+    "subject": "Vendedor não respondeu",
+    "description": "O vendedor não respondeu às minhas últimas mensagens.",
+    "status": "open",
+    "assigned_admin_id": "6818f05468b2d5a57b3ecd0e",
+    "created_at": "2025-05-05 16:37:35.423000",
+    "updated_at": "2025-05-05 16:37:35.423000",
+    "resolved_at": null
+  },
+  {
+    "_id": "6845e1822181c7af11d745bc",
+    "user_id": "683683bfadee286e2d71272f",
+    "protocol_number": "SUP-2025-000002",
+    "subject": "TESTANDO",
+    "message": "OI ISSO AQUI FUNCIONA?",
+    "category": "general",
+    "priority": "medium",
+    "status": "open",
+    "created_at": "2025-06-08 19:16:18.306000",
+    "updated_at": "2025-06-08 19:16:18.306000"
+  },
+  {
+    "_id": "6845e1fd2181c7af11d745be",
+    "user_id": "683683bfadee286e2d71272f",
+    "protocol_number": "SUP-2025-000003",
+    "subject": "testando dv",
+    "message": "oi isso aqui funciona?",
+    "category": "general",
+    "priority": "medium",
+    "status": "open",
+    "created_at": "2025-06-08 19:18:21.440000",
+    "updated_at": "2025-06-08 19:18:21.440000"
+  },
+  {
+    "_id": "6845e33036917128c9b1394d",
+    "user_id": "683683bfadee286e2d71272f",
+    "protocol_number": "SUP-2025-000004",
+    "subject": "MACACO TESTANDO",
+    "message": "OI ISSO AQUI FUNCIONA?",
+    "category": "general",
+    "priority": "medium",
+    "status": "open",
+    "created_at": "2025-06-08 19:23:28.958000",
+    "updated_at": "2025-06-08 19:23:28.958000"
+  },
+  {
+    "_id": "6845e857ac584315c9ebf5b6",
+    "user_id": "683683bfadee286e2d71272f",
+    "protocol_number": "SUP-2025-000005",
+    "subject": "TESTANDO ISSO AQUI",
+    "message": "FUNCIONA OU NAO?",
+    "category": "general",
+    "priority": "medium",
+    "status": "open",
+    "created_at": "2025-06-08 19:45:27.624000",
+    "updated_at": "2025-06-08 19:45:27.624000"
+  }
+]

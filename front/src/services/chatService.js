@@ -20,13 +20,17 @@ class ChatService {
         this.disconnect();
       }
 
-      // CORREÇÃO: Usar import.meta.env para Vite ou fallback
+      // Dynamic WebSocket URL based on environment
       let socketUrl;
-      try {
-        socketUrl = import.meta.env.VITE_WS_URL || 'http://localhost:5000';
-      } catch (error) {
-        // Fallback se import.meta não estiver disponível
-        socketUrl = 'http://localhost:5000';
+      if (import.meta.env.VITE_WS_URL) {
+        socketUrl = import.meta.env.VITE_WS_URL;
+      } else if (import.meta.env.DEV || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        socketUrl = 'http://127.0.0.1:5000';
+      } else {
+        // In production, construct WebSocket URL from current location
+        const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+        const hostname = window.location.hostname;
+        socketUrl = `${protocol}//${hostname}:5000`;
       }
 
       console.log('🔗 Conectando ao WebSocket em:', socketUrl);

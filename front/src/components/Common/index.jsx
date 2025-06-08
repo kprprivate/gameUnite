@@ -10,5 +10,6 @@ export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as Modal } from './Modal';
 export { default as Pagination } from './Pagination';
 export { default as ProfileImageUpload } from './ProfileImageUpload';
+export { default as RatingModal } from './RatingModal';
 export { default as SafeImage } from './SafeImage';
 export { default as Tooltip } from './Tooltip';

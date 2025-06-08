@@ -53,3 +53,11 @@ def register_blueprints(app):
     # Favorites routes
     from app.api.favorites.routes import favorites_bp
     app.register_blueprint(favorites_bp, url_prefix='/api/favorites')
+
+    # Support routes
+    from app.api.support.routes import support_bp
+    app.register_blueprint(support_bp, url_prefix='/api/support')
+
+    # Notifications routes
+    from app.api.notifications.routes import notifications_bp
+    app.register_blueprint(notifications_bp, url_prefix='/api/notifications')

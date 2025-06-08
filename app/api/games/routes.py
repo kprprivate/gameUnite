@@ -22,8 +22,27 @@ def get_games():
         if search:
             query["name"] = {"$regex": search, "$options": "i"}  # Busca case-insensitive
 
-        # Buscar jogos no MongoDB
-        games_cursor = db.games.find(query).sort("name", 1).skip(skip).limit(limit)
+        # Buscar jogos no MongoDB com contagem de anúncios
+        pipeline = [
+            {"$match": query},
+            {"$lookup": {
+                "from": "ads",
+                "localField": "_id",
+                "foreignField": "game_id",
+                "as": "ads"
+            }},
+            {"$addFields": {
+                "ads_count": {"$size": "$ads"}
+            }},
+            {"$project": {
+                "ads": 0  # Remove o array de ads, mantém apenas a contagem
+            }},
+            {"$sort": {"name": 1}},
+            {"$skip": skip},
+            {"$limit": limit}
+        ]
+        
+        games_cursor = db.games.aggregate(pipeline)
 
         # Converter cursor para lista
         games = []
@@ -43,11 +62,29 @@ def get_games():
 def get_game(game_id):
     """Retorna detalhes de um jogo específico."""
     try:
-        # Buscar jogo pelo ID
-        game = db.games.find_one({"_id": ObjectId(game_id)})
-
-        if not game:
+        # Buscar jogo pelo ID com contagem de anúncios
+        pipeline = [
+            {"$match": {"_id": ObjectId(game_id)}},
+            {"$lookup": {
+                "from": "ads",
+                "localField": "_id",
+                "foreignField": "game_id",
+                "as": "ads"
+            }},
+            {"$addFields": {
+                "ads_count": {"$size": "$ads"}
+            }},
+            {"$project": {
+                "ads": 0  # Remove o array de ads, mantém apenas a contagem
+            }}
+        ]
+        
+        result = list(db.games.aggregate(pipeline))
+        
+        if not result:
             return error_response("Jogo não encontrado", status_code=404)
+            
+        game = result[0]
 
         # Converter ObjectId para string
         game["_id"] = str(game["_id"])
@@ -150,6 +187,7 @@ def update_game(game_id):
             return error_response("Jogo não encontrado", status_code=404)
 
         # Preparar dados para atualização
+        from datetime import datetime
         update_data = {k: v for k, v in data.items() if k not in ["_id", "created_at"]}
         update_data["updated_at"] = datetime.utcnow()
 

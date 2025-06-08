@@ -196,6 +196,31 @@ export const questionsService = {
     }
   },
 
+  // Buscar perguntas dos meus anúncios
+  async getMyAdQuestions(params = {}) {
+    try {
+      console.log('🔍 Buscando perguntas dos meus anúncios:', params);
+
+      const response = await api.get('/ad-questions/my-questions', { params });
+
+      console.log('📥 Perguntas dos meus anúncios:', response.data);
+
+      return {
+        success: response.data.success || true,
+        data: response.data.data || response.data,
+        message: response.data.message || 'Perguntas carregadas'
+      };
+    } catch (error) {
+      console.error('❌ Erro ao buscar perguntas dos meus anúncios:', error);
+
+      return {
+        success: false,
+        message: error.response?.data?.message || error.message || 'Erro ao carregar perguntas',
+        data: { questions: [] }
+      };
+    }
+  },
+
   // Função de debug para verificar conectividade
   async debugConnection() {
     try {

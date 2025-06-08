@@ -29,6 +29,7 @@ import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Button from '../../components/Common/Button';
 import Badge from '../../components/Common/Badge';
 import ChatRoom from '../../components/Chat/ChatRoom';
+import RatingModal from '../../components/Common/RatingModal';
 
 const OrderDetails = () => {
   const { orderId } = useParams();
@@ -39,6 +40,7 @@ const OrderDetails = () => {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
 
   useEffect(() => {
     if (orderId) {
@@ -275,6 +277,28 @@ const OrderDetails = () => {
 
     console.log('✅ Ações disponíveis:', actions);
     return actions;
+  };
+
+  // Verificar se pode avaliar o pedido
+  const canRate = () => {
+    if (!order || (order.status !== 'completed' && order.status !== 'delivered') || order.rating_submitted) {
+      return false;
+    }
+    
+    const userRole = getUserRole();
+    if (userRole === 'buyer' && !order.seller_rating) {
+      return true;
+    }
+    if (userRole === 'seller' && !order.buyer_rating) {
+      return true;
+    }
+    
+    return false;
+  };
+
+  const handleRatingSuccess = () => {
+    loadOrderDetails();
+    toast.success('Avaliação enviada com sucesso!');
   };
 
   const formatDate = (dateString) => {
@@ -611,7 +635,7 @@ const OrderDetails = () => {
               )}
 
               {/* Ações Disponíveis */}
-              {availableActions.length > 0 && (
+              {(availableActions.length > 0 || canRate()) && (
                   <div className="bg-white rounded-lg shadow-md p-6">
                     <h3 className="text-lg font-semibold text-gray-800 mb-4">
                       Ações Disponíveis
@@ -635,6 +659,23 @@ const OrderDetails = () => {
                             )}
                           </div>
                       ))}
+                      
+                      {/* Botão de Avaliação */}
+                      {canRate() && (
+                          <div>
+                            <Button
+                                onClick={() => setShowRatingModal(true)}
+                                variant="primary"
+                                className="w-full"
+                            >
+                              <Star className="w-4 h-4 mr-2" />
+                              Avaliar {getUserRole() === 'buyer' ? 'Vendedor' : 'Comprador'}
+                            </Button>
+                            <p className="text-xs text-gray-600 mt-1">
+                              Compartilhe sua experiência com esta transação
+                            </p>
+                          </div>
+                      )}
                     </div>
                   </div>
               )}
@@ -691,6 +732,14 @@ const OrderDetails = () => {
             </div>
           </div>
         </div>
+
+        {/* Modal de Avaliação */}
+        <RatingModal
+          isOpen={showRatingModal}
+          onClose={() => setShowRatingModal(false)}
+          order={order}
+          onSuccess={handleRatingSuccess}
+        />
       </div>
   );
 };

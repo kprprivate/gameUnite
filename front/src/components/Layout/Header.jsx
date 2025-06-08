@@ -29,14 +29,18 @@ const Header = () => {
   // Estados
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   // Refs
   const searchRef = useRef(null);
   const userMenuRef = useRef(null);
+  const notificationRef = useRef(null);
   const debouncedSearch = useDebounce(searchTerm, 300);
 
   // Effects
@@ -49,6 +53,16 @@ const Header = () => {
     }
   }, [debouncedSearch]);
 
+  // Carregar notificações quando autenticado
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      loadNotifications();
+      // Simular atualização periódica das notificações
+      const interval = setInterval(loadNotifications, 30000); // 30 segundos
+      return () => clearInterval(interval);
+    }
+  }, [isAuthenticated, user]);
+
   // Fechar dropdowns quando clicar fora
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -57,6 +71,9 @@ const Header = () => {
       }
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setIsUserMenuOpen(false);
+      }
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setIsNotificationOpen(false);
       }
     };
 
@@ -97,6 +114,75 @@ const Header = () => {
   const closeAllMenus = () => {
     setIsMenuOpen(false);
     setIsUserMenuOpen(false);
+    setIsNotificationOpen(false);
+  };
+
+  // Função para carregar notificações (simulada)
+  const loadNotifications = async () => {
+    try {
+      // Simular dados de notificação - você pode implementar a API depois
+      const mockNotifications = [
+        {
+          id: 1,
+          type: 'order',
+          title: 'Novo pedido recebido',
+          message: 'Você recebeu um novo pedido para "Counter-Strike 2"',
+          timestamp: new Date(Date.now() - 5 * 60000), // 5 minutos atrás
+          read: false,
+          link: '/orders'
+        },
+        {
+          id: 2,
+          type: 'message',
+          title: 'Nova mensagem',
+          message: 'João enviou uma pergunta sobre seu anúncio',
+          timestamp: new Date(Date.now() - 15 * 60000), // 15 minutos atrás
+          read: false,
+          link: '/dashboard'
+        },
+        {
+          id: 3,
+          type: 'favorite',
+          title: 'Anúncio favoritado',
+          message: 'Seu anúncio "Valorant" foi favoritado',
+          timestamp: new Date(Date.now() - 2 * 60 * 60000), // 2 horas atrás
+          read: true,
+          link: '/dashboard'
+        }
+      ];
+
+      setNotifications(mockNotifications);
+      setUnreadCount(mockNotifications.filter(n => !n.read).length);
+    } catch (error) {
+      console.error('Erro ao carregar notificações:', error);
+    }
+  };
+
+  const markAsRead = (notificationId) => {
+    setNotifications(prev => 
+      prev.map(n => 
+        n.id === notificationId ? { ...n, read: true } : n
+      )
+    );
+    setUnreadCount(prev => Math.max(0, prev - 1));
+  };
+
+  const markAllAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    setUnreadCount(0);
+  };
+
+  const formatNotificationTime = (timestamp) => {
+    const now = new Date();
+    const diff = now - timestamp;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) return `${days}d`;
+    if (hours > 0) return `${hours}h`;
+    if (minutes > 0) return `${minutes}m`;
+    return 'agora';
   };
 
   // CORRIGIDO: Usar dados do contexto do carrinho
@@ -208,10 +294,103 @@ const Header = () => {
                 </Link>
 
                 {/* Notifications */}
-                <button className="relative p-2 text-gray-700 hover:text-blue-600 transition-colors">
-                  <Bell className="w-6 h-6" />
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-2 h-2"></span>
-                </button>
+                <div className="relative" ref={notificationRef}>
+                  <button 
+                    onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                    className="relative p-2 text-gray-700 hover:text-blue-600 transition-colors"
+                  >
+                    <Bell className="w-6 h-6" />
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[20px] h-5 flex items-center justify-center">
+                        {unreadCount > 9 ? '9+' : unreadCount}
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Notifications Dropdown */}
+                  {isNotificationOpen && (
+                    <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-[24rem] overflow-hidden">
+                      {/* Header */}
+                      <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+                        <h3 className="font-semibold text-gray-800">Notificações</h3>
+                        {unreadCount > 0 && (
+                          <button
+                            onClick={markAllAsRead}
+                            className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                          >
+                            Marcar todas como lidas
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Notifications List */}
+                      <div className="max-h-72 overflow-y-auto">
+                        {notifications.length > 0 ? (
+                          notifications.map((notification) => (
+                            <div
+                              key={notification.id}
+                              className={`p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer ${
+                                !notification.read ? 'bg-blue-50' : ''
+                              }`}
+                              onClick={() => {
+                                if (!notification.read) {
+                                  markAsRead(notification.id);
+                                }
+                                navigate(notification.link);
+                                setIsNotificationOpen(false);
+                              }}
+                            >
+                              <div className="flex items-start space-x-3">
+                                <div className={`p-2 rounded-full ${
+                                  notification.type === 'order' ? 'bg-green-100 text-green-600' :
+                                  notification.type === 'message' ? 'bg-blue-100 text-blue-600' :
+                                  'bg-red-100 text-red-600'
+                                }`}>
+                                  {notification.type === 'order' ? '🛒' :
+                                   notification.type === 'message' ? '💬' : '❤️'}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between">
+                                    <p className="text-sm font-medium text-gray-800 truncate">
+                                      {notification.title}
+                                    </p>
+                                    <span className="text-xs text-gray-500">
+                                      {formatNotificationTime(notification.timestamp)}
+                                    </span>
+                                  </div>
+                                  <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                                    {notification.message}
+                                  </p>
+                                  {!notification.read && (
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="p-6 text-center text-gray-500">
+                            <Bell className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+                            <p>Nenhuma notificação</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Footer */}
+                      {notifications.length > 0 && (
+                        <div className="p-3 border-t border-gray-200 text-center">
+                          <Link
+                            to="/notifications"
+                            className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                            onClick={() => setIsNotificationOpen(false)}
+                          >
+                            Ver todas as notificações
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
 
                 {/* User Menu */}
                 <div className="relative" ref={userMenuRef}>
@@ -280,6 +459,26 @@ const Header = () => {
                         <Heart className="w-5 h-5 mr-3" />
                         Favoritos
                       </Link>
+
+                      <Link
+                        to="/support"
+                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 transition-colors"
+                        onClick={closeAllMenus}
+                      >
+                        <Bell className="w-5 h-5 mr-3" />
+                        Suporte
+                      </Link>
+
+                      {user?.role === 'admin' && (
+                        <Link
+                          to="/admin"
+                          className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 transition-colors"
+                          onClick={closeAllMenus}
+                        >
+                          <Settings className="w-5 h-5 mr-3" />
+                          Administração
+                        </Link>
+                      )}
 
                       <div className="border-t border-gray-200 mt-2 pt-2">
                         <button
@@ -416,6 +615,26 @@ const Header = () => {
                     <Heart className="w-4 h-4 inline mr-2" />
                     Favoritos
                   </Link>
+
+                  <Link
+                    to="/support"
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    onClick={closeAllMenus}
+                  >
+                    <Bell className="w-4 h-4 inline mr-2" />
+                    Suporte
+                  </Link>
+
+                  {user?.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                      onClick={closeAllMenus}
+                    >
+                      <Settings className="w-4 h-4 inline mr-2" />
+                      Administração
+                    </Link>
+                  )}
 
                   <Link
                     to="/profile"

@@ -1,0 +1,28 @@
+[
+  {
+    "_id": "684466baca6c10ae80bfc039",
+    "ad_id": "683f854862ea757871328f21",
+    "user_id": "683683bfadee286e2d71272f",
+    "question": "oi, isso aqui funciona?",
+    "answer": "nao, pega nao",
+    "answered_by": "683f070c7d624369c4c241d3",
+    "answered_at": "2025-06-07 16:20:42.973000",
+    "status": "answered",
+    "is_public": true,
+    "created_at": "2025-06-07 16:20:10.803000",
+    "updated_at": "2025-06-07 16:20:58.145000"
+  },
+  {
+    "_id": "68446b1e1a2ea2bad936c48e",
+    "ad_id": "683f854862ea757871328f21",
+    "user_id": "683683bfadee286e2d71272f",
+    "question": "seu escuro macaco",
+    "answer": "oi seu escuro",
+    "answered_by": "683f070c7d624369c4c241d3",
+    "answered_at": "2025-06-07 16:40:30.761000",
+    "status": "answered",
+    "is_public": true,
+    "created_at": "2025-06-07 16:38:54.747000",
+    "updated_at": "2025-06-07 16:40:30.761000"
+  }
+]

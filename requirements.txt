@@ -9,3 +9,4 @@ python-slugify
 certifi
 Pillow
 boto3
+pydantic

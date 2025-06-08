@@ -28,6 +28,11 @@ import Cart from './pages/Cart/Cart';
 import Checkout from './pages/Cart/Checkout';
 import Orders from './pages/Orders/Orders';
 import OrderDetails from './pages/Orders/OrderDetails';
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import AdminSupport from './pages/Admin/AdminSupport';
+import Support from './pages/Support/Support';
+import TicketDetails from './pages/Support/TicketDetails';
+import Notifications from './pages/Notifications/Notifications';
 
 // Components
 import ProtectedRoute from './components/Auth/ProtectedRoute';
@@ -123,6 +128,46 @@ function App() {
                       element={
                         <ProtectedRoute>
                           <Layout><EditAd /></Layout>
+                        </ProtectedRoute>
+                      }
+                  />
+                  <Route
+                      path="/support"
+                      element={
+                        <ProtectedRoute>
+                          <Layout><Support /></Layout>
+                        </ProtectedRoute>
+                      }
+                  />
+                  <Route
+                      path="/support/ticket/:ticketId"
+                      element={
+                        <ProtectedRoute>
+                          <Layout><TicketDetails /></Layout>
+                        </ProtectedRoute>
+                      }
+                  />
+                  <Route
+                      path="/notifications"
+                      element={
+                        <ProtectedRoute>
+                          <Layout><Notifications /></Layout>
+                        </ProtectedRoute>
+                      }
+                  />
+                  <Route
+                      path="/admin"
+                      element={
+                        <ProtectedRoute requireAdmin={true}>
+                          <Layout><AdminDashboard /></Layout>
+                        </ProtectedRoute>
+                      }
+                  />
+                  <Route
+                      path="/admin/support"
+                      element={
+                        <ProtectedRoute requireAdmin={true}>
+                          <Layout><AdminSupport /></Layout>
                         </ProtectedRoute>
                       }
                   />

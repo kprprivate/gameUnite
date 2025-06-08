@@ -2,6 +2,7 @@ from datetime import datetime
 from bson import ObjectId
 from app.db.mongo_client import db
 from app.models.user.crud import get_user_by_id
+from app.services.notification.notification_service import notify_ad_favorited
 
 
 def add_to_favorites(user_id, ad_id):
@@ -32,6 +33,22 @@ def add_to_favorites(user_id, ad_id):
         favorite["_id"] = str(result.inserted_id)
         favorite["user_id"] = str(favorite["user_id"])
         favorite["ad_id"] = str(favorite["ad_id"])
+
+        # Criar notificação para o dono do anúncio (apenas se não for o próprio usuário)
+        if str(ad["user_id"]) != str(user_id):
+            try:
+                user = get_user_by_id(str(user_id))
+                favoriter_name = f"{user.get('first_name', '')} {user.get('last_name', '')}".strip() if user else "Usuário"
+                if not favoriter_name:
+                    favoriter_name = user.get('username', 'Usuário') if user else "Usuário"
+                
+                notify_ad_favorited(
+                    ad_owner_id=str(ad["user_id"]),
+                    favoriter_name=favoriter_name,
+                    ad_title=ad.get("title", "Anúncio")
+                )
+            except Exception as notif_error:
+                print(f"⚠️ Erro ao criar notificação de favorito: {notif_error}")
 
         return {
             "success": True,

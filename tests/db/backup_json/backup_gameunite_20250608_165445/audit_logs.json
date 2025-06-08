@@ -1,0 +1,90 @@
+[
+  {
+    "_id": "6845e1822181c7af11d745bd",
+    "timestamp": "2025-06-08 19:16:18.398000",
+    "admin_id": "683683bfadee286e2d71272f",
+    "admin_username": "jorjeoliveira",
+    "action": "create",
+    "resource_type": "support_ticket",
+    "resource_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "success": true,
+    "error_message": null,
+    "old_data": null,
+    "new_data": {
+      "subject": "TESTANDO",
+      "message": "OI ISSO AQUI FUNCIONA?",
+      "category": "general",
+      "priority": "medium"
+    },
+    "endpoint": "support.create_ticket",
+    "method": "POST"
+  },
+  {
+    "_id": "6845e1fd2181c7af11d745bf",
+    "timestamp": "2025-06-08 19:18:21.487000",
+    "admin_id": "683683bfadee286e2d71272f",
+    "admin_username": "jorjeoliveira",
+    "action": "create",
+    "resource_type": "support_ticket",
+    "resource_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "success": true,
+    "error_message": null,
+    "old_data": null,
+    "new_data": {
+      "subject": "testando dv",
+      "message": "oi isso aqui funciona?",
+      "category": "general",
+      "priority": "medium"
+    },
+    "endpoint": "support.create_ticket",
+    "method": "POST"
+  },
+  {
+    "_id": "6845e33136917128c9b1394e",
+    "timestamp": "2025-06-08 19:23:29.033000",
+    "admin_id": "683683bfadee286e2d71272f",
+    "admin_username": "jorjeoliveira",
+    "action": "create",
+    "resource_type": "support_ticket",
+    "resource_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "success": true,
+    "error_message": null,
+    "old_data": null,
+    "new_data": {
+      "subject": "MACACO TESTANDO",
+      "message": "OI ISSO AQUI FUNCIONA?",
+      "category": "general",
+      "priority": "medium"
+    },
+    "endpoint": "support.create_ticket",
+    "method": "POST"
+  },
+  {
+    "_id": "6845e857ac584315c9ebf5b7",
+    "timestamp": "2025-06-08 19:45:27.817000",
+    "admin_id": "683683bfadee286e2d71272f",
+    "admin_username": "jorjeoliveira",
+    "action": "create",
+    "resource_type": "support_ticket",
+    "resource_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "success": true,
+    "error_message": null,
+    "old_data": null,
+    "new_data": {
+      "subject": "TESTANDO ISSO AQUI",
+      "message": "FUNCIONA OU NAO?",
+      "category": "general",
+      "priority": "medium"
+    },
+    "endpoint": "support.create_ticket",
+    "method": "POST"
+  }
+]
