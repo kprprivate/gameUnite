@@ -58,6 +58,23 @@
     "priority": "medium",
     "status": "open",
     "created_at": "2025-06-08 19:45:27.624000",
-    "updated_at": "2025-06-08 19:45:27.624000"
+    "updated_at": "2025-06-08 21:04:16.283000",
+    "admin_id": "684524bd06df6c6238f040d7",
+    "admin_response": "espero que funcione, veremos."
+  },
+  {
+    "_id": "684612a0acc23aca787e585a",
+    "user_id": "683683bfadee286e2d71272f",
+    "protocol_number": "SUP-2025-000006",
+    "subject": "CHIMPAZINE BANINI",
+    "message": "SITE LIXO SITE LIXO SITE LIXO SITE LIXO",
+    "category": "technical",
+    "priority": "urgent",
+    "status": "resolved",
+    "created_at": "2025-06-08 22:45:52.682000",
+    "updated_at": "2025-06-08 22:46:41.809000",
+    "admin_id": "684524bd06df6c6238f040d7",
+    "admin_response": "VERME",
+    "resolved_at": "2025-06-08 22:46:41.809000"
   }
 ]

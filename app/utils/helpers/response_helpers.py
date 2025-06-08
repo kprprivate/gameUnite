@@ -27,3 +27,24 @@ def error_response(message="Ocorreu um erro", errors=None, status_code=400):
         response["errors"] = errors
 
     return jsonify(response), status_code
+
+
+def create_response(success, message, data=None, status_code=None):
+    """Cria uma resposta padronizada."""
+    if success:
+        if status_code is None:
+            status_code = 200
+        return {
+            "success": True,
+            "message": message,
+            "data": data,
+            "status_code": status_code
+        }
+    else:
+        if status_code is None:
+            status_code = 400
+        return {
+            "success": False,
+            "message": message,
+            "status_code": status_code
+        }

@@ -50,7 +50,6 @@ class SellerRating(BaseModel):
         json_encoders = {ObjectId: str}
 
 class SellerRatingCreate(BaseModel):
-    order_id: str
     rating: int = Field(ge=1, le=5)
     comment: Optional[str] = None
 

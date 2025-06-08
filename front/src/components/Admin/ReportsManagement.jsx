@@ -4,6 +4,7 @@ import LoadingSpinner from '../Common/LoadingSpinner';
 import Button from '../Common/Button';
 import Badge from '../Common/Badge';
 import { toast } from 'react-toastify';
+import { reportsService } from '../../services/reportsService';
 
 const ReportsManagement = () => {
   const [reports, setReports] = useState([]);
@@ -21,65 +22,23 @@ const ReportsManagement = () => {
     setLoading(true);
     
     try {
-      // Simular dados de reports - implementar API depois
-      const mockReports = [
-        {
-          _id: '1',
-          reporter: {
-            username: 'user123',
-            first_name: 'João',
-            last_name: 'Silva'
-          },
-          reported_item_id: 'ad_123',
-          reported_item_type: 'ad',
-          reason: 'spam',
-          details: 'Este anúncio está sendo postado repetidamente com o mesmo conteúdo',
-          status: 'pending',
-          created_at: new Date(Date.now() - 2 * 60 * 60000).toISOString(),
-          updated_at: new Date(Date.now() - 2 * 60 * 60000).toISOString()
-        },
-        {
-          _id: '2',
-          reporter: {
-            username: 'maria456',
-            first_name: 'Maria',
-            last_name: 'Santos'
-          },
-          reported_item_id: 'ad_456',
-          reported_item_type: 'ad',
-          reason: 'fake',
-          details: 'O vendedor está anunciando um produto que não possui',
-          status: 'reviewed',
-          admin_notes: 'Verificado e confirmado como falso',
-          reviewed_by: 'admin',
-          reviewed_at: new Date(Date.now() - 1 * 60 * 60000).toISOString(),
-          created_at: new Date(Date.now() - 24 * 60 * 60000).toISOString(),
-          updated_at: new Date(Date.now() - 1 * 60 * 60000).toISOString()
-        },
-        {
-          _id: '3',
-          reporter: {
-            username: 'pedro789',
-            first_name: 'Pedro',
-            last_name: 'Costa'
-          },
-          reported_item_id: 'user_789',
-          reported_item_type: 'user',
-          reason: 'inappropriate',
-          details: 'Usuário está enviando mensagens ofensivas',
-          status: 'resolved',
-          admin_notes: 'Usuário foi advertido e suspendido temporariamente',
-          reviewed_by: 'admin',
-          reviewed_at: new Date(Date.now() - 30 * 60000).toISOString(),
-          created_at: new Date(Date.now() - 48 * 60 * 60000).toISOString(),
-          updated_at: new Date(Date.now() - 30 * 60000).toISOString()
-        }
-      ];
-
-      setReports(mockReports);
+      const filters = {};
+      if (filter !== 'all') {
+        filters.status = filter;
+      }
+      
+      const result = await reportsService.getReports(filters);
+      
+      if (result.success) {
+        setReports(result.data.reports || []);
+      } else {
+        toast.error(result.message || 'Erro ao carregar reports');
+        setReports([]);
+      }
     } catch (error) {
       console.error('Erro ao carregar reports:', error);
       toast.error('Erro ao carregar reports');
+      setReports([]);
     }
     
     setLoading(false);
@@ -126,28 +85,19 @@ const ReportsManagement = () => {
     setActionLoading(prev => ({ ...prev, [reportId]: true }));
     
     try {
-      // Simular API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const result = await reportsService.updateReportStatus(reportId, newStatus, adminNotes);
       
-      setReports(prev => 
-        prev.map(report => 
-          report._id === reportId 
-            ? {
-                ...report,
-                status: newStatus,
-                admin_notes: adminNotes,
-                reviewed_by: 'admin',
-                reviewed_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-              }
-            : report
-        )
-      );
-      
-      toast.success(`Report ${getStatusLabel(newStatus).toLowerCase()}`);
-      setShowModal(false);
-      setSelectedReport(null);
+      if (result.success) {
+        // Reload reports to get updated data
+        await loadReports();
+        toast.success(`Report ${getStatusLabel(newStatus).toLowerCase()}`);
+        setShowModal(false);
+        setSelectedReport(null);
+      } else {
+        toast.error(result.message || 'Erro ao atualizar status do report');
+      }
     } catch (error) {
+      console.error('Erro ao atualizar status:', error);
       toast.error('Erro ao atualizar status do report');
     }
     

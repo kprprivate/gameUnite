@@ -38,14 +38,86 @@ const UserEditModal = ({ isOpen, onClose, user, onUserUpdated }) => {
         is_verified: user.is_verified || false,
         profile_pic: user.profile_pic || ''
       });
+      setImagePreview(user.profile_pic || null);
+      setImageFile(null);
       setErrors({}); // Clear any previous errors
     }
   }, [user]);
   
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
   
   const api = useApi();
+
+  const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validar tipo de arquivo
+      if (!file.type.startsWith('image/')) {
+        setErrors({ ...errors, profile_pic: 'Por favor, selecione apenas arquivos de imagem' });
+        return;
+      }
+      
+      // Validar tamanho (máximo 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setErrors({ ...errors, profile_pic: 'Imagem muito grande. Máximo 5MB' });
+        return;
+      }
+      
+      setImageFile(file);
+      
+      // Criar preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+      
+      // Limpar erro anterior
+      if (errors.profile_pic) {
+        const newErrors = { ...errors };
+        delete newErrors.profile_pic;
+        setErrors(newErrors);
+      }
+    }
+  };
+
+  const uploadImage = async () => {
+    if (!imageFile) return null;
+    
+    setUploading(true);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', imageFile);
+      uploadFormData.append('type', 'profiles');
+      
+      const response = await api.post('/upload', uploadFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      if (response.success) {
+        return response.data.file_url;
+      } else {
+        throw new Error(response.message || 'Erro no upload');
+      }
+    } catch (error) {
+      console.error('Erro no upload:', error);
+      throw error;
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    setFormData({ ...formData, profile_pic: '' });
+  };
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -103,15 +175,23 @@ const UserEditModal = ({ isOpen, onClose, user, onUserUpdated }) => {
     
     setLoading(true);
     try {
+      let finalFormData = { ...formData };
+      
+      // Se há uma nova imagem, fazer upload primeiro
+      if (imageFile) {
+        const imageUrl = await uploadImage();
+        finalFormData.profile_pic = imageUrl;
+      }
+      
       // Prepare data - only send changed fields
       const updateData = {};
-      Object.keys(formData).forEach(key => {
-        if (formData[key] !== user[key]) {
-          updateData[key] = formData[key];
+      Object.keys(finalFormData).forEach(key => {
+        if (finalFormData[key] !== user[key]) {
+          updateData[key] = finalFormData[key];
         }
       });
       
-      if (Object.keys(updateData).length === 0) {
+      if (Object.keys(updateData).length === 0 && !imageFile) {
         onClose();
         return;
       }
@@ -127,7 +207,7 @@ const UserEditModal = ({ isOpen, onClose, user, onUserUpdated }) => {
       if (error.response?.data?.message) {
         setErrors({ submit: error.response.data.message });
       } else {
-        setErrors({ submit: 'Erro ao atualizar usuário' });
+        setErrors({ submit: error.message || 'Erro ao atualizar usuário' });
       }
     } finally {
       setLoading(false);
@@ -150,25 +230,68 @@ const UserEditModal = ({ isOpen, onClose, user, onUserUpdated }) => {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Profile Image */}
         <div className="flex justify-center">
-          <div className="flex flex-col items-center space-y-2">
-            <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
-              {formData.profile_pic ? (
+          <div className="flex flex-col items-center space-y-3">
+            <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden relative">
+              {imagePreview ? (
                 <img 
-                  src={formData.profile_pic} 
+                  src={imagePreview} 
                   alt="Profile" 
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <User className="w-12 h-12 text-gray-400" />
               )}
+              {uploading && (
+                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                  <div className="text-white text-xs">Enviando...</div>
+                </div>
+              )}
             </div>
-            <input
-              type="url"
-              placeholder="URL da imagem de perfil"
-              value={formData.profile_pic}
-              onChange={(e) => handleInputChange('profile_pic', e.target.value)}
-              className="text-sm px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            
+            {/* Upload Controls */}
+            <div className="flex flex-col items-center space-y-2">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageSelect}
+                  className="block text-sm text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+                {imagePreview && (
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className="px-2 py-1 text-xs text-red-600 hover:text-red-800 border border-red-300 rounded"
+                  >
+                    Remover
+                  </button>
+                )}
+              </div>
+              
+              {/* URL Input alternativo */}
+              <div className="w-full max-w-xs">
+                <label className="block text-xs text-gray-500 mb-1">
+                  Ou cole uma URL:
+                </label>
+                <input
+                  type="url"
+                  placeholder="https://exemplo.com/imagem.jpg"
+                  value={formData.profile_pic}
+                  onChange={(e) => {
+                    handleInputChange('profile_pic', e.target.value);
+                    if (e.target.value && !imageFile) {
+                      setImagePreview(e.target.value);
+                    }
+                  }}
+                  className="w-full text-xs px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+            
+            {/* Error display */}
+            {errors.profile_pic && (
+              <p className="text-red-500 text-xs">{errors.profile_pic}</p>
+            )}
           </div>
         </div>
 
@@ -360,10 +483,10 @@ const UserEditModal = ({ isOpen, onClose, user, onUserUpdated }) => {
           </Button>
           <Button
             type="submit"
-            disabled={loading}
+            disabled={loading || uploading}
           >
             <Save className="w-4 h-4 mr-2" />
-            {loading ? 'Salvando...' : 'Salvar Alterações'}
+            {uploading ? 'Fazendo upload...' : loading ? 'Salvando...' : 'Salvar Alterações'}
           </Button>
         </div>
       </form>

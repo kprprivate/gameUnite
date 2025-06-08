@@ -5,4 +5,5 @@ export { userService } from './userService';
 export { favoritesService } from './favoritesService';
 export { orderService } from './orderService';
 export { supportService } from './supportService';
+export { reportsService } from './reportsService';
 export { default as api } from './api';

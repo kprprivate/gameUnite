@@ -54,12 +54,9 @@ const RatingModal = ({ isOpen, onClose, order, onSuccess }) => {
   if (!isOpen || !order) return null;
 
   return (
-    <Modal onClose={handleClose}>
-      <div className="p-6">
-        <h2 className="text-xl font-semibold mb-4">Avaliar Pedido</h2>
-        
-        {error && <Alert type="error" message={error} className="mb-4" />}
-        {success && <Alert type="success" message="Avaliação enviada com sucesso!" className="mb-4" />}
+    <Modal isOpen={true} onClose={handleClose} title="Avaliar Pedido">
+      {error && <Alert type="error" message={error} className="mb-4" />}
+      {success && <Alert type="success" message="Avaliação enviada com sucesso!" className="mb-4" />}
         
         <div className="mb-4 p-4 bg-gray-50 rounded-lg">
           <h3 className="font-medium">Detalhes do Pedido</h3>
@@ -131,7 +128,6 @@ const RatingModal = ({ isOpen, onClose, order, onSuccess }) => {
             </Button>
           </div>
         </form>
-      </div>
     </Modal>
   );
 };

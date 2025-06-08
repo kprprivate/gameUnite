@@ -26,6 +26,7 @@ const ChatRoom = ({ orderId, onClose }) => {
   const [sending, setSending] = useState(false);
   const [typingUsers, setTypingUsers] = useState(new Set());
   const [socket, setSocket] = useState(null);
+  const [pendingMessages, setPendingMessages] = useState(new Set());
   
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
@@ -93,7 +94,46 @@ const ChatRoom = ({ orderId, onClose }) => {
     socketInstance.on('new_message', (data) => {
       const message = data.message;
       if (message.room_id === roomId) {
-        setMessages(prev => [...prev, message]);
+        
+        setMessages(prev => {
+          // Se é minha mensagem confirmada e tem temp_id, substituir a temporária
+          if (message.user_id === user._id && message.temp_id) {
+            // Remover mensagem temporária e adicionar a confirmada
+            const withoutTemp = prev.filter(msg => msg.temp_id !== message.temp_id);
+            return [...withoutTemp, message];
+          }
+          
+          // Se é minha mensagem confirmada mas sem temp_id, verificar se já existe temporária similar
+          if (message.user_id === user._id) {
+            // Procurar por mensagem temporária com conteúdo similar enviada recentemente (últimos 10 segundos)
+            const recentTime = Date.now() - 10000; // 10 segundos
+            const tempIndex = prev.findIndex(msg => 
+              msg.is_pending && 
+              msg.user_id === user._id && 
+              msg.content === message.content &&
+              new Date(msg.created_at).getTime() > recentTime
+            );
+            
+            if (tempIndex !== -1) {
+              // Substituir mensagem temporária pela confirmada
+              const newMessages = [...prev];
+              newMessages[tempIndex] = message;
+              return newMessages;
+            }
+          }
+          
+          // Caso normal: apenas adicionar a mensagem
+          return [...prev, message];
+        });
+        
+        // Se é minha mensagem, remover do estado de pendente
+        if (message.user_id === user._id && message.temp_id) {
+          setPendingMessages(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(message.temp_id);
+            return newSet;
+          });
+        }
         
         // Tocar som de notificação se não for própria mensagem
         if (message.user_id !== user._id) {
@@ -176,21 +216,56 @@ const ChatRoom = ({ orderId, onClose }) => {
     if (!newMessage.trim() || sending || !connected) return;
 
     setSending(true);
+    const tempId = Date.now().toString();
+    const messageContent = newMessage.trim();
 
     try {
+      // Adicionar mensagem temporária com status pendente
+      const tempMessage = {
+        _id: tempId,
+        temp_id: tempId,
+        content: messageContent,
+        user_id: user._id,
+        user: user,
+        created_at: new Date().toISOString(),
+        room_id: room._id,
+        is_pending: true
+      };
+      
+      setMessages(prev => [...prev, tempMessage]);
+      setPendingMessages(prev => new Set([...prev, tempId]));
+      setNewMessage('');
+      
+      // Timeout para remover mensagem temporária se não receber confirmação
+      setTimeout(() => {
+        setPendingMessages(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(tempId);
+          return newSet;
+        });
+      }, 30000); // 30 segundos
+      
       // Enviar via WebSocket
       if (socket && room) {
         socket.emit('send_message', {
           room_id: room._id,
-          content: newMessage.trim()
+          content: messageContent,
+          temp_id: tempId
         });
         
-        setNewMessage('');
         messageInputRef.current?.focus();
       }
     } catch (error) {
       console.error('Erro ao enviar mensagem:', error);
       toast.error('Erro ao enviar mensagem');
+      
+      // Remover mensagem temporária em caso de erro
+      setMessages(prev => prev.filter(msg => msg.temp_id !== tempId));
+      setPendingMessages(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(tempId);
+        return newSet;
+      });
     }
 
     setSending(false);
@@ -233,7 +308,18 @@ const ChatRoom = ({ orderId, onClose }) => {
 
   const getMessageStatus = (message) => {
     if (message.user_id === user._id) {
-      return message.read_by?.length > 1 ? 'read' : 'sent';
+      // Se é mensagem temporária e ainda está em pendingMessages, está sendo enviada
+      if (message.is_pending && message.temp_id && pendingMessages.has(message.temp_id)) {
+        return 'pending';
+      }
+      
+      // Se tem _id do servidor, foi confirmada
+      if (message._id && !message.is_pending) {
+        return message.read_by?.length > 1 ? 'read' : 'sent';
+      }
+      
+      // Caso padrão para mensagens enviadas
+      return 'sent';
     }
     return null;
   };
@@ -367,11 +453,18 @@ const ChatRoom = ({ orderId, onClose }) => {
                         
                         {isOwnMessage && (
                           <div className="ml-2">
-                            {getMessageStatus(message) === 'read' ? (
-                              <CheckCircle2 className="w-3 h-3" />
-                            ) : (
-                              <Clock className="w-3 h-3" />
-                            )}
+                            {(() => {
+                              const status = getMessageStatus(message);
+                              switch (status) {
+                                case 'pending':
+                                  return <Clock className="w-3 h-3" />;
+                                case 'read':
+                                  return <CheckCircle2 className="w-3 h-3" />;
+                                case 'sent':
+                                default:
+                                  return <CheckCircle2 className="w-3 h-3 opacity-60" />;
+                              }
+                            })()}
                           </div>
                         )}
                       </div>
@@ -418,7 +511,7 @@ const ChatRoom = ({ orderId, onClose }) => {
               handleTyping();
             }}
             placeholder={connected ? "Digite sua mensagem..." : "Aguardando conexão..."}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+            className="chat-input flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
             disabled={!connected}
             maxLength={1000}
           />

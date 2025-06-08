@@ -1,0 +1,2482 @@
+[
+  {
+    "_id": "68452b037f93da3611c13511",
+    "timestamp": "2025-06-08 06:17:39.813000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452b28f43f1588b2dedd6f",
+    "timestamp": "2025-06-08 06:18:16.503000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452be08e1ab7c0e622a6b9",
+    "timestamp": "2025-06-08 06:21:20.952000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452c9a8e1ab7c0e622a6ba",
+    "timestamp": "2025-06-08 06:24:26.551000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": null,
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/test",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452d728e1ab7c0e622a6bb",
+    "timestamp": "2025-06-08 06:28:02.345000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452d848e1ab7c0e622a6bc",
+    "timestamp": "2025-06-08 06:28:20.842000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452dc88e1ab7c0e622a6bd",
+    "timestamp": "2025-06-08 06:29:28.653000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452de2bdd2aa07b6bc4c57",
+    "timestamp": "2025-06-08 06:29:54.245000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452debbdd2aa07b6bc4c58",
+    "timestamp": "2025-06-08 06:30:03.305000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452df2bdd2aa07b6bc4c59",
+    "timestamp": "2025-06-08 06:30:10.366000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452e10bdd2aa07b6bc4c5b",
+    "timestamp": "2025-06-08 06:30:40.913000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452e12bdd2aa07b6bc4c5d",
+    "timestamp": "2025-06-08 06:30:42.311000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452e41bdd2aa07b6bc4c5f",
+    "timestamp": "2025-06-08 06:31:29.799000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452e4abdd2aa07b6bc4c60",
+    "timestamp": "2025-06-08 06:31:38.794000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452e66c6fb1ca83180e489",
+    "timestamp": "2025-06-08 06:32:06.105000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452e6bc6fb1ca83180e48a",
+    "timestamp": "2025-06-08 06:32:11.573000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452e75c6fb1ca83180e48c",
+    "timestamp": "2025-06-08 06:32:21.160000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452f2bc6fb1ca83180e48e",
+    "timestamp": "2025-06-08 06:35:23.405000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452f36c6fb1ca83180e48f",
+    "timestamp": "2025-06-08 06:35:34.452000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452f3ec6fb1ca83180e490",
+    "timestamp": "2025-06-08 06:35:42.416000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452f43c6fb1ca83180e491",
+    "timestamp": "2025-06-08 06:35:47.297000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452f4cc6fb1ca83180e492",
+    "timestamp": "2025-06-08 06:35:56.976000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452f82adb9dd14709594e2",
+    "timestamp": "2025-06-08 06:36:50.697000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452f8aadb9dd14709594e3",
+    "timestamp": "2025-06-08 06:36:58.798000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452fecadb9dd14709594e5",
+    "timestamp": "2025-06-08 06:38:36.937000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": null,
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68452ff1adb9dd14709594e6",
+    "timestamp": "2025-06-08 06:38:41.044000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": null,
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684530208abc1e8c2cf04efc",
+    "timestamp": "2025-06-08 06:39:28.628000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684530268abc1e8c2cf04efd",
+    "timestamp": "2025-06-08 06:39:34.247000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684530568abc1e8c2cf04efe",
+    "timestamp": "2025-06-08 06:40:22.298000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845305ffd073423a0738eb2",
+    "timestamp": "2025-06-08 06:40:31.600000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845306afd073423a0738eb3",
+    "timestamp": "2025-06-08 06:40:42.923000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68453072fd073423a0738eb4",
+    "timestamp": "2025-06-08 06:40:50.092000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68453073fd073423a0738eb5",
+    "timestamp": "2025-06-08 06:40:51.925000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68453074fd073423a0738eb6",
+    "timestamp": "2025-06-08 06:40:52.384000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68453075fd073423a0738eb7",
+    "timestamp": "2025-06-08 06:40:53.046000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68453076fd073423a0738eb9",
+    "timestamp": "2025-06-08 06:40:54.484000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68453077fd073423a0738eba",
+    "timestamp": "2025-06-08 06:40:55.037000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684530aafd073423a0738ebb",
+    "timestamp": "2025-06-08 06:41:46.125000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684530abfd073423a0738ebd",
+    "timestamp": "2025-06-08 06:41:47.942000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684530d0fd073423a0738ebe",
+    "timestamp": "2025-06-08 06:42:24.723000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68453104fd073423a0738ebf",
+    "timestamp": "2025-06-08 06:43:16.197000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531244635d3aaadde9fdd",
+    "timestamp": "2025-06-08 06:43:48.088000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531274635d3aaadde9fde",
+    "timestamp": "2025-06-08 06:43:51.417000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531844635d3aaadde9fdf",
+    "timestamp": "2025-06-08 06:45:24.280000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531954635d3aaadde9fe0",
+    "timestamp": "2025-06-08 06:45:41.258000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531b561253ef26b1632a8",
+    "timestamp": "2025-06-08 06:46:13.864000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531ba61253ef26b1632a9",
+    "timestamp": "2025-06-08 06:46:18.015000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531be61253ef26b1632ab",
+    "timestamp": "2025-06-08 06:46:22.282000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531c461253ef26b1632ac",
+    "timestamp": "2025-06-08 06:46:28.738000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531d061253ef26b1632ad",
+    "timestamp": "2025-06-08 06:46:40.984000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531d161253ef26b1632ae",
+    "timestamp": "2025-06-08 06:46:41.483000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531d261253ef26b1632b0",
+    "timestamp": "2025-06-08 06:46:42.137000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531d261253ef26b1632b1",
+    "timestamp": "2025-06-08 06:46:42.861000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684531e561253ef26b1632b2",
+    "timestamp": "2025-06-08 06:47:01.646000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845eeeb1e11892809554e45",
+    "timestamp": "2025-06-08 20:13:31.736000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845eeee1e11892809554e46",
+    "timestamp": "2025-06-08 20:13:34.053000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845eef31e11892809554e48",
+    "timestamp": "2025-06-08 20:13:39.539000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845ef021e11892809554e49",
+    "timestamp": "2025-06-08 20:13:54.991000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845ef8b1e11892809554e4b",
+    "timestamp": "2025-06-08 20:16:11.163000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845ef8b1e11892809554e4c",
+    "timestamp": "2025-06-08 20:16:11.622000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845efbc1e11892809554e4d",
+    "timestamp": "2025-06-08 20:17:00.781000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845efe91e11892809554e4e",
+    "timestamp": "2025-06-08 20:17:45.744000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845efef1e11892809554e4f",
+    "timestamp": "2025-06-08 20:17:51.338000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845eff01e11892809554e50",
+    "timestamp": "2025-06-08 20:17:52.090000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845eff01e11892809554e51",
+    "timestamp": "2025-06-08 20:17:52.611000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845eff21e11892809554e52",
+    "timestamp": "2025-06-08 20:17:54.143000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f01f1e11892809554e53",
+    "timestamp": "2025-06-08 20:18:39.766000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f0221e11892809554e55",
+    "timestamp": "2025-06-08 20:18:42.955000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f02d1e11892809554e57",
+    "timestamp": "2025-06-08 20:18:53.149000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f0481e11892809554e58",
+    "timestamp": "2025-06-08 20:19:20.138000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f04f1e11892809554e59",
+    "timestamp": "2025-06-08 20:19:27.310000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f08f12699538d9a8c11e",
+    "timestamp": "2025-06-08 20:20:31.929000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f09112699538d9a8c11f",
+    "timestamp": "2025-06-08 20:20:33.551000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f09e12699538d9a8c121",
+    "timestamp": "2025-06-08 20:20:46.939000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f0a112699538d9a8c122",
+    "timestamp": "2025-06-08 20:20:49.043000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f7ad35c841188ce6bec0",
+    "timestamp": "2025-06-08 20:50:53.065000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f7b335c841188ce6bec1",
+    "timestamp": "2025-06-08 20:50:59.569000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f7be35c841188ce6bec3",
+    "timestamp": "2025-06-08 20:51:10.950000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f7c735c841188ce6bec4",
+    "timestamp": "2025-06-08 20:51:19.675000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_all_ads",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/ads",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f7d935c841188ce6bec5",
+    "timestamp": "2025-06-08 20:51:37.996000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f7db35c841188ce6bec6",
+    "timestamp": "2025-06-08 20:51:39.918000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f7dc35c841188ce6bec8",
+    "timestamp": "2025-06-08 20:51:40.677000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f7e935c841188ce6bec9",
+    "timestamp": "2025-06-08 20:51:53.458000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f7eb35c841188ce6becb",
+    "timestamp": "2025-06-08 20:51:55.442000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f7ef35c841188ce6becd",
+    "timestamp": "2025-06-08 20:51:59.879000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f7f135c841188ce6becf",
+    "timestamp": "2025-06-08 20:52:01.205000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f81435c841188ce6bed0",
+    "timestamp": "2025-06-08 20:52:36.958000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_all_ads",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/ads",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f82035c841188ce6bed1",
+    "timestamp": "2025-06-08 20:52:48.827000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f911c1396c9989b95199",
+    "timestamp": "2025-06-08 20:56:49.361000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f917c1396c9989b9519a",
+    "timestamp": "2025-06-08 20:56:55.932000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f91ec1396c9989b9519c",
+    "timestamp": "2025-06-08 20:57:02.090000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f92cc1396c9989b9519d",
+    "timestamp": "2025-06-08 20:57:16.020000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_all_ads",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/ads",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f979c1396c9989b9519e",
+    "timestamp": "2025-06-08 20:58:33.533000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f97bc1396c9989b9519f",
+    "timestamp": "2025-06-08 20:58:35.373000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_order_details_admin",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/orders/68446c791a2ea2bad936c48f",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f982c1396c9989b951a0",
+    "timestamp": "2025-06-08 20:58:42.133000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_order_details_admin",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/orders/68446c791a2ea2bad936c48f",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f99bc1396c9989b951a1",
+    "timestamp": "2025-06-08 20:59:07.215000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f99dc1396c9989b951a3",
+    "timestamp": "2025-06-08 20:59:09.050000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845f9a1c1396c9989b951a5",
+    "timestamp": "2025-06-08 20:59:13.854000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fa50c1396c9989b951a7",
+    "timestamp": "2025-06-08 21:02:08.058000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fa59c1396c9989b951a9",
+    "timestamp": "2025-06-08 21:02:17.109000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fab56691ec7d5210b05f",
+    "timestamp": "2025-06-08 21:03:49.028000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fabb6691ec7d5210b060",
+    "timestamp": "2025-06-08 21:03:55.099000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fad06691ec7d5210b062",
+    "timestamp": "2025-06-08 21:04:16.208000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.update_ticket",
+    "method": "PUT",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets/6845e857ac584315c9ebf5b6",
+      "method": "PUT"
+    }
+  },
+  {
+    "_id": "6845fad06691ec7d5210b064",
+    "timestamp": "2025-06-08 21:04:16.346000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fadd6691ec7d5210b066",
+    "timestamp": "2025-06-08 21:04:29.203000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fae26691ec7d5210b067",
+    "timestamp": "2025-06-08 21:04:34.064000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_all_ads",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/ads",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fafc6691ec7d5210b068",
+    "timestamp": "2025-06-08 21:05:00.755000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fafd6691ec7d5210b069",
+    "timestamp": "2025-06-08 21:05:01.885000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_order_details_admin",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/orders/68446c791a2ea2bad936c48f",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fb046691ec7d5210b06a",
+    "timestamp": "2025-06-08 21:05:08.811000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fb246691ec7d5210b06c",
+    "timestamp": "2025-06-08 21:05:40.984000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fb276691ec7d5210b06d",
+    "timestamp": "2025-06-08 21:05:43.017000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fb546691ec7d5210b06e",
+    "timestamp": "2025-06-08 21:06:28.588000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_all_ads",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/ads",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fb586691ec7d5210b06f",
+    "timestamp": "2025-06-08 21:06:32.820000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fb5a6691ec7d5210b070",
+    "timestamp": "2025-06-08 21:06:34.328000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_order_details_admin",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/orders/68446c791a2ea2bad936c48f",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fc086691ec7d5210b071",
+    "timestamp": "2025-06-08 21:09:28.464000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fc37e46bfb4d500ed49d",
+    "timestamp": "2025-06-08 21:10:15.926000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fc39e46bfb4d500ed49e",
+    "timestamp": "2025-06-08 21:10:17.566000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fc40e46bfb4d500ed4a0",
+    "timestamp": "2025-06-08 21:10:24.120000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fc4de46bfb4d500ed4a1",
+    "timestamp": "2025-06-08 21:10:37.267000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_all_ads",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/ads",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fc59e46bfb4d500ed4a2",
+    "timestamp": "2025-06-08 21:10:49.400000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fc5be46bfb4d500ed4a3",
+    "timestamp": "2025-06-08 21:10:51.262000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_order_details_admin",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/orders/68446c791a2ea2bad936c48f",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fc5de46bfb4d500ed4a4",
+    "timestamp": "2025-06-08 21:10:53.857000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_order_details_admin",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/orders/684465f3f510347e55a6eea2",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6845fc61e46bfb4d500ed4a5",
+    "timestamp": "2025-06-08 21:10:57.784000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68461180acc23aca787e5848",
+    "timestamp": "2025-06-08 22:41:04.049000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68461185acc23aca787e5849",
+    "timestamp": "2025-06-08 22:41:09.532000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68461195acc23aca787e584b",
+    "timestamp": "2025-06-08 22:41:25.896000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68461196acc23aca787e584d",
+    "timestamp": "2025-06-08 22:41:26.748000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68461198acc23aca787e584e",
+    "timestamp": "2025-06-08 22:41:28.742000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_all_ads",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/ads",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684611c4acc23aca787e584f",
+    "timestamp": "2025-06-08 22:42:12.371000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684611c5acc23aca787e5850",
+    "timestamp": "2025-06-08 22:42:13.291000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_all_ads",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/ads",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684611c6acc23aca787e5851",
+    "timestamp": "2025-06-08 22:42:14.052000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684611cbacc23aca787e5852",
+    "timestamp": "2025-06-08 22:42:19.621000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_order_details_admin",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/orders/68446c791a2ea2bad936c48f",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684611d6acc23aca787e5853",
+    "timestamp": "2025-06-08 22:42:30.015000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_order_details_admin",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/orders/68446c791a2ea2bad936c48f",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684611dcacc23aca787e5854",
+    "timestamp": "2025-06-08 22:42:36.985000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_all_ads",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/ads",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684611e8acc23aca787e5855",
+    "timestamp": "2025-06-08 22:42:48.396000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "6846122facc23aca787e5856",
+    "timestamp": "2025-06-08 22:43:59.902000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68461242acc23aca787e5858",
+    "timestamp": "2025-06-08 22:44:18.921000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684612b9acc23aca787e585c",
+    "timestamp": "2025-06-08 22:46:17.156000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684612baacc23aca787e585d",
+    "timestamp": "2025-06-08 22:46:18.777000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684612c3acc23aca787e585f",
+    "timestamp": "2025-06-08 22:46:27.318000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.update_ticket",
+    "method": "PUT",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets/684612a0acc23aca787e585a",
+      "method": "PUT"
+    }
+  },
+  {
+    "_id": "684612c3acc23aca787e5861",
+    "timestamp": "2025-06-08 22:46:27.467000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684612d1acc23aca787e5863",
+    "timestamp": "2025-06-08 22:46:41.485000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.update_ticket",
+    "method": "PUT",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets/684612a0acc23aca787e585a",
+      "method": "PUT"
+    }
+  },
+  {
+    "_id": "684612d1acc23aca787e5865",
+    "timestamp": "2025-06-08 22:46:41.878000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68463f5a47a875a3944bbc15",
+    "timestamp": "2025-06-09 01:56:42.252000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68463f5b47a875a3944bbc16",
+    "timestamp": "2025-06-09 01:56:43.801000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68463f5e47a875a3944bbc18",
+    "timestamp": "2025-06-09 01:56:46.824000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68463f6247a875a3944bbc19",
+    "timestamp": "2025-06-09 01:56:50.308000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_all_ads",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/ads",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68463f8547a875a3944bbc1a",
+    "timestamp": "2025-06-09 01:57:25.382000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_audit_logs",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/audit-logs",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68463f8647a875a3944bbc1c",
+    "timestamp": "2025-06-09 01:57:26.015000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_orders",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/orders",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68463f8747a875a3944bbc1d",
+    "timestamp": "2025-06-09 01:57:27.543000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_order_details_admin",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/orders/68446c791a2ea2bad936c48f",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68463f8a47a875a3944bbc1e",
+    "timestamp": "2025-06-09 01:57:30.966000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "admin.get_all_ads",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/admin/ads",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68463f8c47a875a3944bbc1f",
+    "timestamp": "2025-06-09 01:57:32.707000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_users",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/users",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68463f9147a875a3944bbc20",
+    "timestamp": "2025-06-09 01:57:37.369000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "68463f9647a875a3944bbc22",
+    "timestamp": "2025-06-09 01:57:42.510000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_all_tickets",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/tickets",
+      "method": "GET"
+    }
+  },
+  {
+    "_id": "684641e4bc5ad4896f937ade",
+    "timestamp": "2025-06-09 02:07:32.899000",
+    "event_type": "admin_bypass_attempt",
+    "description": "Tentativa de acesso a endpoint admin sem autenticação",
+    "severity": "high",
+    "user_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "endpoint": "support.get_admin_stats",
+    "method": "GET",
+    "additional_data": {
+      "endpoint": "/api/support/admin/stats",
+      "method": "GET"
+    }
+  }
+]

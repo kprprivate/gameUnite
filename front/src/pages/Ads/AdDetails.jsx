@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
 import { adService } from '../../services/adService';
 import { favoritesService } from '../../services/favoritesService';
+import { reportsService } from '../../services/reportsService';
 import {
   ArrowLeft,
   Eye,
@@ -32,6 +33,7 @@ import FavoriteButton from '../../components/Common/FavoriteButton';
 import AddToCartButton from '../../components/Common/AddToCartButton';
 import SafeImage from '../../components/Common/SafeImage';
 import AdQuestions from '../../components/Ad/AdQuestions';
+import { formatSellerStatus } from '../../utils/helpers';
 
 const AdDetails = () => {
   const { adId } = useParams();
@@ -219,23 +221,23 @@ const AdDetails = () => {
     setSubmittingReport(true);
 
     try {
-      // Simular envio do report - você pode implementar a API depois
       const reportData = {
-        ad_id: adId,
+        reported_item_id: adId,
+        reported_item_type: 'ad',
         reason: reportReason,
-        details: reportDetails,
-        reporter_id: user._id
+        details: reportDetails
       };
 
-      console.log('Report enviado:', reportData);
+      const result = await reportsService.createReport(reportData);
       
-      // Simular delay de request
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast.success('Report enviado com sucesso! Nossa equipe irá analisar.');
-      setShowReportModal(false);
-      setReportReason('');
-      setReportDetails('');
+      if (result.success) {
+        toast.success('Report enviado com sucesso! Nossa equipe irá analisar.');
+        setShowReportModal(false);
+        setReportReason('');
+        setReportDetails('');
+      } else {
+        toast.error(result.message || 'Erro ao enviar report');
+      }
     } catch (error) {
       console.error('Erro ao enviar report:', error);
       toast.error('Erro ao enviar report. Tente novamente.');
@@ -618,8 +620,24 @@ const AdDetails = () => {
                 <div className="space-y-2 text-sm text-gray-600 mb-4">
                   <div className="flex items-center">
                     <Star className="w-4 h-4 mr-2 text-yellow-500" />
-                    Avaliação: {(ad.user?.seller_rating || 0).toFixed(1)}
-                    ({ad.user?.sales_count || 0} {(ad.user?.sales_count || 0) === 1 ? 'venda' : 'vendas'})
+                    {(() => {
+                      const sellerStatus = formatSellerStatus(ad.user?.seller_rating, ad.user?.sales_count);
+                      if (sellerStatus.isStarting) {
+                        return (
+                          <span>
+                            Vendedor: <span className="text-blue-600 font-medium">{sellerStatus.display}</span>
+                            {sellerStatus.salesCount > 0 && ` (${sellerStatus.salesCount} ${sellerStatus.salesCount === 1 ? 'venda' : 'vendas'})`}
+                          </span>
+                        );
+                      } else {
+                        return (
+                          <span>
+                            Avaliação: {sellerStatus.display}
+                            ({sellerStatus.salesCount} {sellerStatus.salesCount === 1 ? 'venda' : 'vendas'})
+                          </span>
+                        );
+                      }
+                    })()}
                   </div>
                   <div className="flex items-center">
                     <MapPin className="w-4 h-4 mr-2" />

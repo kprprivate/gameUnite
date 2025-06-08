@@ -375,129 +375,136 @@ const TicketDetails = () => {
           </div>
         </div>
 
-        {/* Main Content Area */}
-        <div className="space-y-6">
-          {/* Original Message */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+        {/* Chat-like Conversation Area */}
+        <div className="bg-white rounded-lg shadow-md">
+          {/* Chat Header */}
+          <div className="p-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
+            <h3 className="text-lg font-semibold text-gray-800 flex items-center">
               <MessageCircle className="w-5 h-5 mr-2 text-blue-600" />
-              Descrição do Problema
+              Conversa do Ticket
             </h3>
-            <div className="bg-gray-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-              <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
-                {ticket.message || 'Nenhuma descrição fornecida.'}
-              </p>
+          </div>
+
+          {/* Chat Messages */}
+          <div className="p-4 space-y-4 max-h-96 overflow-y-auto">
+            {/* Initial message from user */}
+            <div className="flex justify-end">
+              <div className="max-w-xs lg:max-w-md">
+                <div className="bg-blue-600 text-white p-3 rounded-lg rounded-br-sm">
+                  <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                    {ticket.message || 'Nenhuma descrição fornecida.'}
+                  </p>
+                </div>
+                <div className="text-xs text-gray-500 mt-1 text-right">
+                  Você • {formatTime(ticket.created_at)}
+                </div>
+              </div>
+            </div>
+
+            {/* Additional user messages */}
+            {ticket.additional_info && ticket.additional_info.map((info, index) => (
+              <div key={index} className="flex justify-end">
+                <div className="max-w-xs lg:max-w-md">
+                  <div className="bg-blue-600 text-white p-3 rounded-lg rounded-br-sm">
+                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{info.message}</p>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1 text-right">
+                    Você • {formatTime(info.created_at)}
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {/* Admin response */}
+            {ticket.admin_response && (
+              <div className="flex justify-start">
+                <div className="max-w-xs lg:max-w-md">
+                  <div className="flex items-center mb-2">
+                    <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center mr-2">
+                      <Shield className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="text-sm font-medium text-gray-800">Equipe de Suporte</span>
+                  </div>
+                  <div className="bg-gray-100 text-gray-800 p-3 rounded-lg rounded-bl-sm">
+                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{ticket.admin_response}</p>
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {ticket.resolved_at ? formatTime(ticket.resolved_at) : formatTime(ticket.updated_at)}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Status indicator for current conversation state */}
+            <div className="flex justify-center">
+              <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                ticket.status === 'open' ? 'bg-orange-100 text-orange-800' :
+                ticket.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
+                ticket.status === 'resolved' ? 'bg-green-100 text-green-800' : 
+                'bg-gray-100 text-gray-800'
+              }`}>
+                {getStatusIcon(ticket.status)}
+                <span className="ml-1">{getStatusLabel(ticket.status)}</span>
+              </div>
             </div>
           </div>
 
-          {/* Admin Response */}
-          {ticket.admin_response && (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <Shield className="w-5 h-5 mr-2 text-blue-600" />
-                Resposta da Equipe de Suporte
-              </h3>
-              <div className="bg-blue-50 border-l-4 border-blue-500 rounded-r-lg p-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Shield className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm text-blue-700 font-medium mb-2">
-                      Equipe de Suporte
-                      {ticket.resolved_at && (
-                        <span className="ml-2 text-xs bg-blue-100 px-2 py-1 rounded">
-                          Respondido em {formatTime(ticket.resolved_at)}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-gray-800 leading-relaxed">{ticket.admin_response}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Additional Information from User */}
-          {ticket.additional_info && ticket.additional_info.length > 0 && (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <Edit className="w-5 h-5 mr-2 text-green-600" />
-                Informações Adicionais
-                <span className="ml-2 text-sm bg-green-100 text-green-700 px-2 py-1 rounded">
-                  {ticket.additional_info.length} mensagem(ns)
-                </span>
-              </h3>
-              <div className="space-y-4">
-                {ticket.additional_info.map((info, index) => (
-                  <div key={index} className="bg-green-50 border-l-4 border-green-500 rounded-r-lg p-4">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
-                        <User className="w-4 h-4 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="text-sm text-green-700 font-medium mb-1">
-                          Você • {formatTime(info.created_at)}
-                          <span className="text-green-600 ml-2">
-                            ({formatRelativeTime(info.created_at)})
-                          </span>
-                        </div>
-                        <p className="text-gray-800 leading-relaxed">{info.message}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Add Reply Form */}
-          {showReplyForm && canAddReply && (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <Send className="w-5 h-5 mr-2 text-blue-600" />
-                Adicionar Informação
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Descreva informações adicionais sobre seu problema:
-                  </label>
+          {/* Chat Input Form */}
+          {canAddReply && (
+            <div className="border-t border-gray-200 p-4">
+              {showReplyForm ? (
+                <div className="space-y-3">
                   <textarea
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
-                    placeholder="Forneça mais detalhes, capturas de tela que podem ajudar, ou atualizações sobre o problema..."
-                    className="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-vertical"
-                    rows="5"
+                    placeholder="Digite sua mensagem..."
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    rows="3"
                     maxLength="1000"
                   />
-                  <div className="text-right text-xs text-gray-500 mt-1">
-                    {replyText.length}/1000 caracteres
+                  <div className="flex justify-between items-center">
+                    <div className="text-xs text-gray-500">
+                      {replyText.length}/1000 caracteres
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button
+                        size="sm"
+                        onClick={handleAddReply}
+                        disabled={updating || !replyText.trim() || replyText.trim().length < 5}
+                      >
+                        <Send className="w-4 h-4 mr-1" />
+                        {updating ? 'Enviando...' : 'Enviar'}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          setShowReplyForm(false);
+                          setReplyText('');
+                        }}
+                        disabled={updating}
+                      >
+                        Cancelar
+                      </Button>
+                    </div>
                   </div>
                 </div>
-                
-                <div className="flex space-x-3">
-                  <Button
-                    onClick={handleAddReply}
-                    disabled={updating || !replyText.trim() || replyText.trim().length < 5}
+              ) : (
+                <div className="text-center">
+                  <Button 
+                    onClick={() => setShowReplyForm(true)}
+                    className="w-full"
                   >
-                    <Send className="w-4 h-4 mr-2" />
-                    {updating ? 'Enviando...' : 'Enviar Informação'}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setShowReplyForm(false);
-                      setReplyText('');
-                    }}
-                    disabled={updating}
-                  >
-                    Cancelar
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Adicionar informação ao ticket
                   </Button>
                 </div>
-              </div>
+              )}
             </div>
           )}
+        </div>
+
+        <div className="space-y-6">
 
           {/* Status Information */}
           <div className="bg-white rounded-lg shadow-md p-6">

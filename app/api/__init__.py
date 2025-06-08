@@ -61,3 +61,7 @@ def register_blueprints(app):
     # Notifications routes
     from app.api.notifications.routes import notifications_bp
     app.register_blueprint(notifications_bp, url_prefix='/api/notifications')
+
+    # Reports routes
+    from app.api.reports.routes import reports_bp
+    app.register_blueprint(reports_bp, url_prefix='/api/reports')

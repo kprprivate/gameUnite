@@ -321,11 +321,10 @@ def delete_category(category_id):
 
 @support_bp.route('/ratings/<order_id>', methods=['POST'])
 @strict_rate_limit(5)  # Máximo 5 avaliações por minuto (evita spam)
-@custom_jwt_required
-def submit_rating():
+@jwt_required()
+def submit_rating(order_id):
     try:
-        user_id = g.user['_id']
-        order_id = request.view_args['order_id']
+        user_id = get_jwt_identity()
         data = request.get_json()
         
         # Validação de entrada

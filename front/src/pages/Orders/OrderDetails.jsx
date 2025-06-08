@@ -30,6 +30,7 @@ import Button from '../../components/Common/Button';
 import Badge from '../../components/Common/Badge';
 import ChatRoom from '../../components/Chat/ChatRoom';
 import RatingModal from '../../components/Common/RatingModal';
+import { formatSellerStatus } from '../../utils/helpers';
 
 const OrderDetails = () => {
   const { orderId } = useParams();
@@ -39,7 +40,7 @@ const OrderDetails = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(true);
   const [showRatingModal, setShowRatingModal] = useState(false);
 
   useEffect(() => {
@@ -101,6 +102,10 @@ const OrderDetails = () => {
 
       if (result.success) {
         toast.success(`Status atualizado para: ${newStatus}`);
+        
+        // Backend já envia mensagem do sistema automaticamente
+        // Removido envio duplicado do frontend
+        
         await loadOrderDetails(); // Recarregar dados
       } else {
         toast.error(result.message);
@@ -281,16 +286,30 @@ const OrderDetails = () => {
 
   // Verificar se pode avaliar o pedido
   const canRate = () => {
-    if (!order || (order.status !== 'completed' && order.status !== 'delivered') || order.rating_submitted) {
+    if (!order || !user) {
+      return false;
+    }
+    
+    // Verificar se o status permite avaliação
+    if (order.status !== 'completed' && order.status !== 'delivered') {
+      return false;
+    }
+    
+    // Se já foi avaliado globalmente
+    if (order.rating_submitted) {
       return false;
     }
     
     const userRole = getUserRole();
-    if (userRole === 'buyer' && !order.seller_rating) {
-      return true;
+    
+    if (userRole === 'buyer') {
+      // Comprador pode avaliar se ainda não avaliou o vendedor
+      return !order.seller_rating && !order.buyer_rated_seller;
     }
-    if (userRole === 'seller' && !order.buyer_rating) {
-      return true;
+    
+    if (userRole === 'seller') {
+      // Vendedor pode avaliar se ainda não avaliou o comprador
+      return !order.buyer_rating && !order.seller_rated_buyer;
     }
     
     return false;
@@ -385,13 +404,6 @@ const OrderDetails = () => {
                   Atualizar
                 </Button>
 
-                <Button
-                    onClick={() => setShowChat(!showChat)}
-                    variant="outline"
-                >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  {showChat ? 'Fechar Chat' : 'Abrir Chat'}
-                </Button>
               </div>
             </div>
           </div>
@@ -559,15 +571,13 @@ const OrderDetails = () => {
               </div>
 
               {/* Chat */}
-              {showChat && (
-                  <div className="bg-white rounded-lg shadow-md p-6">
-                    <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                      <MessageCircle className="w-5 h-5 mr-2" />
-                      Chat do Pedido
-                    </h2>
-                    <ChatRoom orderId={orderId} onClose={() => setShowChat(false)} />
-                  </div>
-              )}
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Chat do Pedido
+                </h2>
+                <ChatRoom orderId={orderId} />
+              </div>
             </div>
 
             {/* Sidebar */}
@@ -605,11 +615,27 @@ const OrderDetails = () => {
                     <div className="space-y-2 text-sm text-gray-600 mb-4">
                       <div className="flex items-center">
                         <Star className="w-4 h-4 mr-2 text-yellow-500" />
-                        Avaliação: 4.8 (23 vendas)
+                        {(() => {
+                          const sellerStatus = formatSellerStatus(otherUser.seller_rating, otherUser.total_sales);
+                          if (sellerStatus.isStarting) {
+                            return (
+                              <span>
+                                Status: <span className="text-blue-600 font-medium">{sellerStatus.display}</span>
+                                {sellerStatus.salesCount > 0 && ` (${sellerStatus.salesCount} ${sellerStatus.salesCount === 1 ? 'venda' : 'vendas'})`}
+                              </span>
+                            );
+                          } else {
+                            return (
+                              <span>
+                                Avaliação: {sellerStatus.display} ({sellerStatus.salesCount} vendas)
+                              </span>
+                            );
+                          }
+                        })()}
                       </div>
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-2" />
-                        Membro desde 2023
+                        Membro desde {otherUser.created_at ? new Date(otherUser.created_at).getFullYear() : new Date().getFullYear()}
                       </div>
                     </div>
 
@@ -625,7 +651,7 @@ const OrderDetails = () => {
 
                       <Button
                           className="w-full"
-                          onClick={() => setShowChat(true)}
+                          onClick={() => document.querySelector('.chat-input')?.focus()}
                       >
                         <MessageCircle className="w-4 h-4 mr-2" />
                         Enviar Mensagem

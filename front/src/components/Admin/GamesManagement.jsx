@@ -39,6 +39,7 @@ const GamesManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+
   const api = useApi();
 
   useEffect(() => {
@@ -344,6 +345,7 @@ const GameCard = ({ game, onEdit, onDelete, onToggleFeatured, onToggleActive }) 
 
 // Game Modal Component
 const GameModal = ({ type, game, onClose, onSave }) => {
+  
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -355,12 +357,86 @@ const GameModal = ({ type, game, onClose, onSave }) => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   const api = useApi();
 
+  const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validar tipo de arquivo
+      if (!file.type.startsWith('image/')) {
+        setError('Por favor, selecione apenas arquivos de imagem');
+        return;
+      }
+      
+      // Validar tamanho (máximo 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Imagem muito grande. Máximo 5MB');
+        return;
+      }
+      
+      setImageFile(file);
+      
+      // Criar preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+      
+      setError('');
+    }
+  };
+
+  const uploadImage = async () => {
+    if (!imageFile) return null;
+    
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', imageFile);
+      formData.append('type', 'games');
+      
+      const response = await api.post('/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      if (response.success) {
+        return response.data.file_url;
+      } else {
+        throw new Error(response.message || 'Erro no upload');
+      }
+    } catch (error) {
+      console.error('Erro no upload:', error);
+      throw error;
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    setFormData({ ...formData, image_url: '' });
+  };
+
   useEffect(() => {
     if (game) {
-      setFormData(game);
+      setFormData({
+        name: game.name || '',
+        description: game.description || '',
+        image_url: game.image_url || '',
+        platform: game.platform || 'PC',
+        category: game.category || '',
+        is_featured: game.is_featured || false,
+        is_active: game.is_active !== false
+      });
+      setImagePreview(game.image_url || null);
     }
   }, [game]);
 
@@ -370,28 +446,50 @@ const GameModal = ({ type, game, onClose, onSave }) => {
     setError('');
 
     try {
+      let finalFormData = { ...formData };
+      
+      // Se há uma nova imagem, fazer upload primeiro
+      if (imageFile) {
+        const imageUrl = await uploadImage();
+        finalFormData.image_url = imageUrl;
+      }
+
       if (type === 'create') {
-        await api.post('/games', formData);
+        await api.post('/games', finalFormData);
       } else {
-        await api.put(`/games/${game._id}`, formData);
+        await api.put(`/games/${game._id}`, finalFormData);
       }
       onSave();
       onClose();
     } catch (error) {
-      setError(error.response?.data?.message || 'Erro ao salvar jogo');
+      setError(error.response?.data?.message || error.message || 'Erro ao salvar jogo');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Modal onClose={onClose} size="lg">
-      <form onSubmit={handleSubmit} className="p-6">
-        <h2 className="text-xl font-semibold mb-6">
-          {type === 'create' ? 'Adicionar Novo Jogo' : 'Editar Jogo'}
-        </h2>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-screen overflow-y-auto">
+        <form onSubmit={handleSubmit} className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold">
+              {type === 'create' ? 'Adicionar Novo Jogo' : 'Editar Jogo'}
+            </h2>
+            <button 
+              type="button"
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              ✕
+            </button>
+          </div>
 
-        {error && <Alert type="error" message={error} className="mb-4" />}
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Left Column */}
@@ -441,15 +539,47 @@ const GameModal = ({ type, game, onClose, onSave }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                URL da Imagem
+                Imagem do Jogo
               </label>
-              <input
-                type="url"
-                value={formData.image_url}
-                onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                placeholder="https://exemplo.com/imagem.jpg"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
+              <div className="space-y-3">
+                {/* Upload Input */}
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageSelect}
+                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  />
+                  {imagePreview && (
+                    <button
+                      type="button"
+                      onClick={removeImage}
+                      className="px-3 py-1 text-sm text-red-600 hover:text-red-800 border border-red-300 rounded"
+                    >
+                      Remover
+                    </button>
+                  )}
+                </div>
+                
+                {/* URL Input alternativo */}
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">
+                    Ou cole uma URL de imagem:
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.image_url}
+                    onChange={(e) => {
+                      setFormData({ ...formData, image_url: e.target.value });
+                      if (e.target.value && !imageFile) {
+                        setImagePreview(e.target.value);
+                      }
+                    }}
+                    placeholder="https://exemplo.com/imagem.jpg"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -469,19 +599,26 @@ const GameModal = ({ type, game, onClose, onSave }) => {
             </div>
 
             {/* Preview */}
-            {formData.image_url && (
+            {imagePreview && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Preview
+                  Preview da Imagem
                 </label>
-                <img
-                  src={formData.image_url}
-                  alt="Preview"
-                  className="w-full h-32 object-cover rounded-lg border"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                  }}
-                />
+                <div className="relative">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-48 object-cover rounded-lg border"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                  {uploading && (
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
+                      <div className="text-white text-sm">Fazendo upload...</div>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
@@ -514,12 +651,13 @@ const GameModal = ({ type, game, onClose, onSave }) => {
           <Button type="button" variant="outline" onClick={onClose}>
             Cancelar
           </Button>
-          <Button type="submit" disabled={loading}>
-            {loading ? 'Salvando...' : type === 'create' ? 'Criar Jogo' : 'Salvar Alterações'}
+          <Button type="submit" disabled={loading || uploading}>
+            {uploading ? 'Fazendo upload...' : loading ? 'Salvando...' : type === 'create' ? 'Criar Jogo' : 'Salvar Alterações'}
           </Button>
         </div>
       </form>
-    </Modal>
+      </div>
+    </div>
   );
 };
 

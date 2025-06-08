@@ -1,0 +1,210 @@
+[
+  {
+    "_id": "6845e1822181c7af11d745bd",
+    "timestamp": "2025-06-08 19:16:18.398000",
+    "admin_id": "683683bfadee286e2d71272f",
+    "admin_username": "jorjeoliveira",
+    "action": "create",
+    "resource_type": "support_ticket",
+    "resource_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "success": true,
+    "error_message": null,
+    "old_data": null,
+    "new_data": {
+      "subject": "TESTANDO",
+      "message": "OI ISSO AQUI FUNCIONA?",
+      "category": "general",
+      "priority": "medium"
+    },
+    "endpoint": "support.create_ticket",
+    "method": "POST"
+  },
+  {
+    "_id": "6845e1fd2181c7af11d745bf",
+    "timestamp": "2025-06-08 19:18:21.487000",
+    "admin_id": "683683bfadee286e2d71272f",
+    "admin_username": "jorjeoliveira",
+    "action": "create",
+    "resource_type": "support_ticket",
+    "resource_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "success": true,
+    "error_message": null,
+    "old_data": null,
+    "new_data": {
+      "subject": "testando dv",
+      "message": "oi isso aqui funciona?",
+      "category": "general",
+      "priority": "medium"
+    },
+    "endpoint": "support.create_ticket",
+    "method": "POST"
+  },
+  {
+    "_id": "6845e33136917128c9b1394e",
+    "timestamp": "2025-06-08 19:23:29.033000",
+    "admin_id": "683683bfadee286e2d71272f",
+    "admin_username": "jorjeoliveira",
+    "action": "create",
+    "resource_type": "support_ticket",
+    "resource_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "success": true,
+    "error_message": null,
+    "old_data": null,
+    "new_data": {
+      "subject": "MACACO TESTANDO",
+      "message": "OI ISSO AQUI FUNCIONA?",
+      "category": "general",
+      "priority": "medium"
+    },
+    "endpoint": "support.create_ticket",
+    "method": "POST"
+  },
+  {
+    "_id": "6845e857ac584315c9ebf5b7",
+    "timestamp": "2025-06-08 19:45:27.817000",
+    "admin_id": "683683bfadee286e2d71272f",
+    "admin_username": "jorjeoliveira",
+    "action": "create",
+    "resource_type": "support_ticket",
+    "resource_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "success": true,
+    "error_message": null,
+    "old_data": null,
+    "new_data": {
+      "subject": "TESTANDO ISSO AQUI",
+      "message": "FUNCIONA OU NAO?",
+      "category": "general",
+      "priority": "medium"
+    },
+    "endpoint": "support.create_ticket",
+    "method": "POST"
+  },
+  {
+    "_id": "6845fad06691ec7d5210b063",
+    "timestamp": "2025-06-08 21:04:16.310000",
+    "admin_id": "684524bd06df6c6238f040d7",
+    "admin_username": "mariomariano",
+    "action": "update",
+    "resource_type": "support_ticket",
+    "resource_id": "6845e857ac584315c9ebf5b6",
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "success": true,
+    "error_message": null,
+    "old_data": {
+      "_id": "6845e857ac584315c9ebf5b6",
+      "user_id": "683683bfadee286e2d71272f",
+      "protocol_number": "SUP-2025-000005",
+      "subject": "TESTANDO ISSO AQUI",
+      "message": "FUNCIONA OU NAO?",
+      "category": "general",
+      "priority": "medium",
+      "status": "open",
+      "created_at": "2025-06-08 19:45:27.624000",
+      "updated_at": "2025-06-08 19:45:27.624000"
+    },
+    "new_data": {
+      "status": "open",
+      "admin_response": "espero que funcione, veremos.",
+      "priority": "medium"
+    },
+    "endpoint": "support.update_ticket",
+    "method": "PUT"
+  },
+  {
+    "_id": "684612a0acc23aca787e585b",
+    "timestamp": "2025-06-08 22:45:52.719000",
+    "admin_id": "683683bfadee286e2d71272f",
+    "admin_username": "jorjeoliveira",
+    "action": "create",
+    "resource_type": "support_ticket",
+    "resource_id": null,
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "success": true,
+    "error_message": null,
+    "old_data": null,
+    "new_data": {
+      "subject": "CHIMPAZINE BANINI",
+      "message": "SITE LIXO SITE LIXO SITE LIXO SITE LIXO",
+      "category": "technical",
+      "priority": "urgent"
+    },
+    "endpoint": "support.create_ticket",
+    "method": "POST"
+  },
+  {
+    "_id": "684612c3acc23aca787e5860",
+    "timestamp": "2025-06-08 22:46:27.431000",
+    "admin_id": "684524bd06df6c6238f040d7",
+    "admin_username": "mariomariano",
+    "action": "update",
+    "resource_type": "support_ticket",
+    "resource_id": "684612a0acc23aca787e585a",
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "success": true,
+    "error_message": null,
+    "old_data": {
+      "_id": "684612a0acc23aca787e585a",
+      "user_id": "683683bfadee286e2d71272f",
+      "protocol_number": "SUP-2025-000006",
+      "subject": "CHIMPAZINE BANINI",
+      "message": "SITE LIXO SITE LIXO SITE LIXO SITE LIXO",
+      "category": "technical",
+      "priority": "urgent",
+      "status": "open",
+      "created_at": "2025-06-08 22:45:52.682000",
+      "updated_at": "2025-06-08 22:45:52.682000"
+    },
+    "new_data": {
+      "status": "open",
+      "admin_response": "VERME",
+      "priority": "urgent"
+    },
+    "endpoint": "support.update_ticket",
+    "method": "PUT"
+  },
+  {
+    "_id": "684612d1acc23aca787e5864",
+    "timestamp": "2025-06-08 22:46:41.846000",
+    "admin_id": "684524bd06df6c6238f040d7",
+    "admin_username": "mariomariano",
+    "action": "update",
+    "resource_type": "support_ticket",
+    "resource_id": "684612a0acc23aca787e585a",
+    "ip_address": "127.0.0.1",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+    "success": true,
+    "error_message": null,
+    "old_data": {
+      "_id": "684612a0acc23aca787e585a",
+      "user_id": "683683bfadee286e2d71272f",
+      "protocol_number": "SUP-2025-000006",
+      "subject": "CHIMPAZINE BANINI",
+      "message": "SITE LIXO SITE LIXO SITE LIXO SITE LIXO",
+      "category": "technical",
+      "priority": "urgent",
+      "status": "open",
+      "created_at": "2025-06-08 22:45:52.682000",
+      "updated_at": "2025-06-08 22:46:27.399000",
+      "admin_id": "684524bd06df6c6238f040d7",
+      "admin_response": "VERME"
+    },
+    "new_data": {
+      "status": "resolved",
+      "admin_response": "VERME",
+      "priority": "urgent"
+    },
+    "endpoint": "support.update_ticket",
+    "method": "PUT"
+  }
+]

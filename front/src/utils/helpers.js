@@ -84,3 +84,31 @@ export const debounce = (func, wait) => {
     timeout = setTimeout(later, wait);
   };
 };
+
+export const formatSellerRating = (rating, salesCount) => {
+  // If seller has less than 10 sales, show "Iniciando"
+  if (!salesCount || salesCount < 10) {
+    return "Iniciando";
+  }
+  
+  // Otherwise show the actual rating
+  return rating ? rating.toFixed(1) : "0.0";
+};
+
+export const formatSellerStatus = (rating, salesCount) => {
+  // If seller has less than 10 sales, show starting status
+  if (!salesCount || salesCount < 10) {
+    return {
+      display: "Iniciando",
+      isStarting: true,
+      salesCount: salesCount || 0
+    };
+  }
+  
+  // Otherwise show the actual rating
+  return {
+    display: `${rating ? rating.toFixed(1) : "0.0"}/5`,
+    isStarting: false,
+    salesCount: salesCount || 0
+  };
+};

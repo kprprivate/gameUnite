@@ -5,6 +5,7 @@ import { userService, adService } from '../../services';
 import { User, Star, Calendar, MapPin, MessageCircle, TrendingUp } from 'lucide-react';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Button from '../../components/Common/Button';
+import { formatSellerStatus } from '../../utils/helpers';
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -119,7 +120,8 @@ const UserProfile = () => {
               <div className="mt-4 md:mt-0 text-center md:text-right">
                 <Button
                   onClick={handleContact}
-                  className="bg-white text-blue-600 hover:bg-gray-100"
+                  variant="outline"
+                  className="!bg-white !text-blue-600 hover:!bg-blue-50 !border-blue-600 shadow-md"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Entrar em Contato
@@ -130,7 +132,7 @@ const UserProfile = () => {
 
           {/* Estatísticas */}
           <div className="p-6 bg-gray-50 border-t">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
                 <div className="text-2xl font-bold text-gray-800">{user.total_ads || 0}</div>
                 <div className="text-sm text-gray-600">Anúncios Publicados</div>
@@ -142,10 +144,6 @@ const UserProfile = () => {
               <div className="text-center">
                 <div className="text-2xl font-bold text-gray-800">{user.total_views || 0}</div>
                 <div className="text-sm text-gray-600">Visualizações Totais</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-gray-800">R$ {user.total_value || 0}</div>
-                <div className="text-sm text-gray-600">Valor Total em Vendas</div>
               </div>
             </div>
           </div>
@@ -159,9 +157,14 @@ const UserProfile = () => {
                   <div className="text-sm font-medium text-green-800">Como Vendedor</div>
                   <div className="flex items-center mt-1">
                     <Star className="w-4 h-4 text-yellow-500 fill-current mr-1" />
-                    <span className="text-lg font-bold text-green-800">
-                      {user.seller_rating?.toFixed(1) || '0.0'}/5
-                    </span>
+                    {(() => {
+                      const sellerStatus = formatSellerStatus(user.seller_rating, user.total_sales);
+                      return (
+                        <span className="text-lg font-bold text-green-800">
+                          {sellerStatus.display}
+                        </span>
+                      );
+                    })()}
                   </div>
                 </div>
                 <div className="text-sm text-green-600">

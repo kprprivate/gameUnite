@@ -119,12 +119,14 @@ def get_featured_games():
 
 
 @games_bp.route("/", methods=["POST"])
+@jwt_required
 @admin_required
 def create_game():
     """Cria um novo jogo (apenas admin)."""
     try:
         # Obter dados do request
         data = request.json
+        print(f"Dados recebidos para criar jogo: {data}")
 
         # Validar dados obrigatórios
         if not data or not data.get("name"):
@@ -142,7 +144,13 @@ def create_game():
         # Verificar se slug já existe
         existing_slug = db.games.find_one({"slug": slug})
         if existing_slug:
-            return error_response("Slug já em uso", status_code=400)
+            # Gerar slug único com sufixo numérico
+            counter = 1
+            base_slug = slug
+            while existing_slug:
+                slug = f"{base_slug}-{counter}"
+                existing_slug = db.games.find_one({"slug": slug})
+                counter += 1
 
         # Preparar dados do jogo
         from datetime import datetime
@@ -152,7 +160,10 @@ def create_game():
             "description": data.get("description", ""),
             "image_url": data.get("image_url", ""),
             "cover_url": data.get("cover_url", ""),
+            "platform": data.get("platform", "PC"),
+            "category": data.get("category", ""),
             "is_featured": data.get("is_featured", False),
+            "is_active": data.get("is_active", True),
             "created_at": datetime.utcnow(),
             "updated_at": datetime.utcnow()
         }
@@ -171,12 +182,14 @@ def create_game():
 
 
 @games_bp.route("/<game_id>", methods=["PUT"])
+@jwt_required
 @admin_required
 def update_game(game_id):
     """Atualiza um jogo existente (apenas admin)."""
     try:
         # Obter dados do request
         data = request.json
+        print(f"Dados recebidos para atualizar jogo {game_id}: {data}")
 
         if not data:
             return error_response("Dados inválidos", status_code=400)
@@ -210,6 +223,7 @@ def update_game(game_id):
 
 
 @games_bp.route("/<game_id>", methods=["DELETE"])
+@jwt_required
 @admin_required
 def delete_game(game_id):
     """Remove um jogo (apenas admin)."""

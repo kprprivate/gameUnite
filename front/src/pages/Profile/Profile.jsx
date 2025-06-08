@@ -8,6 +8,7 @@ import Button from '../../components/Common/Button';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Modal from '../../components/Common/Modal';
 import ProfileImageUpload from '../../components/Common/ProfileImageUpload';
+import { formatSellerStatus } from '../../utils/helpers';
 
 const Profile = () => {
   const { user: authUser } = useAuth();
@@ -170,7 +171,7 @@ const Profile = () => {
               </div>
               <div className="text-right text-white">
                 <div className="text-sm">
-                  <div>⭐ {userData.seller_rating?.toFixed(1) || '0.0'}/5 - Vendedor</div>
+                  <div>⭐ {formatSellerStatus(userData.seller_rating, userData.total_sales).display} - Vendedor</div>
                   <div>⭐ {userData.buyer_rating?.toFixed(1) || '0.0'}/5 - Comprador</div>
                   <div>{userData.total_ads || 0} anúncios publicados</div>
                   <div>{userData.active_ads || 0} anúncios ativos</div>
