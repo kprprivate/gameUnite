@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Blueprint, request, jsonify, g
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.support.support_service import SupportService, convert_objectids
@@ -511,7 +513,7 @@ def update_user(user_id):
             return error_response("Usuário não encontrado", 404)
         
         # Adicionar timestamp de atualização
-        update_data['updated_at'] = datetime.utcnow()
+        update_data['updated_at'] = datetime.now()
         
         # Atualizar usuário
         result = db.users.update_one(
