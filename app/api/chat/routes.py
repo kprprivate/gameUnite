@@ -92,6 +92,13 @@ def send_message_route(room_id):
                 'message': result["data"]["message"]
             }, room=room_id)
 
+            # Enviar notificação para o outro usuário na conversa
+            from app.services.notification.notification_service import notify_new_chat_message
+            try:
+                notify_new_chat_message(room_id, g.user["_id"], content)
+            except Exception as e:
+                print(f"Erro ao enviar notificação de chat: {e}")
+
             return success_response(
                 data=result["data"],
                 message=result["message"],
@@ -102,3 +109,42 @@ def send_message_route(room_id):
 
     except Exception as e:
         return error_response(f"Erro ao enviar mensagem: {str(e)}")
+
+
+@chat_bp.route("/room/<room_id>/read", methods=["PATCH"])
+@jwt_required
+def mark_room_as_read(room_id):
+    """Marca mensagens da sala como lidas."""
+    try:
+        from app.services.chat.chat_service import mark_messages_as_read
+        result = mark_messages_as_read(room_id, g.user["_id"])
+
+        if result["success"]:
+            return success_response(
+                data=result.get("data", {}),
+                message="Mensagens marcadas como lidas"
+            )
+        else:
+            return error_response(result["message"], status_code=400)
+
+    except Exception as e:
+        return error_response(f"Erro ao marcar como lidas: {str(e)}")
+
+
+@chat_bp.route("/room/<room_id>", methods=["DELETE"])
+@jwt_required
+def delete_chat_room(room_id):
+    """Remove uma sala de chat."""
+    try:
+        from app.services.chat.chat_service import delete_chat_room
+        result = delete_chat_room(room_id, g.user["_id"])
+
+        if result["success"]:
+            return success_response(
+                message="Sala de chat removida"
+            )
+        else:
+            return error_response(result["message"], status_code=400)
+
+    except Exception as e:
+        return error_response(f"Erro ao remover sala: {str(e)}")

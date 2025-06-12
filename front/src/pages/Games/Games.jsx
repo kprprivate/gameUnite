@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useGames } from '../../contexts/GameContext';
-import { Search, Filter, Gamepad } from 'lucide-react';
+import { Search, Filter, Gamepad, ArrowLeft } from 'lucide-react';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Button from '../../components/Common/Button';
 
 const Games = () => {
   const { games, loading, fetchGames } = useGames();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredGames, setFilteredGames] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
@@ -34,9 +35,20 @@ const Games = () => {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">
-            Catálogo de Jogos
-          </h1>
+          <div className="flex items-center mb-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/')}
+              className="mr-4"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Voltar ao Início
+            </Button>
+            <h1 className="text-3xl font-bold text-gray-800">
+              Catálogo de Jogos
+            </h1>
+          </div>
           <p className="text-gray-600">
             Explore nossa biblioteca de jogos e encontre anúncios de compra, venda e troca
           </p>

@@ -298,3 +298,66 @@ def get_user_chat_rooms(user_id):
 
     except Exception as e:
         return {"success": False, "message": f"Erro ao buscar salas de chat: {str(e)}"}
+
+
+def mark_messages_as_read(room_id, user_id):
+    """Marca todas as mensagens da sala como lidas pelo usuário."""
+    try:
+        # Verificar se o usuário tem acesso à sala
+        room = db.chat_rooms.find_one({"_id": ObjectId(room_id)})
+        if not room:
+            return {"success": False, "message": "Sala de chat não encontrada"}
+
+        if str(room["buyer_id"]) != str(user_id) and str(room["seller_id"]) != str(user_id):
+            return {"success": False, "message": "Acesso negado"}
+
+        # Marcar todas as mensagens como lidas
+        result = db.chat_messages.update_many(
+            {
+                "room_id": ObjectId(room_id),
+                "read_by": {"$ne": ObjectId(user_id)}
+            },
+            {"$addToSet": {"read_by": ObjectId(user_id)}}
+        )
+
+        return {
+            "success": True,
+            "data": {"marked_count": result.modified_count},
+            "message": f"{result.modified_count} mensagens marcadas como lidas"
+        }
+
+    except Exception as e:
+        return {"success": False, "message": f"Erro ao marcar mensagens como lidas: {str(e)}"}
+
+
+def delete_chat_room(room_id, user_id):
+    """Remove uma sala de chat (soft delete)."""
+    try:
+        # Verificar se o usuário tem acesso à sala
+        room = db.chat_rooms.find_one({"_id": ObjectId(room_id)})
+        if not room:
+            return {"success": False, "message": "Sala de chat não encontrada"}
+
+        if str(room["buyer_id"]) != str(user_id) and str(room["seller_id"]) != str(user_id):
+            return {"success": False, "message": "Acesso negado"}
+
+        # Soft delete - marcar como inativa ao invés de deletar
+        db.chat_rooms.update_one(
+            {"_id": ObjectId(room_id)},
+            {
+                "$set": {
+                    "status": "deleted",
+                    "deleted_by": ObjectId(user_id),
+                    "deleted_at": datetime.utcnow(),
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+
+        return {
+            "success": True,
+            "message": "Sala de chat removida"
+        }
+
+    except Exception as e:
+        return {"success": False, "message": f"Erro ao remover sala de chat: {str(e)}"}

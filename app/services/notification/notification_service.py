@@ -298,26 +298,52 @@ def notify_new_question(ad_owner_id, questioner_name, ad_title, question_text):
         }
     )
 
-def notify_order_status_change(user_id, order_id, status, product_title):
+def notify_order_status_change(user_id, order_id, new_status, is_seller=False, product_title=None):
     """Notifica sobre mudança de status do pedido."""
     status_messages = {
+        "pending": "pendente",
         "confirmed": "confirmado",
+        "paid": "pago",
         "shipped": "enviado",
         "delivered": "entregue",
         "cancelled": "cancelado"
     }
     
-    status_text = status_messages.get(status, status)
+    status_text = status_messages.get(new_status, new_status)
+    
+    # Fetch order details if product_title not provided
+    if not product_title:
+        try:
+            order = db.orders.find_one({"_id": ObjectId(order_id)})
+            if order and order.get("ad_snapshot"):
+                product_title = order["ad_snapshot"].get("title", "Produto")
+            else:
+                product_title = "Produto"
+        except:
+            product_title = "Produto"
+    
+    # Different messages for buyer vs seller
+    if is_seller:
+        if new_status == "pending":
+            title = "Novo pedido recebido"
+            message = f"Você recebeu um novo pedido para \"{product_title}\""
+        else:
+            title = f"Pedido {status_text}"
+            message = f"O pedido \"{product_title}\" foi {status_text}"
+    else:
+        title = f"Pedido {status_text}"
+        message = f"Seu pedido \"{product_title}\" foi {status_text}"
     
     return create_notification(
         user_id,
         "order",
-        f"Pedido {status_text}",
-        f"Seu pedido \"{product_title}\" foi {status_text}",
+        title,
+        message,
         {
             "order_id": order_id,
-            "status": status,
-            "product_title": product_title
+            "status": new_status,
+            "product_title": product_title,
+            "is_seller": is_seller
         }
     )
 
@@ -333,3 +359,50 @@ def notify_ad_favorited(ad_owner_id, favoriter_name, ad_title):
             "favoriter_name": favoriter_name
         }
     )
+
+def notify_new_chat_message(room_id, sender_id, message_content):
+    """Notifica sobre nova mensagem no chat."""
+    try:
+        # Buscar dados da sala de chat
+        room = db.chat_rooms.find_one({"_id": ObjectId(room_id)})
+        if not room:
+            return {"success": False, "message": "Sala não encontrada"}
+
+        # Buscar dados do pedido
+        order = db.orders.find_one({"_id": room["order_id"]})
+        if not order:
+            return {"success": False, "message": "Pedido não encontrado"}
+
+        # Buscar dados do remetente
+        from app.models.user.crud import get_user_by_id
+        sender = get_user_by_id(str(sender_id))
+        sender_name = sender.get("username", "Usuário") if sender else "Usuário"
+
+        # Determinar quem deve receber a notificação (o outro usuário)
+        recipient_id = room["seller_id"] if str(room["buyer_id"]) == str(sender_id) else room["buyer_id"]
+
+        # Truncar mensagem se muito longa
+        truncated_message = message_content[:100]
+        if len(message_content) > 100:
+            truncated_message += "..."
+
+        # Criar notificação
+        product_title = order.get("ad_snapshot", {}).get("title", "Produto")
+        
+        return create_notification(
+            str(recipient_id),
+            "chat",
+            "Nova mensagem no chat",
+            f"{sender_name}: {truncated_message}",
+            {
+                "room_id": room_id,
+                "order_id": str(order["_id"]),
+                "sender_id": str(sender_id),
+                "sender_name": sender_name,
+                "product_title": product_title
+            }
+        )
+
+    except Exception as e:
+        logger.error(f"Erro ao notificar nova mensagem de chat: {e}")
+        return {"success": False, "message": "Erro ao enviar notificação"}
