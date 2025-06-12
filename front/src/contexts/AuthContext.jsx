@@ -159,8 +159,8 @@ export const AuthProvider = ({ children }) => {
       url: window.location.href
     }));
 
-    // Redirecionar
-    window.location.href = '/login';
+    // Redirecionar para home em vez de login
+    window.location.href = '/';
   };
 
   // Função para atualizar dados do usuário após mudanças no perfil

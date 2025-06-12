@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Card, 
   Button, 
@@ -248,6 +249,23 @@ const GamesManagement = () => {
 // Game Card Component
 const GameCard = ({ game, onEdit, onDelete, onToggleFeatured, onToggleActive }) => {
   const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+    };
+
+    if (showMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [showMenu]);
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -275,7 +293,7 @@ const GameCard = ({ game, onEdit, onDelete, onToggleFeatured, onToggleActive }) 
 
         {/* Menu Button */}
         <div className="absolute top-2 right-2">
-          <div className="relative">
+          <div className="relative" ref={menuRef}>
             <Button
               variant="ghost"
               size="sm"
@@ -288,21 +306,30 @@ const GameCard = ({ game, onEdit, onDelete, onToggleFeatured, onToggleActive }) 
             {showMenu && (
               <div className="absolute right-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10">
                 <button
-                  onClick={() => onEdit(game)}
+                  onClick={() => {
+                    onEdit(game);
+                    setShowMenu(false);
+                  }}
                   className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2"
                 >
                   <Edit3 className="w-4 h-4" />
                   Editar
                 </button>
                 <button
-                  onClick={() => onToggleFeatured(game._id, game.is_featured)}
+                  onClick={() => {
+                    onToggleFeatured(game._id, game.is_featured);
+                    setShowMenu(false);
+                  }}
                   className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2"
                 >
                   <Star className="w-4 h-4" />
                   {game.is_featured ? 'Remover Destaque' : 'Destacar'}
                 </button>
                 <button
-                  onClick={() => onToggleActive(game._id, game.is_active)}
+                  onClick={() => {
+                    onToggleActive(game._id, game.is_active);
+                    setShowMenu(false);
+                  }}
                   className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100 flex items-center gap-2"
                 >
                   <Zap className="w-4 h-4" />
@@ -310,7 +337,10 @@ const GameCard = ({ game, onEdit, onDelete, onToggleFeatured, onToggleActive }) 
                 </button>
                 <hr className="my-1" />
                 <button
-                  onClick={() => onDelete(game._id)}
+                  onClick={() => {
+                    onDelete(game._id);
+                    setShowMenu(false);
+                  }}
                   className="w-full px-3 py-2 text-left text-sm hover:bg-red-50 text-red-600 flex items-center gap-2"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -323,7 +353,11 @@ const GameCard = ({ game, onEdit, onDelete, onToggleFeatured, onToggleActive }) 
       </div>
 
       <div className="p-4">
-        <h3 className="font-semibold text-gray-900 mb-1">{game.name}</h3>
+        <Link to={`/games/${game._id}`} className="block">
+          <h3 className="font-semibold text-gray-900 mb-1 hover:text-blue-600 transition-colors cursor-pointer">
+            {game.name}
+          </h3>
+        </Link>
         <p className="text-sm text-gray-600 mb-2">{game.platform}</p>
         {game.description && (
           <p className="text-xs text-gray-500 line-clamp-2">{game.description}</p>

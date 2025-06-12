@@ -37,6 +37,10 @@ def create_notification(user_id, notification_type, title, message, data=None):
         
         if result.inserted_id:
             logger.info(f"Notificação criada para usuário {user_id}: {title}")
+            
+            # Removed real-time WebSocket notifications to prevent flooding
+            # Notifications will be loaded when user refreshes or navigates
+            
             return {
                 "success": True,
                 "message": "Notificação criada com sucesso",

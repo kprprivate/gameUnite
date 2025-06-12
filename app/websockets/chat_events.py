@@ -536,3 +536,89 @@ def log_stats():
         logger.info(f"WebSocket Stats: {stats}")
     except Exception as e:
         logger.error(f"Erro ao gerar stats: {e}")
+
+
+# Notification Broadcasting Functions
+def broadcast_notification_to_user(user_id, notification_data):
+    """Broadcasts a notification to a specific user if they are connected."""
+    try:
+        user_id = str(user_id)
+        
+        # Check if user is connected
+        if user_id in connected_users:
+            room_name = f"user_{user_id}"
+            
+            # Sanitize notification data
+            sanitized_notification = serialize_datetime(notification_data)
+            
+            # Emit to user's personal room
+            socketio.emit('new_notification', {
+                'notification': sanitized_notification,
+                'timestamp': datetime.utcnow().isoformat()
+            }, room=room_name)
+            
+            logger.info(f"Notification broadcasted to user {user_id}")
+            return True
+        else:
+            logger.debug(f"User {user_id} not connected, notification not broadcasted")
+            return False
+            
+    except Exception as e:
+        logger.error(f"Error broadcasting notification to user {user_id}: {e}")
+        return False
+
+
+def broadcast_unread_count_update(user_id, unread_count):
+    """Broadcasts updated unread count to a specific user."""
+    try:
+        user_id = str(user_id)
+        
+        if user_id in connected_users:
+            room_name = f"user_{user_id}"
+            
+            socketio.emit('unread_count_update', {
+                'unread_count': unread_count,
+                'timestamp': datetime.utcnow().isoformat()
+            }, room=room_name)
+            
+            logger.info(f"Unread count update broadcasted to user {user_id}: {unread_count}")
+            return True
+            
+        return False
+        
+    except Exception as e:
+        logger.error(f"Error broadcasting unread count to user {user_id}: {e}")
+        return False
+
+
+def send_realtime_notification(user_id, notification_type, title, message, data=None):
+    """Helper function to send real-time notifications."""
+    try:
+        notification_data = {
+            'type': notification_type,
+            'title': title,
+            'message': message,
+            'data': data or {},
+            'created_at': datetime.utcnow(),
+            'read': False
+        }
+        
+        # Broadcast to user if connected
+        broadcast_notification_to_user(user_id, notification_data)
+        
+        # Also update unread count (this would typically come from the notification service)
+        # For now, we'll just broadcast that there's a new notification
+        from app.services.notification.notification_service import get_unread_count
+        try:
+            count_result = get_unread_count(user_id)
+            if count_result.get('success'):
+                unread_count = count_result.get('count', 0)
+                broadcast_unread_count_update(user_id, unread_count)
+        except Exception as count_error:
+            logger.error(f"Error getting unread count: {count_error}")
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error sending real-time notification: {e}")
+        return False

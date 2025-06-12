@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { notificationService } from '../../services';
 import { Bell, Check, CheckCheck, Eye, Trash2, Filter } from 'lucide-react';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Button from '../../components/Common/Button';
@@ -7,10 +9,41 @@ import { toast } from 'react-toastify';
 
 const Notifications = () => {
   const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [filter, setFilter] = useState('all'); // all, unread, read
   const [actionLoading, setActionLoading] = useState({});
+
+  // Load notifications
+  const loadNotifications = async () => {
+    if (!isAuthenticated) return;
+    
+    setLoading(true);
+    try {
+      const [notifResult, countResult] = await Promise.all([
+        notificationService.getNotifications({ page: 1, limit: 50 }),
+        notificationService.getUnreadCount()
+      ]);
+      
+      if (notifResult.success && notifResult.data.notifications) {
+        const formatted = notifResult.data.notifications.map(n => 
+          notificationService.formatNotification(n)
+        );
+        setNotifications(formatted);
+      }
+      
+      if (countResult.success) {
+        setUnreadCount(countResult.data.unread_count || 0);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar notificações:', error);
+      toast.error('Erro ao carregar notificações');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -18,76 +51,11 @@ const Notifications = () => {
     }
   }, [isAuthenticated]);
 
-  const loadNotifications = async () => {
-    setLoading(true);
-    
-    try {
-      // Simular carregamento de notificações - implementar API depois
-      const mockNotifications = [
-        {
-          id: 1,
-          type: 'question',
-          title: 'Nova pergunta no seu anúncio',
-          message: 'João perguntou: "O jogo está funcionando perfeitamente?"',
-          timestamp: new Date(Date.now() - 5 * 60000),
-          read: false,
-          data: {
-            ad_id: '123',
-            ad_title: 'Counter-Strike 2',
-            user_name: 'João'
-          }
-        },
-        {
-          id: 2,
-          type: 'order',
-          title: 'Pedido entregue',
-          message: 'Seu pedido "Valorant" foi marcado como entregue',
-          timestamp: new Date(Date.now() - 2 * 60 * 60000),
-          read: false,
-          data: {
-            order_id: '456',
-            product_title: 'Valorant'
-          }
-        },
-        {
-          id: 3,
-          type: 'favorite',
-          title: 'Anúncio favoritado',
-          message: 'Maria favoritou seu anúncio "League of Legends"',
-          timestamp: new Date(Date.now() - 24 * 60 * 60000),
-          read: true,
-          data: {
-            ad_id: '789',
-            ad_title: 'League of Legends',
-            user_name: 'Maria'
-          }
-        },
-        {
-          id: 4,
-          type: 'system',
-          title: 'Anúncio aprovado',
-          message: 'Seu anúncio "Minecraft" foi aprovado e está visível',
-          timestamp: new Date(Date.now() - 48 * 60 * 60000),
-          read: true,
-          data: {
-            ad_id: '101',
-            ad_title: 'Minecraft'
-          }
-        }
-      ];
 
-      setNotifications(mockNotifications);
-    } catch (error) {
-      console.error('Erro ao carregar notificações:', error);
-      toast.error('Erro ao carregar notificações');
-    }
-    
-    setLoading(false);
-  };
-
-  const formatTime = (timestamp) => {
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
     const now = new Date();
-    const diff = now - timestamp;
+    const diff = now - date;
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
@@ -98,18 +66,21 @@ const Notifications = () => {
     return 'Agora mesmo';
   };
 
-  const getNotificationIcon = (type) => {
-    switch (type) {
-      case 'question': return '💬';
-      case 'order': return '📦';
-      case 'favorite': return '❤️';
-      case 'system': return '🔔';
-      default: return '📢';
+  const getNotificationColor = (notification) => {
+    if (notification.color) {
+      const colors = {
+        blue: 'bg-blue-100 text-blue-600',
+        green: 'bg-green-100 text-green-600',
+        red: 'bg-red-100 text-red-600',
+        yellow: 'bg-yellow-100 text-yellow-600',
+        purple: 'bg-purple-100 text-purple-600',
+        gray: 'bg-gray-100 text-gray-600'
+      };
+      return colors[notification.color] || 'bg-blue-100 text-blue-600';
     }
-  };
-
-  const getNotificationColor = (type) => {
-    switch (type) {
+    
+    // Fallback to type-based colors
+    switch (notification.type) {
       case 'question': return 'bg-blue-100 text-blue-600';
       case 'order': return 'bg-green-100 text-green-600';
       case 'favorite': return 'bg-red-100 text-red-600';
@@ -118,20 +89,20 @@ const Notifications = () => {
     }
   };
 
-  const markAsRead = async (notificationId) => {
+  const handleMarkAsRead = async (notificationId) => {
     setActionLoading(prev => ({ ...prev, [notificationId]: true }));
     
     try {
-      // Simular API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setNotifications(prev =>
-        prev.map(n =>
-          n.id === notificationId ? { ...n, read: true } : n
-        )
-      );
-      
-      toast.success('Notificação marcada como lida');
+      const result = await notificationService.markAsRead(notificationId);
+      if (result.success) {
+        setNotifications(prev =>
+          prev.map(n => n._id === notificationId ? { ...n, read: true } : n)
+        );
+        setUnreadCount(prev => Math.max(0, prev - 1));
+        toast.success('Notificação marcada como lida');
+      } else {
+        toast.error(result.message || 'Erro ao marcar como lida');
+      }
     } catch (error) {
       toast.error('Erro ao marcar como lida');
     }
@@ -139,31 +110,39 @@ const Notifications = () => {
     setActionLoading(prev => ({ ...prev, [notificationId]: false }));
   };
 
-  const markAllAsRead = async () => {
-    setLoading(true);
-    
+  const handleMarkAllAsRead = async () => {
     try {
-      // Simular API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-      toast.success('Todas as notificações foram marcadas como lidas');
+      const result = await notificationService.markAllAsRead();
+      if (result.success) {
+        setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+        setUnreadCount(0);
+        toast.success('Todas as notificações foram marcadas como lidas');
+      } else {
+        toast.error(result.message || 'Erro ao marcar todas como lidas');
+      }
     } catch (error) {
       toast.error('Erro ao marcar todas como lidas');
     }
-    
-    setLoading(false);
   };
 
-  const deleteNotification = async (notificationId) => {
+  const handleDeleteNotification = async (notificationId) => {
     setActionLoading(prev => ({ ...prev, [notificationId]: true }));
     
     try {
-      // Simular API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setNotifications(prev => prev.filter(n => n.id !== notificationId));
-      toast.success('Notificação removida');
+      const result = await notificationService.deleteNotification(notificationId);
+      if (result.success) {
+        const notification = notifications.find(n => n._id === notificationId);
+        setNotifications(prev => prev.filter(n => n._id !== notificationId));
+        
+        // Update unread count if the deleted notification was unread
+        if (notification && !notification.read) {
+          setUnreadCount(prev => Math.max(0, prev - 1));
+        }
+        
+        toast.success('Notificação removida');
+      } else {
+        toast.error(result.message || 'Erro ao remover notificação');
+      }
     } catch (error) {
       toast.error('Erro ao remover notificação');
     }
@@ -177,7 +156,23 @@ const Notifications = () => {
     return true;
   });
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const handleNotificationClick = (notification) => {
+    // Handle navigation based on notification data
+    if (notification.data) {
+      const data = notification.data;
+      if (data.ad_id) {
+        navigate(`/ads/${data.ad_id}`);
+      } else if (data.order_id) {
+        navigate(`/orders/${data.order_id}`);
+      } else if (data.question_id) {
+        navigate(`/dashboard?tab=questions`);
+      } else {
+        navigate('/dashboard');
+      }
+    } else {
+      navigate('/dashboard');
+    }
+  };
 
   if (!isAuthenticated) {
     return (
@@ -221,7 +216,7 @@ const Notifications = () => {
             </div>
             
             {unreadCount > 0 && (
-              <Button onClick={markAllAsRead} disabled={loading}>
+              <Button onClick={handleMarkAllAsRead} disabled={loading}>
                 <CheckCheck className="w-4 h-4 mr-2" />
                 Marcar todas como lidas
               </Button>
@@ -268,15 +263,16 @@ const Notifications = () => {
           {filteredNotifications.length > 0 ? (
             filteredNotifications.map((notification) => (
               <div
-                key={notification.id}
-                className={`bg-white rounded-lg shadow-md p-6 transition-all hover:shadow-lg ${
+                key={notification._id}
+                className={`bg-white rounded-lg shadow-md p-6 transition-all hover:shadow-lg cursor-pointer ${
                   !notification.read ? 'border-l-4 border-blue-500' : ''
                 }`}
+                onClick={() => handleNotificationClick(notification)}
               >
                 <div className="flex items-start space-x-4">
-                  <div className={`p-3 rounded-full ${getNotificationColor(notification.type)}`}>
+                  <div className={`p-3 rounded-full ${getNotificationColor(notification)}`}>
                     <span className="text-lg">
-                      {getNotificationIcon(notification.type)}
+                      {notification.icon || '🔔'}
                     </span>
                   </div>
                   
@@ -288,8 +284,11 @@ const Notifications = () => {
                       <div className="flex items-center space-x-2">
                         {!notification.read && (
                           <button
-                            onClick={() => markAsRead(notification.id)}
-                            disabled={actionLoading[notification.id]}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMarkAsRead(notification._id);
+                            }}
+                            disabled={actionLoading[notification._id]}
                             className="p-1 text-blue-600 hover:text-blue-800 transition-colors"
                             title="Marcar como lida"
                           >
@@ -297,8 +296,11 @@ const Notifications = () => {
                           </button>
                         )}
                         <button
-                          onClick={() => deleteNotification(notification.id)}
-                          disabled={actionLoading[notification.id]}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteNotification(notification._id);
+                          }}
+                          disabled={actionLoading[notification._id]}
                           className="p-1 text-red-600 hover:text-red-800 transition-colors"
                           title="Remover notificação"
                         >
@@ -313,12 +315,18 @@ const Notifications = () => {
                     
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-500">
-                        {formatTime(notification.timestamp)}
+                        {notification.timeAgo || formatTime(notification.created_at)}
                       </span>
                       
                       {!notification.read && (
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                           Nova
+                        </span>
+                      )}
+                      
+                      {notification.isNew && (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          Recente
                         </span>
                       )}
                     </div>
@@ -337,7 +345,7 @@ const Notifications = () => {
               <p className="text-gray-600">
                 {filter === 'all' 
                   ? 'Você não tem notificações ainda'
-                  : `Altere o filtro para ver outras notificações`
+                  : 'Altere o filtro para ver outras notificações'
                 }
               </p>
             </div>

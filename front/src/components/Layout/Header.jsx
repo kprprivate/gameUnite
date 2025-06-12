@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { useCart } from '../../contexts/CartContext'; // ADICIONAR IMPORT
+import { useCart } from '../../contexts/CartContext';
 import { useGames } from '../../contexts/GameContext';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { useChat } from '../../contexts/ChatContext';
+import { notificationService } from '../../services';
 import { useDebounce } from '../../hooks';
+import LanguageSelector from '../Common/LanguageSelector';
 import {
   User,
   LogOut,
@@ -22,7 +26,7 @@ import {
 
 const Header = () => {
   const { user, logout, isAuthenticated } = useAuth();
-  const { cart } = useCart(); // USAR CONTEXTO DO CARRINHO
+  const { cart } = useCart();
   const { fetchGames } = useGames();
   const navigate = useNavigate();
 
@@ -36,6 +40,7 @@ const Header = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [notificationsLoading, setNotificationsLoading] = useState(false);
 
   // Refs
   const searchRef = useRef(null);
@@ -53,15 +58,6 @@ const Header = () => {
     }
   }, [debouncedSearch]);
 
-  // Carregar notificações quando autenticado
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      loadNotifications();
-      // Simular atualização periódica das notificações
-      const interval = setInterval(loadNotifications, 30000); // 30 segundos
-      return () => clearInterval(interval);
-    }
-  }, [isAuthenticated, user]);
 
   // Fechar dropdowns quando clicar fora
   useEffect(() => {
@@ -117,75 +113,92 @@ const Header = () => {
     setIsNotificationOpen(false);
   };
 
-  // Função para carregar notificações (simulada)
-  const loadNotifications = async () => {
-    try {
-      // Simular dados de notificação - você pode implementar a API depois
-      const mockNotifications = [
-        {
-          id: 1,
-          type: 'order',
-          title: 'Novo pedido recebido',
-          message: 'Você recebeu um novo pedido para "Counter-Strike 2"',
-          timestamp: new Date(Date.now() - 5 * 60000), // 5 minutos atrás
-          read: false,
-          link: '/orders'
-        },
-        {
-          id: 2,
-          type: 'message',
-          title: 'Nova mensagem',
-          message: 'João enviou uma pergunta sobre seu anúncio',
-          timestamp: new Date(Date.now() - 15 * 60000), // 15 minutos atrás
-          read: false,
-          link: '/dashboard'
-        },
-        {
-          id: 3,
-          type: 'favorite',
-          title: 'Anúncio favoritado',
-          message: 'Seu anúncio "Valorant" foi favoritado',
-          timestamp: new Date(Date.now() - 2 * 60 * 60000), // 2 horas atrás
-          read: true,
-          link: '/dashboard'
-        }
-      ];
 
-      setNotifications(mockNotifications);
-      setUnreadCount(mockNotifications.filter(n => !n.read).length);
+  // Load notifications only when dropdown is opened
+  const loadNotifications = async () => {
+    if (!isAuthenticated || notificationsLoading) return;
+    
+    setNotificationsLoading(true);
+    try {
+      const [notifResult, countResult] = await Promise.all([
+        notificationService.getNotifications({ page: 1, limit: 5 }),
+        notificationService.getUnreadCount()
+      ]);
+      
+      if (notifResult.success && notifResult.data.notifications) {
+        const formatted = notifResult.data.notifications.map(n => 
+          notificationService.formatNotification(n)
+        );
+        setNotifications(formatted);
+      }
+      
+      if (countResult.success) {
+        setUnreadCount(countResult.data.unread_count || 0);
+      }
     } catch (error) {
       console.error('Erro ao carregar notificações:', error);
+    } finally {
+      setNotificationsLoading(false);
     }
   };
 
-  const markAsRead = (notificationId) => {
-    setNotifications(prev => 
-      prev.map(n => 
-        n.id === notificationId ? { ...n, read: true } : n
-      )
-    );
-    setUnreadCount(prev => Math.max(0, prev - 1));
+  // Load unread count on authentication
+  useEffect(() => {
+    if (isAuthenticated) {
+      notificationService.getUnreadCount().then(result => {
+        if (result.success) {
+          setUnreadCount(result.data.unread_count || 0);
+        }
+      });
+    } else {
+      setUnreadCount(0);
+      setNotifications([]);
+    }
+  }, [isAuthenticated]);
+
+  const handleNotificationClick = async (notification) => {
+    if (!notification.read) {
+      await notificationService.markAsRead(notification._id);
+      setUnreadCount(prev => Math.max(0, prev - 1));
+      
+      // Update local state
+      setNotifications(prev =>
+        prev.map(n => n._id === notification._id ? { ...n, read: true } : n)
+      );
+    }
+    
+    // Navigate based on notification type and data
+    let navigateTo = '/dashboard';
+    
+    if (notification.data) {
+      const data = notification.data;
+      if (data.ad_id) {
+        navigateTo = `/ads/${data.ad_id}`;
+      } else if (data.order_id) {
+        navigateTo = `/orders/${data.order_id}`;
+      } else if (data.question_id) {
+        navigateTo = `/dashboard?tab=questions`;
+      }
+    }
+    
+    navigate(navigateTo);
+    setIsNotificationOpen(false);
   };
 
-  const markAllAsRead = () => {
+  const handleMarkAllAsRead = async () => {
+    await notificationService.markAllAsRead();
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     setUnreadCount(0);
   };
 
-  const formatNotificationTime = (timestamp) => {
-    const now = new Date();
-    const diff = now - timestamp;
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (days > 0) return `${days}d`;
-    if (hours > 0) return `${hours}h`;
-    if (minutes > 0) return `${minutes}m`;
-    return 'agora';
+  // Handle notification dropdown click
+  const handleNotificationDropdownClick = () => {
+    setIsNotificationOpen(!isNotificationOpen);
+    if (!isNotificationOpen && notifications.length === 0) {
+      loadNotifications();
+    }
   };
 
-  // CORRIGIDO: Usar dados do contexto do carrinho
   const cartItemCount = cart?.total_items || 0;
 
   return (
@@ -293,10 +306,13 @@ const Header = () => {
                   )}
                 </Link>
 
+                {/* Language Selector */}
+                <LanguageSelector />
+
                 {/* Notifications */}
                 <div className="relative" ref={notificationRef}>
                   <button 
-                    onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                    onClick={handleNotificationDropdownClick}
                     className="relative p-2 text-gray-700 hover:text-blue-600 transition-colors"
                   >
                     <Bell className="w-6 h-6" />
@@ -315,7 +331,7 @@ const Header = () => {
                         <h3 className="font-semibold text-gray-800">Notificações</h3>
                         {unreadCount > 0 && (
                           <button
-                            onClick={markAllAsRead}
+                            onClick={handleMarkAllAsRead}
                             className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
                           >
                             Marcar todas como lidas
@@ -325,29 +341,29 @@ const Header = () => {
 
                       {/* Notifications List */}
                       <div className="max-h-72 overflow-y-auto">
-                        {notifications.length > 0 ? (
+                        {notificationsLoading ? (
+                          <div className="p-6 text-center text-gray-500">
+                            Carregando...
+                          </div>
+                        ) : notifications.length > 0 ? (
                           notifications.map((notification) => (
                             <div
-                              key={notification.id}
+                              key={notification._id}
                               className={`p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors cursor-pointer ${
                                 !notification.read ? 'bg-blue-50' : ''
                               }`}
-                              onClick={() => {
-                                if (!notification.read) {
-                                  markAsRead(notification.id);
-                                }
-                                navigate(notification.link);
-                                setIsNotificationOpen(false);
-                              }}
+                              onClick={() => handleNotificationClick(notification)}
                             >
                               <div className="flex items-start space-x-3">
-                                <div className={`p-2 rounded-full ${
-                                  notification.type === 'order' ? 'bg-green-100 text-green-600' :
-                                  notification.type === 'message' ? 'bg-blue-100 text-blue-600' :
-                                  'bg-red-100 text-red-600'
+                                <div className={`p-2 rounded-full text-lg ${
+                                  notification.color === 'green' ? 'bg-green-100 text-green-600' :
+                                  notification.color === 'blue' ? 'bg-blue-100 text-blue-600' :
+                                  notification.color === 'red' ? 'bg-red-100 text-red-600' :
+                                  notification.color === 'yellow' ? 'bg-yellow-100 text-yellow-600' :
+                                  notification.color === 'purple' ? 'bg-purple-100 text-purple-600' :
+                                  'bg-gray-100 text-gray-600'
                                 }`}>
-                                  {notification.type === 'order' ? '🛒' :
-                                   notification.type === 'message' ? '💬' : '❤️'}
+                                  {notification.icon}
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center justify-between">
@@ -355,7 +371,7 @@ const Header = () => {
                                       {notification.title}
                                     </p>
                                     <span className="text-xs text-gray-500">
-                                      {formatNotificationTime(notification.timestamp)}
+                                      {notification.timeAgo}
                                     </span>
                                   </div>
                                   <p className="text-sm text-gray-600 mt-1 line-clamp-2">
@@ -363,6 +379,11 @@ const Header = () => {
                                   </p>
                                   {!notification.read && (
                                     <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                  )}
+                                  {notification.isNew && (
+                                    <span className="inline-block mt-1 px-2 py-1 text-xs bg-blue-500 text-white rounded-full">
+                                      Novo
+                                    </span>
                                   )}
                                 </div>
                               </div>

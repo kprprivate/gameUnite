@@ -157,11 +157,25 @@ def get_user_stats(user_id):
         value_result = list(db.ads.aggregate(pipeline))
         total_value = value_result[0]["total_value"] if value_result else 0
 
+        # Estatísticas de vendas (como vendedor)
+        sales_count = db.orders.count_documents({
+            "seller_id": ObjectId(user_id),
+            "status": "delivered"
+        })
+
+        # Estatísticas de compras (como comprador)
+        purchases_count = db.orders.count_documents({
+            "buyer_id": ObjectId(user_id),
+            "status": "delivered"
+        })
+
         return {
             "total_ads": total_ads,
             "active_ads": active_ads,
             "total_views": total_views,
-            "total_value": total_value
+            "total_value": total_value,
+            "sales_count": sales_count,
+            "purchases_count": purchases_count
         }
 
     except Exception as e:
@@ -169,7 +183,9 @@ def get_user_stats(user_id):
             "total_ads": 0,
             "active_ads": 0,
             "total_views": 0,
-            "total_value": 0
+            "total_value": 0,
+            "sales_count": 0,
+            "purchases_count": 0
         }
 
 

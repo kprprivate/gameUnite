@@ -3,6 +3,7 @@ from datetime import datetime
 from bson import ObjectId
 from app.db.mongo_client import db
 from app.models.user.crud import get_user_by_id
+from app.services.notification.notification_service import notify_order_status_change
 
 
 def create_order(buyer_id, order_data):
@@ -87,6 +88,17 @@ def create_order(buyer_id, order_data):
         order["seller_id"] = str(order["seller_id"])
         order["ad_id"] = str(order["ad_id"])
         order["game_id"] = str(order["game_id"])
+
+        # Send notification to seller about new order
+        try:
+            notify_order_status_change(
+                user_id=str(ad["user_id"]),
+                order_id=str(result.inserted_id),
+                new_status="pending",
+                is_seller=True
+            )
+        except Exception as e:
+            print(f"Erro ao enviar notificação: {str(e)}")
 
         return {
             "success": True,
@@ -395,6 +407,26 @@ def update_order_status(order_id, user_id, new_status, role=None):
             {"_id": order_object_id},
             {"$set": update_data}
         )
+
+        # Send notifications to both buyer and seller about status change
+        try:
+            # Notify buyer
+            notify_order_status_change(
+                user_id=str(order["buyer_id"]),
+                order_id=order_id,
+                new_status=new_status,
+                is_seller=False
+            )
+            
+            # Notify seller
+            notify_order_status_change(
+                user_id=str(order["seller_id"]),
+                order_id=order_id,
+                new_status=new_status,
+                is_seller=True
+            )
+        except Exception as e:
+            print(f"Erro ao enviar notificações: {str(e)}")
 
         return {"success": True, "message": f"Status atualizado para {new_status}"}
 

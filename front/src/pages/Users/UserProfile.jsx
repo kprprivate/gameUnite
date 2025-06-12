@@ -5,7 +5,7 @@ import { userService, adService } from '../../services';
 import { User, Star, Calendar, MapPin, MessageCircle, TrendingUp } from 'lucide-react';
 import LoadingSpinner from '../../components/Common/LoadingSpinner';
 import Button from '../../components/Common/Button';
-import { formatSellerStatus } from '../../utils/helpers';
+import { formatSellerStatus, formatBuyerStatus } from '../../utils/helpers';
 
 const UserProfile = () => {
   const { userId } = useParams();
@@ -177,9 +177,23 @@ const UserProfile = () => {
                   <div className="text-sm font-medium text-blue-800">Como Comprador</div>
                   <div className="flex items-center mt-1">
                     <Star className="w-4 h-4 text-yellow-500 fill-current mr-1" />
-                    <span className="text-lg font-bold text-blue-800">
-                      {user.buyer_rating?.toFixed(1) || '0.0'}/5
-                    </span>
+                    {(() => {
+                      const buyerStatus = formatBuyerStatus(user.buyer_rating, user.purchases_count);
+                      if (buyerStatus.isStarting) {
+                        return (
+                          <span className="text-lg font-bold text-blue-800">
+                            {buyerStatus.display}
+                            {buyerStatus.purchaseCount > 0 && ` (${buyerStatus.purchaseCount} ${buyerStatus.purchaseCount === 1 ? 'compra' : 'compras'})`}
+                          </span>
+                        );
+                      } else {
+                        return (
+                          <span className="text-lg font-bold text-blue-800">
+                            {buyerStatus.display}
+                          </span>
+                        );
+                      }
+                    })()}
                   </div>
                 </div>
                 <div className="text-sm text-blue-600">

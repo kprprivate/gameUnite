@@ -1,19 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Card, LoadingSpinner, Badge, Pagination } from '../Common';
-import { useApi } from '../../hooks';
-import { Activity, Eye, Shield, AlertTriangle, Clock, User } from 'lucide-react';
+import { useApi, useDebounce } from '../../hooks';
+import { Activity, Eye, Shield, AlertTriangle, Clock, User, Search } from 'lucide-react';
 
 const AuditLogs = () => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalLogs, setTotalLogs] = useState(0);
 
   const api = useApi();
+  
+  // Debounce search term
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    setCurrentPage(1); // Reset page when search changes
+  }, [debouncedSearchTerm]);
 
   useEffect(() => {
     loadAuditLogs();
-  }, [currentPage]);
+  }, [currentPage, debouncedSearchTerm]);
 
   const loadAuditLogs = async () => {
     setLoading(true);
@@ -21,14 +30,21 @@ const AuditLogs = () => {
       const response = await api.get('/support/admin/audit-logs', {
         params: {
           page: currentPage,
-          limit: 20
+          limit: 20,
+          search: debouncedSearchTerm || undefined
         }
       });
-      setLogs(response.data.logs || []);
-      setTotalPages(Math.ceil((response.data.total || 0) / 20));
+      
+      if (response.success) {
+        setLogs(response.data.logs || []);
+        setTotalPages(response.data.total_pages || Math.ceil((response.data.total || 0) / 20));
+        setTotalLogs(response.data.total || 0);
+      }
     } catch (error) {
       console.error('Erro ao carregar logs:', error);
       setLogs([]);
+      setTotalPages(1);
+      setTotalLogs(0);
     } finally {
       setLoading(false);
     }

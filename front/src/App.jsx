@@ -7,6 +7,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from './contexts/AuthContext';
 import { GameProvider } from './contexts/GameContext';
 import { CartProvider } from './contexts/CartContext';
+import { LanguageProvider } from './contexts/LanguageContext';
+import { ChatProvider } from './contexts/ChatContext';
+// Removed NotificationProvider to prevent flooding
 
 // Layout
 import Layout from './components/Layout/Layout';
@@ -33,6 +36,7 @@ import AdminSupport from './pages/Admin/AdminSupport';
 import Support from './pages/Support/Support';
 import TicketDetails from './pages/Support/TicketDetails';
 import Notifications from './pages/Notifications/Notifications';
+import Chat from './pages/Chat/Chat';
 
 // Components
 import ProtectedRoute from './components/Auth/ProtectedRoute';
@@ -41,10 +45,12 @@ import './App.css';
 
 function App() {
   return (
-      <AuthProvider>
-        <GameProvider>
-          <CartProvider> {/* NOVO */}
-            <Router>
+      <LanguageProvider>
+        <AuthProvider>
+          <GameProvider>
+            <CartProvider>
+              <ChatProvider>
+                <Router>
               <div className="App">
                 <Routes>
                   {/* Public Routes */}
@@ -171,6 +177,14 @@ function App() {
                         </ProtectedRoute>
                       }
                   />
+                  <Route
+                      path="/chat/:userId?"
+                      element={
+                        <ProtectedRoute>
+                          <Layout><Chat /></Layout>
+                        </ProtectedRoute>
+                      }
+                  />
 
                   {/* 404 Route */}
                   <Route
@@ -204,10 +218,12 @@ function App() {
                     pauseOnHover
                 />
               </div>
-            </Router>
-          </CartProvider>
-        </GameProvider>
-      </AuthProvider>
+                </Router>
+              </ChatProvider>
+            </CartProvider>
+          </GameProvider>
+        </AuthProvider>
+      </LanguageProvider>
   );
 }
 

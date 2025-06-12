@@ -167,9 +167,10 @@ const Favorites = () => {
                 {filteredAndSortedFavorites.map((favorite) => (
                   <div
                     key={favorite._id}
-                    className={`bg-white rounded-lg shadow-md overflow-hidden ${
+                    className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer ${
                       removing[favorite.ad._id] ? 'opacity-50' : ''
                     }`}
+                    onClick={() => window.location.href = `/ads/${favorite.ad._id}`}
                   >
                     {/* Image */}
                     {favorite.ad.image_url && (
@@ -234,7 +235,7 @@ const Favorites = () => {
                       </div>
 
                       {/* Actions */}
-                      <div className="flex space-x-2">
+                      <div className="flex space-x-2" onClick={(e) => e.stopPropagation()}>
                         <Link
                           to={`/ads/${favorite.ad._id}`}
                           className="flex-1 bg-blue-600 text-white text-center py-2 px-3 rounded-md hover:bg-blue-700 transition-colors text-sm flex items-center justify-center"
@@ -243,7 +244,10 @@ const Favorites = () => {
                           Ver Anúncio
                         </Link>
                         <button
-                          onClick={() => handleRemoveFavorite(favorite.ad._id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveFavorite(favorite.ad._id);
+                          }}
                           disabled={removing[favorite.ad._id]}
                           className="bg-red-600 text-white py-2 px-3 rounded-md hover:bg-red-700 transition-colors disabled:opacity-50"
                         >
@@ -280,7 +284,11 @@ const Favorites = () => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {filteredAndSortedFavorites.map((favorite) => (
-                        <tr key={favorite._id} className={removing[favorite.ad._id] ? 'opacity-50' : ''}>
+                        <tr 
+                          key={favorite._id} 
+                          className={`hover:bg-gray-50 cursor-pointer transition-colors ${removing[favorite.ad._id] ? 'opacity-50' : ''}`}
+                          onClick={() => window.location.href = `/ads/${favorite.ad._id}`}
+                        >
                           <td className="px-6 py-4">
                             <div className="flex items-center">
                               {favorite.ad.image_url && (
@@ -317,7 +325,7 @@ const Favorites = () => {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {new Date(favorite.created_at).toLocaleDateString('pt-BR')}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium" onClick={(e) => e.stopPropagation()}>
                             <div className="flex space-x-2">
                               <Link
                                 to={`/ads/${favorite.ad._id}`}
@@ -326,7 +334,10 @@ const Favorites = () => {
                                 <Eye className="w-4 h-4" />
                               </Link>
                               <button
-                                onClick={() => handleRemoveFavorite(favorite.ad._id)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleRemoveFavorite(favorite.ad._id);
+                                }}
                                 disabled={removing[favorite.ad._id]}
                                 className="text-red-600 hover:text-red-900 disabled:opacity-50"
                               >
