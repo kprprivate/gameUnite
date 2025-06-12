@@ -351,6 +351,135 @@ class ChatService {
       maxReconnectAttempts: this.maxReconnectAttempts
     };
   }
+
+  // Verificar status do chat (sempre habilitado por enquanto)
+  async getChatStatus() {
+    try {
+      return {
+        success: true,
+        data: { enabled: true }
+      };
+    } catch (error) {
+      console.error('Erro ao verificar status do chat:', error);
+      return {
+        success: false,
+        data: { enabled: true }
+      };
+    }
+  }
+
+  // Buscar salas de chat (conversas) do usuário
+  async getConversations() {
+    try {
+      const response = await api.get('/chat/rooms');
+      return {
+        success: true,
+        data: { conversations: response.data.data || [] }
+      };
+    } catch (error) {
+      console.error('Erro ao buscar conversas:', error);
+      return {
+        success: false,
+        data: { conversations: [] }
+      };
+    }
+  }
+
+  // Buscar mensagens de uma sala de chat
+  async getMessages(roomId) {
+    try {
+      const response = await api.get(`/chat/room/${roomId}/messages`);
+      return {
+        success: true,
+        data: { messages: response.data.data || [] }
+      };
+    } catch (error) {
+      console.error('Erro ao buscar mensagens:', error);
+      return {
+        success: false,
+        data: { messages: [] }
+      };
+    }
+  }
+
+  // Enviar mensagem em uma sala
+  async sendMessage(roomId, messageData) {
+    try {
+      const response = await api.post(`/chat/room/${roomId}/message`, {
+        content: messageData.content
+      });
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (error) {
+      console.error('Erro ao enviar mensagem:', error);
+      return {
+        success: false,
+        message: 'Erro ao enviar mensagem'
+      };
+    }
+  }
+
+  // Buscar ou criar sala de chat para um pedido
+  async startConversation(conversationData) {
+    try {
+      // Para o sistema de chat baseado em pedidos, usar o orderId para buscar/criar sala
+      const orderId = conversationData.order_id || conversationData.ad_id;
+      if (!orderId) {
+        return {
+          success: false,
+          message: 'ID do pedido é obrigatório'
+        };
+      }
+
+      const response = await api.get(`/chat/room/${orderId}`);
+      return {
+        success: true,
+        data: { conversation: response.data.data }
+      };
+    } catch (error) {
+      console.error('Erro ao iniciar conversa:', error);
+      return {
+        success: false,
+        message: 'Erro ao iniciar conversa'
+      };
+    }
+  }
+
+  // Marcar mensagens como lidas
+  async markAsRead(roomId) {
+    try {
+      const response = await api.patch(`/chat/room/${roomId}/read`);
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (error) {
+      console.error('Erro ao marcar como lida:', error);
+      return {
+        success: false,
+        message: 'Erro ao marcar mensagens como lidas'
+      };
+    }
+  }
+
+  // Excluir conversa
+  async deleteConversation(roomId) {
+    try {
+      const response = await api.delete(`/chat/room/${roomId}`);
+      return {
+        success: true,
+        data: response.data
+      };
+    } catch (error) {
+      console.error('Erro ao excluir conversa:', error);
+      return {
+        success: false,
+        message: 'Erro ao excluir conversa'
+      };
+    }
+  }
 }
 
 // Instância singleton

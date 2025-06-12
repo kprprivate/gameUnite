@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Button, Badge, LoadingSpinner, Pagination, Modal } from '../Common';
-import { useApi } from '../../hooks';
+import { useApi, useDebounce } from '../../hooks';
 import { 
   ShoppingBag, 
   Package, 
@@ -29,10 +29,17 @@ const OrdersManagement = () => {
 
   const api = useApi();
   const navigate = useNavigate();
+  
+  // Debounce search term to avoid excessive API calls
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [debouncedSearchTerm, statusFilter]);
 
   useEffect(() => {
     loadOrders();
-  }, [currentPage, searchTerm, statusFilter]);
+  }, [currentPage, debouncedSearchTerm, statusFilter]);
 
   const loadOrders = async () => {
     setLoading(true);
@@ -41,7 +48,7 @@ const OrdersManagement = () => {
         params: {
           page: currentPage,
           limit: 20,
-          search: searchTerm || undefined,
+          search: debouncedSearchTerm || undefined,
           status: statusFilter !== 'all' ? statusFilter : undefined
         }
       });

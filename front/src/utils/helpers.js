@@ -112,3 +112,21 @@ export const formatSellerStatus = (rating, salesCount) => {
     salesCount: salesCount || 0
   };
 };
+
+export const formatBuyerStatus = (rating, purchaseCount) => {
+  // If buyer has less than 5 purchases, show starting status
+  if (!purchaseCount || purchaseCount < 5) {
+    return {
+      display: "Iniciando",
+      isStarting: true,
+      purchaseCount: purchaseCount || 0
+    };
+  }
+  
+  // Otherwise show the actual rating
+  return {
+    display: `${rating ? rating.toFixed(1) : "0.0"}/5`,
+    isStarting: false,
+    purchaseCount: purchaseCount || 0
+  };
+};

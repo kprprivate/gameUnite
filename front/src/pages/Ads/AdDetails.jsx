@@ -3,9 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
+import { useCart } from '../../contexts/CartContext';
+import { useChat } from '../../contexts/ChatContext';
 import { adService } from '../../services/adService';
 import { favoritesService } from '../../services/favoritesService';
 import { reportsService } from '../../services/reportsService';
+import { cartService } from '../../services/cartService';
+import { orderService } from '../../services/orderService';
 import {
   ArrowLeft,
   Eye,
@@ -39,6 +43,8 @@ const AdDetails = () => {
   const { adId } = useParams();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
+  const { isInCart } = useCart();
+  const { chatEnabled, startConversation } = useChat();
 
   const [ad, setAd] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -62,6 +68,13 @@ const AdDetails = () => {
       loadAdDetails();
     }
   }, [adId]);
+
+  // Verificar se o anúncio está favoritado quando o usuário estiver autenticado
+  useEffect(() => {
+    if (adId && isAuthenticated && ad) {
+      checkIfFavorited();
+    }
+  }, [adId, isAuthenticated, ad]);
 
   useEffect(() => {
     if (ad && ad.game_id) {
@@ -133,6 +146,20 @@ const AdDetails = () => {
     }
     
     setLoadingSimilar(false);
+  };
+
+  const checkIfFavorited = async () => {
+    if (!isAuthenticated || !adId) return;
+
+    try {
+      const result = await favoritesService.checkIsFavorite(adId);
+      if (result.success) {
+        setIsFavorited(result.data.is_favorited || false);
+      }
+    } catch (error) {
+      console.error('Erro ao verificar favorito:', error);
+      setIsFavorited(false);
+    }
   };
 
   const handleDeleteAd = async () => {
@@ -244,6 +271,53 @@ const AdDetails = () => {
     }
 
     setSubmittingReport(false);
+  };
+
+  const handleBuyNow = async () => {
+    if (!isAuthenticated) {
+      toast.info('Faça login para comprar');
+      return;
+    }
+
+    try {
+      // Adicionar ao carrinho primeiro
+      const cartResult = await cartService.addToCart(adId, 1);
+      
+      if (cartResult.success) {
+        // Ir direto para o checkout
+        navigate('/checkout');
+      } else {
+        toast.error(cartResult.message);
+      }
+    } catch (error) {
+      console.error('Erro ao comprar agora:', error);
+      toast.error('Erro ao processar compra');
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!isAuthenticated) {
+      toast.info('Faça login para enviar mensagens');
+      return;
+    }
+
+    if (!chatEnabled) {
+      toast.info('Chat está desabilitado pelos administradores');
+      return;
+    }
+
+    try {
+      // Iniciar conversa e navegar para o chat
+      const result = await startConversation(ad.user_id, '', adId);
+      if (result?.success) {
+        navigate(`/chat/${ad.user_id}?ad=${adId}`);
+      } else {
+        toast.error('Erro ao iniciar conversa');
+      }
+    } catch (error) {
+      console.error('Erro ao iniciar conversa:', error);
+      toast.error('Erro ao iniciar conversa');
+    }
   };
 
   const reportReasons = [
@@ -663,10 +737,21 @@ const AdDetails = () => {
                         </Button>
                       </Link>
 
-                      <Button className="w-full">
-                        <MessageCircle className="w-4 h-4 mr-2" />
-                        Enviar Mensagem
-                      </Button>
+                      {chatEnabled ? (
+                        <Button 
+                          className="w-full"
+                          onClick={handleSendMessage}
+                        >
+                          <MessageCircle className="w-4 h-4 mr-2" />
+                          Enviar Mensagem
+                        </Button>
+                      ) : (
+                        <div className="text-center p-3 bg-gray-50 rounded-lg">
+                          <p className="text-sm text-gray-500">
+                            Mensagens estão temporariamente desabilitadas
+                          </p>
+                        </div>
+                      )}
                     </div>
                 )}
               </div>
@@ -686,9 +771,24 @@ const AdDetails = () => {
                           size="lg"
                       />
 
-                      <Button variant="outline" className="w-full">
-                        Comprar Agora
-                      </Button>
+                      {isInCart(adId) ? (
+                        <Button 
+                          variant="outline" 
+                          className="w-full"
+                          onClick={() => navigate('/cart')}
+                        >
+                          <ShoppingCart className="w-4 h-4 mr-2" />
+                          Ver Carrinho
+                        </Button>
+                      ) : (
+                        <Button 
+                          variant="outline" 
+                          className="w-full"
+                          onClick={handleBuyNow}
+                        >
+                          Comprar Agora
+                        </Button>
+                      )}
                     </div>
 
                     <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">

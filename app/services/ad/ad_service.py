@@ -400,9 +400,12 @@ def create_ad(user_id, ad_data):
             if "desired_games" in ad_data and ad_data["desired_games"]:
                 ad["desired_games"] = str(ad_data["desired_games"]).strip()
 
-        # Adicionar imagem se fornecida
+        # Adicionar imagem ou definir imagem padrão
         if ad_data.get("image_url"):
             ad["image_url"] = str(ad_data["image_url"]).strip()
+        else:
+            # Definir imagem padrão quando nenhuma imagem é fornecida
+            ad["image_url"] = "/uploads/ads/no-ads-image.jpg"
 
         # Inserir no banco
         result = db.ads.insert_one(ad)

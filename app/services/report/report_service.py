@@ -20,11 +20,15 @@ class ReportService:
                     return create_response(False, f'Campo obrigatório: {field}', status_code=400)
             
             # Validate reported_item_type
-            if data['reported_item_type'] not in ['ad', 'user']:
+            if data['reported_item_type'] not in ['ad', 'user', 'order']:
                 return create_response(False, 'Tipo de item inválido', status_code=400)
             
             # Validate reason
-            valid_reasons = ['spam', 'fake', 'inappropriate', 'scam', 'wrong_category', 'other']
+            valid_reasons = [
+                'spam', 'fake', 'inappropriate', 'scam', 'wrong_category', 'other',
+                'payment_issue', 'delivery_issue', 'product_issue', 'seller_issue', 
+                'buyer_issue', 'communication_issue', 'fraud'
+            ]
             if data['reason'] not in valid_reasons:
                 return create_response(False, 'Motivo inválido', status_code=400)
             

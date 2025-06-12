@@ -91,6 +91,10 @@ const Cart = () => {
     setValidating(false);
   };
 
+  const handleItemClick = (adId) => {
+    navigate(`/ads/${adId}`);
+  };
+
   const calculateTotal = () => {
     return cart.items.reduce((total, item) => {
       return total + (item.price_snapshot * item.quantity);
@@ -166,7 +170,10 @@ const Cart = () => {
           <div className="lg:col-span-2 space-y-4">
             {cart.items.map((item) => (
               <div key={item._id} className="bg-white rounded-lg shadow-md p-6">
-                <div className="flex items-start space-x-4">
+                <div 
+                  className="flex items-start space-x-4 cursor-pointer hover:bg-gray-50 transition-colors rounded-lg p-2 -m-2"
+                  onClick={() => handleItemClick(item.ad_id)}
+                >
                   {/* Imagem */}
                   <div className="w-20 h-20 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                     <img
@@ -200,9 +207,12 @@ const Cart = () => {
                     </div>
 
                     {/* Controles de quantidade */}
-                    <div className="flex items-center space-x-2 mb-3">
+                    <div className="flex items-center space-x-2 mb-3" onClick={(e) => e.stopPropagation()}>
                       <button
-                        onClick={() => handleUpdateQuantity(item.ad_id, item.quantity - 1)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleUpdateQuantity(item.ad_id, item.quantity - 1);
+                        }}
                         disabled={updating[item.ad_id] || item.quantity <= 1}
                         className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center disabled:opacity-50"
                       >
@@ -218,7 +228,10 @@ const Cart = () => {
                       </span>
                       
                       <button
-                        onClick={() => handleUpdateQuantity(item.ad_id, item.quantity + 1)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleUpdateQuantity(item.ad_id, item.quantity + 1);
+                        }}
                         disabled={updating[item.ad_id]}
                         className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center disabled:opacity-50"
                       >
@@ -233,7 +246,10 @@ const Cart = () => {
 
                     {/* Botão remover */}
                     <button
-                      onClick={() => handleRemoveItem(item.ad_id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveItem(item.ad_id);
+                      }}
                       disabled={updating[item.ad_id]}
                       className="text-sm text-red-600 hover:text-red-800 flex items-center disabled:opacity-50"
                     >

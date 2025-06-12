@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Badge, LoadingSpinner, Pagination, Modal } from '../Common';
-import { useApi } from '../../hooks';
+import { useApi, useDebounce } from '../../hooks';
 import { 
   Tag, 
   Package, 
@@ -32,10 +32,17 @@ const AdsManagement = () => {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const api = useApi();
+  
+  // Debounce search term to avoid excessive API calls
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [debouncedSearchTerm, statusFilter]);
 
   useEffect(() => {
     loadAds();
-  }, [currentPage, searchTerm, statusFilter]);
+  }, [currentPage, debouncedSearchTerm, statusFilter]);
 
   const loadAds = async () => {
     setLoading(true);
@@ -43,7 +50,7 @@ const AdsManagement = () => {
       const params = new URLSearchParams({
         page: currentPage,
         limit: 10,
-        search: searchTerm,
+        search: debouncedSearchTerm,
         status: statusFilter
       });
 

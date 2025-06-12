@@ -1,44 +1,71 @@
 import React, { useState, useEffect } from 'react';
-import { Flag, Eye, Check, X, Clock, AlertTriangle } from 'lucide-react';
+import { Flag, Eye, Check, X, Clock, AlertTriangle, Search } from 'lucide-react';
 import LoadingSpinner from '../Common/LoadingSpinner';
 import Button from '../Common/Button';
 import Badge from '../Common/Badge';
+import { Pagination } from '../Common';
+import { useDebounce } from '../../hooks';
 import { toast } from 'react-toastify';
 import { reportsService } from '../../services/reportsService';
 
 const ReportsManagement = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all'); // all, pending, reviewed, resolved, dismissed
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalReports, setTotalReports] = useState(0);
   const [selectedReport, setSelectedReport] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [actionLoading, setActionLoading] = useState({});
+  
+  // Debounce search term
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    setCurrentPage(1); // Reset page when filters change
+  }, [debouncedSearchTerm, filter]);
 
   useEffect(() => {
     loadReports();
-  }, [filter]);
+  }, [currentPage, debouncedSearchTerm, filter]);
 
   const loadReports = async () => {
     setLoading(true);
     
     try {
-      const filters = {};
+      const filters = {
+        page: currentPage,
+        limit: 20
+      };
+      
       if (filter !== 'all') {
         filters.status = filter;
+      }
+      
+      if (debouncedSearchTerm) {
+        filters.search = debouncedSearchTerm;
       }
       
       const result = await reportsService.getReports(filters);
       
       if (result.success) {
         setReports(result.data.reports || []);
+        setTotalPages(result.data.total_pages || 1);
+        setTotalReports(result.data.total || 0);
       } else {
         toast.error(result.message || 'Erro ao carregar reports');
         setReports([]);
+        setTotalPages(1);
+        setTotalReports(0);
       }
     } catch (error) {
       console.error('Erro ao carregar reports:', error);
       toast.error('Erro ao carregar reports');
       setReports([]);
+      setTotalPages(1);
+      setTotalReports(0);
     }
     
     setLoading(false);

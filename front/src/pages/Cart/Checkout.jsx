@@ -220,25 +220,83 @@ const Checkout = () => {
     }
   };
 
-  // Formatação automática
+  // Formatação automática em tempo real
   const formatPhone = (value) => {
     if (!value) return value;
+    
+    // Remove tudo que não é número
     const phone = value.replace(/\D/g, '');
-    const match = phone.match(/^(\d{2})(\d{4,5})(\d{4})$/);
-    if (match) {
-      return `(${match[1]}) ${match[2]}-${match[3]}`;
+    
+    // Aplica formatação progressiva
+    if (phone.length <= 2) {
+      return phone;
+    } else if (phone.length <= 6) {
+      return `(${phone.slice(0, 2)}) ${phone.slice(2)}`;
+    } else if (phone.length <= 10) {
+      return `(${phone.slice(0, 2)}) ${phone.slice(2, 6)}-${phone.slice(6)}`;
+    } else {
+      return `(${phone.slice(0, 2)}) ${phone.slice(2, 7)}-${phone.slice(7, 11)}`;
     }
-    return value;
   };
 
   const formatZipcode = (value) => {
     if (!value) return value;
+    
+    // Remove tudo que não é número
     const zip = value.replace(/\D/g, '');
-    const match = zip.match(/^(\d{5})(\d{3})$/);
-    if (match) {
-      return `${match[1]}-${match[2]}`;
+    
+    // Aplica formatação progressiva
+    if (zip.length <= 5) {
+      return zip;
+    } else {
+      return `${zip.slice(0, 5)}-${zip.slice(5, 8)}`;
     }
-    return value;
+  };
+
+  const formatCPF = (value) => {
+    if (!value) return value;
+    
+    // Remove tudo que não é número
+    const cpf = value.replace(/\D/g, '');
+    
+    // Aplica formatação progressiva
+    if (cpf.length <= 3) {
+      return cpf;
+    } else if (cpf.length <= 6) {
+      return `${cpf.slice(0, 3)}.${cpf.slice(3)}`;
+    } else if (cpf.length <= 9) {
+      return `${cpf.slice(0, 3)}.${cpf.slice(3, 6)}.${cpf.slice(6)}`;
+    } else {
+      return `${cpf.slice(0, 3)}.${cpf.slice(3, 6)}.${cpf.slice(6, 9)}-${cpf.slice(9, 11)}`;
+    }
+  };
+
+  const formatName = (value) => {
+    if (!value) return value;
+    
+    // Remove números e caracteres especiais, mantém apenas letras, espaços e acentos
+    return value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+  };
+
+  const formatState = (value) => {
+    if (!value) return value;
+    
+    // Remove números e caracteres especiais, converte para maiúsculo, máximo 2 caracteres
+    return value.replace(/[^A-Za-z]/g, '').toUpperCase().slice(0, 2);
+  };
+
+  const formatNumber = (value) => {
+    if (!value) return value;
+    
+    // Remove tudo que não é número, mantém apenas números
+    return value.replace(/\D/g, '');
+  };
+
+  const formatText = (value) => {
+    if (!value) return value;
+    
+    // Remove números no início, mantém letras, espaços e acentos
+    return value.replace(/^[0-9]+/, '').replace(/[^A-Za-zÀ-ÿ\s]/g, '');
   };
 
   if (pageLoading) {
@@ -342,6 +400,9 @@ const Checkout = () => {
                               errors.first_name ? 'border-red-300 bg-red-50' : 'border-gray-300 focus:border-blue-500'
                           }`}
                           placeholder="Seu primeiro nome"
+                          onChange={(e) => {
+                            e.target.value = formatName(e.target.value);
+                          }}
                       />
                       {errors.first_name && (
                           <p className="mt-2 text-sm text-red-600 flex items-center">
@@ -362,6 +423,9 @@ const Checkout = () => {
                               errors.last_name ? 'border-red-300 bg-red-50' : 'border-gray-300 focus:border-blue-500'
                           }`}
                           placeholder="Seu sobrenome"
+                          onChange={(e) => {
+                            e.target.value = formatName(e.target.value);
+                          }}
                       />
                       {errors.last_name && (
                           <p className="mt-2 text-sm text-red-600 flex items-center">
@@ -407,9 +471,10 @@ const Checkout = () => {
                                 errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-300 focus:border-blue-500'
                             }`}
                             placeholder="(11) 99999-9999"
-                            onChange={(e) => {
+                            onInput={(e) => {
                               e.target.value = formatPhone(e.target.value);
                             }}
+                            maxLength={15}
                         />
                       </div>
                       {errors.phone && (
@@ -441,9 +506,10 @@ const Checkout = () => {
                               errors.zipcode ? 'border-red-300 bg-red-50' : 'border-gray-300 focus:border-green-500'
                           }`}
                           placeholder="00000-000"
-                          onChange={(e) => {
+                          onInput={(e) => {
                             e.target.value = formatZipcode(e.target.value);
                           }}
+                          maxLength={9}
                       />
                       {errors.zipcode && (
                           <p className="mt-2 text-sm text-red-600 flex items-center">
@@ -465,7 +531,9 @@ const Checkout = () => {
                           }`}
                           placeholder="SP"
                           maxLength={2}
-                          style={{ textTransform: 'uppercase' }}
+                          onInput={(e) => {
+                            e.target.value = formatState(e.target.value);
+                          }}
                       />
                       {errors.state && (
                           <p className="mt-2 text-sm text-red-600 flex items-center">
@@ -486,6 +554,9 @@ const Checkout = () => {
                               errors.street ? 'border-red-300 bg-red-50' : 'border-gray-300 focus:border-green-500'
                           }`}
                           placeholder="Nome da rua"
+                          onInput={(e) => {
+                            e.target.value = formatText(e.target.value);
+                          }}
                       />
                       {errors.street && (
                           <p className="mt-2 text-sm text-red-600 flex items-center">
@@ -506,6 +577,9 @@ const Checkout = () => {
                               errors.number ? 'border-red-300 bg-red-50' : 'border-gray-300 focus:border-green-500'
                           }`}
                           placeholder="123"
+                          onInput={(e) => {
+                            e.target.value = formatNumber(e.target.value);
+                          }}
                       />
                       {errors.number && (
                           <p className="mt-2 text-sm text-red-600 flex items-center">
@@ -538,6 +612,9 @@ const Checkout = () => {
                               errors.neighborhood ? 'border-red-300 bg-red-50' : 'border-gray-300 focus:border-green-500'
                           }`}
                           placeholder="Nome do bairro"
+                          onInput={(e) => {
+                            e.target.value = formatText(e.target.value);
+                          }}
                       />
                       {errors.neighborhood && (
                           <p className="mt-2 text-sm text-red-600 flex items-center">
@@ -558,6 +635,9 @@ const Checkout = () => {
                               errors.city ? 'border-red-300 bg-red-50' : 'border-gray-300 focus:border-green-500'
                           }`}
                           placeholder="Nome da cidade"
+                          onInput={(e) => {
+                            e.target.value = formatText(e.target.value);
+                          }}
                       />
                       {errors.city && (
                           <p className="mt-2 text-sm text-red-600 flex items-center">
@@ -640,15 +720,14 @@ const Checkout = () => {
 
                 {/* Botão de finalizar */}
                 <div className="bg-gradient-to-r from-green-500 to-blue-600 rounded-xl shadow-lg p-6">
-                  <Button
+                  <button
                       type="submit"
-                      loading={processing}
-                      className="w-full bg-white text-gray-800 hover:bg-gray-100 font-bold text-lg py-4 shadow-lg"
-                      size="lg"
+                      disabled={processing}
+                      className="font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 inline-flex items-center justify-center w-full bg-white text-gray-800 hover:bg-gray-100 font-bold text-lg py-4 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Lock className="w-5 h-5 mr-3" />
-                    Finalizar Pedido{getUniqueSellerCount() > 1 ? 's' : ''} - R$ {getTotalPrice().toFixed(2)}
-                  </Button>
+                    {processing ? 'Processando...' : `Finalizar Pedido${getUniqueSellerCount() > 1 ? 's' : ''} - R$ ${getTotalPrice().toFixed(2)}`}
+                  </button>
                   <p className="text-white text-center text-sm mt-3 opacity-90">
                     🔒 Transação 100% segura • Seus dados estão protegidos
                   </p>
@@ -668,7 +747,11 @@ const Checkout = () => {
                 <div className="space-y-4 mb-6 max-h-96 overflow-y-auto">
                   {cart?.items && Array.isArray(cart.items) && cart.items.length > 0 ? (
                       cart.items.map((item) => (
-                          <div key={item.ad_id || item._id} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                          <div 
+                            key={item.ad_id || item._id} 
+                            className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+                            onClick={() => navigate(`/ads/${item.ad_id}`)}
+                          >
                             <div className="w-16 h-16 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
                               {item.ad_snapshot?.image_url || item.image_url ? (
                                   <img

@@ -4,6 +4,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../contexts/AuthContext';
 import { orderService } from '../../services/orderService';
+import { reportsService } from '../../services/reportsService';
 import {
   ArrowLeft,
   Package,
@@ -42,6 +43,10 @@ const OrderDetails = () => {
   const [updating, setUpdating] = useState(false);
   const [showChat, setShowChat] = useState(true);
   const [showRatingModal, setShowRatingModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+  const [reportDetails, setReportDetails] = useState('');
+  const [submittingReport, setSubmittingReport] = useState(false);
 
   useEffect(() => {
     if (orderId) {
@@ -116,6 +121,48 @@ const OrderDetails = () => {
     }
 
     setUpdating(false);
+  };
+
+  const handleReportOrder = async () => {
+    if (!reportReason.trim()) {
+      toast.error('Selecione um motivo para o report');
+      return;
+    }
+
+    setSubmittingReport(true);
+
+    try {
+      const reportData = {
+        reported_item_id: orderId,
+        reported_item_type: 'order',
+        reason: reportReason,
+        details: reportDetails || ''
+      };
+
+      console.log('Enviando report:', reportData);
+
+      const result = await reportsService.createReport(reportData);
+      
+      if (result.success) {
+        toast.success('Report enviado com sucesso! Nossa equipe irá analisar.');
+        setShowReportModal(false);
+        setReportReason('');
+        setReportDetails('');
+      } else {
+        console.error('Erro do servidor:', result);
+        toast.error(result.message || 'Erro ao enviar report');
+      }
+    } catch (error) {
+      console.error('Erro ao enviar report:', error);
+      toast.error('Erro ao enviar report. Tente novamente.');
+    }
+
+    setSubmittingReport(false);
+  };
+
+  const handleRatingSuccess = () => {
+    toast.success('Avaliação enviada com sucesso!');
+    loadOrderDetails(); // Recarregar dados do pedido
   };
 
   // CORREÇÃO: Função para determinar o papel do usuário logado
@@ -315,10 +362,6 @@ const OrderDetails = () => {
     return false;
   };
 
-  const handleRatingSuccess = () => {
-    loadOrderDetails();
-    toast.success('Avaliação enviada com sucesso!');
-  };
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('pt-BR', {
@@ -750,7 +793,12 @@ const OrderDetails = () => {
                 <p className="text-sm text-gray-600 mb-3">
                   Problemas com este pedido?
                 </p>
-                <Button variant="outline" size="sm" className="w-full">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full"
+                  onClick={() => setShowReportModal(true)}
+                >
                   <Flag className="w-4 h-4 mr-2" />
                   Reportar Problema
                 </Button>
@@ -766,6 +814,82 @@ const OrderDetails = () => {
           order={order}
           onSuccess={handleRatingSuccess}
         />
+
+        {/* Modal de Report */}
+        {showReportModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-md w-full max-h-screen overflow-y-auto">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    Reportar Problema
+                  </h3>
+                  <button 
+                    onClick={() => setShowReportModal(false)}
+                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Motivo do report *
+                    </label>
+                    <select
+                      value={reportReason}
+                      onChange={(e) => setReportReason(e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required
+                    >
+                      <option value="">Selecione um motivo</option>
+                      <option value="payment_issue">Problema com pagamento</option>
+                      <option value="delivery_issue">Problema com entrega</option>
+                      <option value="product_issue">Problema com o produto</option>
+                      <option value="seller_issue">Problema com vendedor</option>
+                      <option value="buyer_issue">Problema com comprador</option>
+                      <option value="communication_issue">Problema de comunicação</option>
+                      <option value="fraud">Suspeita de fraude</option>
+                      <option value="other">Outro motivo</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Detalhes (opcional)
+                    </label>
+                    <textarea
+                      value={reportDetails}
+                      onChange={(e) => setReportDetails(e.target.value)}
+                      placeholder="Descreva o problema com mais detalhes..."
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      rows="4"
+                    />
+                  </div>
+
+                  <div className="flex space-x-3 pt-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowReportModal(false)}
+                      className="flex-1"
+                      disabled={submittingReport}
+                    >
+                      Cancelar
+                    </Button>
+                    <Button
+                      onClick={handleReportOrder}
+                      className="flex-1"
+                      disabled={submittingReport || !reportReason.trim()}
+                    >
+                      {submittingReport ? 'Enviando...' : 'Enviar Report'}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
   );
 };

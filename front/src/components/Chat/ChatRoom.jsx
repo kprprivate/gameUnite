@@ -29,6 +29,7 @@ const ChatRoom = ({ orderId, onClose }) => {
   const [pendingMessages, setPendingMessages] = useState(new Set());
   
   const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const typingTimeoutRef = useRef(null);
   const messageInputRef = useRef(null);
 
@@ -195,7 +196,9 @@ const ChatRoom = ({ orderId, onClose }) => {
   };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   };
 
   const playNotificationSound = () => {
@@ -385,7 +388,7 @@ const ChatRoom = ({ orderId, onClose }) => {
       )}
 
       {/* Mensagens */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 ? (
           <div className="text-center py-8">
             <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />

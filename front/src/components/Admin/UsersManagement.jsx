@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Badge, LoadingSpinner, Pagination, SafeImage } from '../Common';
 import UserEditModal from './UserEditModal';
-import { useApi } from '../../hooks';
+import { useApi, useDebounce } from '../../hooks';
 import { 
   Users, 
   UserCheck, 
@@ -25,14 +25,22 @@ const UsersManagement = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
   const api = useApi();
+  
+  // Debounce search term to avoid excessive API calls
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    setCurrentPage(1); // Reset to first page when filters change
+  }, [debouncedSearchTerm, roleFilter, statusFilter]);
 
   useEffect(() => {
     loadUsers();
-  }, [currentPage, searchTerm, roleFilter, statusFilter]);
+  }, [currentPage, debouncedSearchTerm, roleFilter, statusFilter]);
 
   const loadUsers = async () => {
     setLoading(true);
@@ -41,7 +49,7 @@ const UsersManagement = () => {
         params: {
           page: currentPage,
           limit: 20,
-          search: searchTerm || undefined,
+          search: debouncedSearchTerm || undefined,
           role: roleFilter !== 'all' ? roleFilter : undefined,
           status: statusFilter !== 'all' ? statusFilter : undefined
         }
@@ -50,10 +58,13 @@ const UsersManagement = () => {
       if (response.success) {
         setUsers(response.data?.users || []);
         setTotalPages(response.data?.total_pages || 1);
+        setTotalUsers(response.data?.total || 0);
       }
     } catch (error) {
       console.error('Erro ao carregar usuários:', error);
       setUsers([]);
+      setTotalPages(1);
+      setTotalUsers(0);
     } finally {
       setLoading(false);
     }
@@ -86,17 +97,6 @@ const UsersManagement = () => {
     setSelectedUser(null);
   };
 
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = roleFilter === 'all' || user.role === roleFilter;
-    const matchesStatus = statusFilter === 'all' || 
-                         (statusFilter === 'active' && user.is_active) ||
-                         (statusFilter === 'inactive' && !user.is_active);
-    
-    return matchesSearch && matchesRole && matchesStatus;
-  });
-
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -107,7 +107,9 @@ const UsersManagement = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className="text-xl font-semibold text-gray-900">Gestão de Usuários</h2>
-          <p className="text-gray-600">Gerencie usuários, permissões e atividades</p>
+          <p className="text-gray-600">
+            Gerencie usuários, permissões e atividades ({totalUsers} usuários total)
+          </p>
         </div>
       </div>
 
@@ -115,7 +117,7 @@ const UsersManagement = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <StatCard
           title="Total de Usuários"
-          value={users.length}
+          value={totalUsers}
           icon={Users}
           color="blue"
         />
@@ -132,11 +134,8 @@ const UsersManagement = () => {
           color="purple"
         />
         <StatCard
-          title="Usuários Hoje"
-          value={users.filter(u => {
-            const today = new Date().toDateString();
-            return new Date(u.created_at).toDateString() === today;
-          }).length}
+          title="Página Atual"
+          value={`${currentPage}/${totalPages}`}
           icon={Activity}
           color="orange"
         />
@@ -153,8 +152,13 @@ const UsersManagement = () => {
                 placeholder="Buscar usuários..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
+              {loading && searchTerm && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <LoadingSpinner size="sm" />
+                </div>
+              )}
             </div>
           </div>
           <div className="flex gap-2">
@@ -208,7 +212,7 @@ const UsersManagement = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredUsers.map((user) => (
+              {users.map((user) => (
                 <UserRow 
                   key={user._id} 
                   user={user} 

@@ -9,7 +9,7 @@ import {
   Pagination,
   SafeImage 
 } from '../Common';
-import { useApi } from '../../hooks';
+import { useApi, useDebounce } from '../../hooks';
 import {
   MessageSquare,
   Clock,
@@ -25,27 +25,47 @@ const TicketsManagement = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalTickets, setTotalTickets] = useState(0);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const api = useApi();
+  
+  // Debounce search term
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    setCurrentPage(1); // Reset page when filters change
+  }, [debouncedSearchTerm, statusFilter]);
 
   useEffect(() => {
     loadTickets();
-  }, [statusFilter]);
+  }, [currentPage, debouncedSearchTerm, statusFilter]);
 
   const loadTickets = async () => {
     setLoading(true);
     try {
       const response = await api.get('/support/admin/tickets', {
         params: {
+          page: currentPage,
+          limit: 20,
+          search: debouncedSearchTerm || undefined,
           status: statusFilter !== 'all' ? statusFilter : undefined
         }
       });
-      setTickets(response.data.tickets || []);
+      
+      if (response.success) {
+        setTickets(response.data.tickets || []);
+        setTotalPages(response.data.total_pages || 1);
+        setTotalTickets(response.data.total || 0);
+      }
     } catch (error) {
       console.error('Erro ao carregar tickets:', error);
       setTickets([]);
+      setTotalPages(1);
+      setTotalTickets(0);
     } finally {
       setLoading(false);
     }
